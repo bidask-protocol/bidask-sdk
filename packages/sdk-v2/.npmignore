@@ -1,0 +1,13 @@
+.github
+.vscode
+node_modules
+src
+tests
+coverage
+.eslintrc
+.gitignore
+.prettierrc
+tsconfig.json
+tsup.config.ts
+*.log
+*.tgz

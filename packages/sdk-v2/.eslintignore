@@ -1,0 +1,8 @@
+node_modules
+dist
+public
+.git
+.husky
+*.d.ts
+*.config.js
+.eslintrc.cjs

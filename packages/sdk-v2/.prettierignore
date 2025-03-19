@@ -1,0 +1,7 @@
+node_modules
+dist
+public
+.git
+.husky
+*.d.ts
+package-lock.json 

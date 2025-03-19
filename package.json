@@ -1,0 +1,31 @@
+{
+  "name": "bidask-sdk",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "5.2.2",
+    "eslint": "8.56.0",
+    "eslint-kit": "10.5.0",
+    "prettier": "3.5.3",
+    "tsup": "8.4.0",
+    "turbo": "2.4.4",
+    "typescript": "5.8.2"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "svelte"
+      ]
+    }
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

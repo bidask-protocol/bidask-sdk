@@ -1,0 +1,8 @@
+import { Address } from '@ton/ton'
+
+export const ZERO_ADDRESS = Address.parse(
+  '0:0000000000000000000000000000000000000000000000000000000000000000',
+)
+
+export const BIN_STEP_COEFFICIENT = 10000
+export const FEE_COEFFICIENT = 10000
