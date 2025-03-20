@@ -5,5 +5,9 @@ export const getBinByPrice = (price: number, bps: bigint) => {
 }
 
 export const getPriceByBin = (bin: number, bps: bigint) => {
-  return Math.pow(1 + Number(bps) / BIN_STEP_COEFFICIENT, bin)
+  return (1 + Number(bps) / BIN_STEP_COEFFICIENT) ** bin
+}
+
+export const getBinPriceBounds = (bin: number, bps: bigint) => {
+  return [getPriceByBin(bin, bps), getPriceByBin(bin + 1, bps)]
 }

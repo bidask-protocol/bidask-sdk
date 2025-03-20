@@ -6,7 +6,7 @@ export const getPriceFromSqrtPriceX128 = (sqrtPriceX128: bigint): number => {
   return (Number(sqrtPriceX128) / 2 ** 128) ** 2
 }
 
-export const getNormilizedPrice = (
+export const getNormalizedPrice = (
   price: number,
   jetton0Decimals: number,
   jetton1Decimals: number,

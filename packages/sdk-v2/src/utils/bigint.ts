@@ -1,4 +1,4 @@
-export const toBigInt = (amount: number | string, decimals: number | string): bigint => {
+export const toBigInt = (amount: number | string, decimals: number | string = 0): bigint => {
   const decimalsNumber = Number(decimals)
   const multiplier = BigInt(10) ** BigInt(decimalsNumber)
 
@@ -6,7 +6,8 @@ export const toBigInt = (amount: number | string, decimals: number | string): bi
   if (typeof amount === 'string') {
     amountString = amount
   } else {
-    amountString = amount.toFixed(decimalsNumber)
+    const re = new RegExp('^-?\\d+(?:.\\d{0,' + (decimalsNumber || -1) + '})?')
+    amountString = amount.toString().match(re)![0]
   }
 
   const [integerPart, fractionalPart = ''] = String(amountString).split('.')
@@ -14,7 +15,10 @@ export const toBigInt = (amount: number | string, decimals: number | string): bi
   return BigInt(integerPart) * multiplier + BigInt(fractionStr)
 }
 
-export const fromBigInt = (amount: number | string | bigint, decimals: number | string): string => {
+export const fromBigInt = (
+  amount: number | string | bigint,
+  decimals: number | string = 0,
+): string => {
   const amountStr = BigInt(amount).toString()
   const decimalsNumber = Number(decimals)
 

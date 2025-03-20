@@ -11,7 +11,7 @@ import {
   PoolContract,
   RangeContract,
   JettonMaster,
-  normilizeBinsAmount,
+  normalizeBinsAmount,
   createProvideNativeLiquidityTxParams,
   createProvideLiquidityTxParams,
   getBinByPrice,
@@ -21,6 +21,7 @@ import {
   getDeadline,
   BIN_STEP_COEFFICIENT,
   LiquidityType,
+  createCurveShape,
 } from "@bidask/sdk";
 
 // The pool you want to provide liquidity to
@@ -36,9 +37,9 @@ const selectedPool = {
     decimals: "9";
   };
 
-// The amount of tokens you want to provide liquidity with
-const token0Amount = "1000000000000000000000000";
-const token1Amount = "1000000000000000000000000";
+// The amount of tokens you want to provide liquidity
+const token0Amount = "100"; // human readable format
+const token1Amount = "230"; // human readable format
 
 // Calculate the bin step in absolute terms
 const binStepAbs = Number(selectedPool.bps) / BIN_STEP_COEFFICIENT;
@@ -66,71 +67,23 @@ const currentBinIndex = getBinByPrice(currentPrice, selectedPool.bps);
 const firstBinIndex = currentBinIndex - 10;
 const lastBinIndex = currentBinIndex + 10;
 
-// ВСЁ ЭТО ДОЛЖНО БЫТЬ ВЫНЕСЕНО В ХЕЛПЕРЫ ↓
-// Calculate bin distribution based on selected shape
-let bins;
-switch (liquidityShape) {
-  case LiquidityShapes.SPOT:
-    bins = computeSpotBins(
-      token0AmountNumber,
-      token1AmountNumber,
-      firstBinIndex,
-      lastBinIndex,
-      currentBinIndex,
-      Math.sqrt(currentPrice),
-      binStepAbs
-    );
-    break;
-  case LiquidityShapes.BIDASK:
-    bins = computeBidAskBins(
-      token0AmountNumber,
-      token1AmountNumber,
-      firstBinIndex,
-      lastBinIndex,
-      currentBinIndex,
-      Math.sqrt(currentPrice),
-      binStepAbs
-    );
-    break;
-  case LiquidityShapes.CURVE:
-    bins = computeCurveBins(
-      token0AmountNumber,
-      token1AmountNumber,
-      firstBinIndex,
-      lastBinIndex,
-      currentBinIndex,
-      Math.sqrt(currentPrice),
-      binStepAbs
-    );
-    break;
-  default:
-    throw new Error(`Runtime error: Unknown liquidity shape ${liquidityShape}`);
-}
+const token0AmountNormalized = toBigInt(token0Amount, selectedPool.token0.decimals);
+const token1AmountNormalized = toBigInt(token1Amount, selectedPool.token1.decimals);
 
-// Normalize bin amounts to match input tokens
-const normilizedBins = normilizeBinsAmount(
-  bins,
-  token0AmountNumber,
-  token1AmountNumber
-);
-
-// Create bins to provide
-const binsToProvide = normilizedBins.reduce(
-  (acc, bin, idx) => {
-    acc[firstBinIndex + idx] = [BigInt(bin.x), BigInt(bin.y)];
-
-    return acc;
-  },
-  {} as Record<number, [bigint, bigint]>
-);
-// ВСЁ ЭТО ДОЛЖНО БЫТЬ ВЫНЕСЕНО В ХЕЛПЕРЫ ↑
+// Create the shape of the bins to provide
+// Available options are: createCurveShape, createSpotShape, createBidaskShape
+const binsToProvide = createCurveShape({
+  token0Amount: token0AmountNormalized,
+  token1Amount: token1AmountNormalized,
+  currentPrice: currentPrice,
+  fromBin: firstBinIndex,
+  toBin: lastBinIndex,
+  bps: binStep,
+})
 
 // Determine liquidity type (single or both tokens)
-const token0AmountNormilized = toBigInt(token0Amount, selectedPool.token0.decimals);
-const token1AmountNormilized = toBigInt(token1Amount, selectedPool.token1.decimals);
-
 const liquidityType =
-  token0AmountNormilized > 0 && token1AmountNormilized > 0
+  token0AmountNormalized > 0 && token1AmountNormalized > 0
     ? LiquidityType.TwoSides
     : LiquidityType.OneSide;
 
@@ -148,8 +101,8 @@ if (isZeroAddress(selectedPool.token1.address)) {
   // Create transaction parameters for providing TON + Jetton
   const txParams = createProvideNativeLiquidityTxParams({
     poolAddress: pool.address,
-    jettonAmount: token0AmountNormilized,
-    tonAmount: token1AmountNormilized,
+    jettonAmount: token0AmountNormalized,
+    tonAmount: token1AmountNormalized,
     senderAddress: Address.parse(userAddress),
     liquidityType,
     liquidityDict,
@@ -182,8 +135,8 @@ if (isZeroAddress(selectedPool.token1.address)) {
     poolAddress: pool.address,
     jettonWalletAddress0: jetton0Wallet,
     jettonWalletAddress1: jetton1Wallet,
-    jettonAmount0: token0AmountNormilized,
-    jettonAmount1: token1AmountNormilized,
+    jettonAmount0: token0AmountNormalized,
+    jettonAmount1: token1AmountNormalized,
     senderAddress: Address.parse(userAddress),
     liquidityType,
     liquidityDict,
@@ -335,7 +288,7 @@ const poolData = {
 const tokenFrom = poolData.token0;
 
 // Amount to swap
-const amountFromRaw = "100";
+const amountFromRaw = "100"; // human readable format
 const slippage = 0.01; // 1% slippage
 
 // Create pool contract instance

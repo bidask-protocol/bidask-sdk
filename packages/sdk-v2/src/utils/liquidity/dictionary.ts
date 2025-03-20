@@ -1,22 +1,26 @@
 import { beginCell, Dictionary } from '@ton/ton'
 
-import { LiquidityProvideBins } from '../../types/liquidity'
+import { LiquidityProvideBins, LiquidityRemoveBins } from '../../types/liquidity'
 
 export const createPaddedBinDict = <
   BinValue extends any,
   Bins extends Record<number, BinValue>,
-  Dict extends Dictionary<any, any>,
+  Result,
 >(params: {
   bins: Bins
   emptyBin: BinValue
-  dict: Dict
-  iterator: (paddedBinDict: Array<[number, BinValue]>, dict: Dict, binDictIndex: number) => Dict
+  result: Result
+  iterator: (
+    paddedBinDict: Array<[number, BinValue]>,
+    result: Result,
+    binDictIndex: number,
+  ) => Result
 }) => {
   const sortedBinNumbers = Object.keys(params.bins)
     .map(Number)
     .sort((a, b) => a - b)
 
-  if (sortedBinNumbers.length === 0) return params.dict
+  if (sortedBinNumbers.length === 0) return params.result
 
   const tmpBins: Record<number, Array<[number, BinValue]>> = {}
   for (const bin of sortedBinNumbers) {
@@ -37,7 +41,7 @@ export const createPaddedBinDict = <
     tmpBins[groupKey][positionInGroup] = [bin, params.bins[bin]]
   }
 
-  let result = params.dict
+  let result = params.result
 
   for (const groupKey in tmpBins) {
     result = params.iterator(tmpBins[groupKey], result, Number(groupKey))
@@ -50,15 +54,32 @@ export const createLiquidityProvideDict = (bins: LiquidityProvideBins) => {
   return createPaddedBinDict({
     bins,
     emptyBin: [0n, 0n],
-    dict: Dictionary.empty(Dictionary.Keys.Int(32), Dictionary.Values.Buffer(122)),
-    iterator: (paddedBinDict, dict, binDictIndex) => {
+    result: Dictionary.empty(Dictionary.Keys.Int(32), Dictionary.Values.Buffer(122)),
+    iterator: (paddedBinDict, result, binDictIndex) => {
       const liquidityCell = beginCell()
 
       for (const [, [amount0, amount1]] of paddedBinDict) {
         liquidityCell.storeUint(amount0, 120).storeUint(amount1, 120)
       }
 
-      return dict.set(binDictIndex, liquidityCell.asSlice().loadBuffer(120))
+      return result.set(binDictIndex, liquidityCell.asSlice().loadBuffer(120))
+    },
+  })
+}
+
+export const createLiquidityBurnDict = (bins: LiquidityRemoveBins) => {
+  return createPaddedBinDict({
+    bins,
+    emptyBin: 0n,
+    result: Dictionary.empty(Dictionary.Keys.Int(32), Dictionary.Values.Buffer(122)),
+    iterator: (bins, result, binDictIndex) => {
+      let liquidityCell = beginCell()
+
+      for (const [, burnAmount] of bins) {
+        liquidityCell = liquidityCell.storeUint(burnAmount, 244)
+      }
+
+      return result.set(binDictIndex, liquidityCell.asSlice().loadBuffer(122))
     },
   })
 }
