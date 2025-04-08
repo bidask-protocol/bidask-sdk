@@ -54,7 +54,7 @@ export const createLiquidityProvideDict = (bins: LiquidityProvideBins) => {
   return createPaddedBinDict({
     bins,
     emptyBin: [0n, 0n],
-    result: Dictionary.empty(Dictionary.Keys.Int(32), Dictionary.Values.Buffer(122)),
+    result: Dictionary.empty(Dictionary.Keys.Int(32), Dictionary.Values.Buffer(120)),
     iterator: (paddedBinDict, result, binDictIndex) => {
       const liquidityCell = beginCell()
 

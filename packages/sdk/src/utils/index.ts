@@ -9,7 +9,10 @@ export { getBinByPrice, getPriceByBin } from './bins'
 export { isZeroAddress } from './address'
 export { createPaddedBinDict } from './liquidity/dictionary'
 export { toBigInt, fromBigInt } from './bigint'
-export { getCentralBinShares } from './liquidity/shapes/central-bin'
+export {
+  calculateCentralAmountXByAmountY,
+  calculateCentralAmountYByAmountX,
+} from './liquidity/shapes/central-bin'
 export { createSpotShape } from './liquidity/shapes/spot-shape'
 export { createBidaskShape } from './liquidity/shapes/bidask-shape'
 export { createCurveShape } from './liquidity/shapes/curve-shape'

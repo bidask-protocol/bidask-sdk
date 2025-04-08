@@ -1,4 +1,4 @@
-import { getBinByPrice, getBinPriceBounds } from '../../bins'
+import { getBinByPrice, getBinPriceBounds, getPriceByBin } from '../../bins'
 
 export const getCentralBinShares = (currentPrice: number, bps: bigint) => {
   const currentBin = getBinByPrice(currentPrice, bps)
@@ -162,4 +162,44 @@ export function calculateLiquidity(
   }
 
   return calculateLiquidityForTokenY(tokenY, sqrtPriceLower, sqrtPriceUpper)
+}
+
+export const calculateCentralAmountXByAmountY = (
+  tokenYAmount: number,
+  activeBin: number,
+  bps: bigint,
+): number => {
+  const [lowerPriceBound, upperPriceBound] = getBinPriceBounds(activeBin, bps)
+
+
+  const sqrtLowerPriceBound = Math.sqrt(lowerPriceBound)
+  const sqrtUpperPriceBound = Math.sqrt(upperPriceBound)
+
+  const liquidity = calculateLiquidityForTokenY(
+    tokenYAmount,
+    sqrtLowerPriceBound,
+    sqrtUpperPriceBound,
+  )
+
+  return calculateTokenX(liquidity, sqrtLowerPriceBound, sqrtUpperPriceBound)
+}
+
+export const calculateCentralAmountYByAmountX = (
+  tokenXAmount: number,
+  activeBin: number,
+  bps: bigint,
+): number => {
+  const [lowerPriceBound, upperPriceBound] = getBinPriceBounds(activeBin, bps)
+
+
+  const sqrtLowerPriceBound = Math.sqrt(lowerPriceBound)
+  const sqrtUpperPriceBound = Math.sqrt(upperPriceBound)
+
+  const liquidity = calculateLiquidityForTokenX(
+    tokenXAmount,
+    sqrtLowerPriceBound,
+    sqrtUpperPriceBound,
+  )
+
+  return calculateTokenY(liquidity, sqrtLowerPriceBound, sqrtUpperPriceBound)
 }

@@ -1,7 +1,7 @@
 {
-  "name": "bidask-sdk-v2",
-  "version": "0.1.0",
-  "description": "Bidask SDK v2",
+  "name": "@foprta/sdk",
+  "version": "0.1.2",
+  "description": "Bidask Protocol SDK",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -32,6 +32,6 @@
     "@types/node": "^22.11.18"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com"
   }
 }
