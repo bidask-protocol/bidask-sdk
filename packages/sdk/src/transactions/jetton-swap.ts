@@ -22,7 +22,7 @@ export function createJettonSwapTxParams(params: {
     .storeCoins(exactOut)
     .storeAddress(null)
     .storeBit(0)
-    .storeMaybeRef(null)
+    .storeMaybeRef(beginCell().storeAddress(params.senderAddress).endCell())
     .storeMaybeRef(null)
     .endCell()
 

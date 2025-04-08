@@ -6,6 +6,7 @@ import { TxParams } from '../types'
 export function createTonSwapTxParams(params: {
   amountIn: bigint
   receiverAddress: Address
+  senderAddress: Address
   lastPrice: bigint
   poolAddress: Address
   exactOut?: bigint
@@ -21,7 +22,7 @@ export function createTonSwapTxParams(params: {
     .storeCoins(exactOut)
     .storeAddress(null)
     .storeBit(0)
-    .storeMaybeRef(null)
+    .storeMaybeRef(beginCell().storeAddress(params.senderAddress).endCell())
     .storeMaybeRef(null)
     .endCell()
 
