@@ -5,3 +5,13 @@ export type TxParams = {
   value: bigint
   payload: Cell
 }
+
+export type SwapPartialParams =
+  | {
+      allowPartial: true
+      sqrtX128LastPrice: bigint
+    }
+  | {
+      allowPartial: false
+      minAmountToReceive: bigint
+    }

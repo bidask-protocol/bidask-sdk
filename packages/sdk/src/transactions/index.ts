@@ -1,6 +1,7 @@
-export { createProvideNativeLiquidityTxParams } from './both-provide-liquidity'
+export { createProvideNativeLiquidityTxParams } from './provide-native-liquidity'
 export { createTonSwapTxParams } from './ton-swap'
 export { createJettonSwapTxParams } from './jetton-swap'
 export { createProvideLiquidityTxParams } from './provide-liquidity'
 export { createBurnAllTxParams } from './burn-all'
 export { createBurnTxParams } from './burn'
+export { createDeployPoolTxParams } from './deploy-pool'

@@ -2,7 +2,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { LiquidityType, TxParams } from '../types'
-import { LiquidityProvideBins } from '../types/liquidity'
+import { DepositType, LiquidityProvideBins } from '../types/liquidity'
 import { createLiquidityProvideDict } from '../utils/liquidity/dictionary'
 
 export function createProvideLiquidityTxParams(params: {
@@ -11,6 +11,7 @@ export function createProvideLiquidityTxParams(params: {
   jettonWalletAddress0: Address
   jettonWalletAddress1: Address
   senderAddress: Address
+  depositType: DepositType
   liquidityType: LiquidityType
   binsToProvide: LiquidityProvideBins
   poolAddress: Address
@@ -29,7 +30,8 @@ export function createProvideLiquidityTxParams(params: {
 
   const forwardPayload = beginCell()
     .storeUint(PoolContract.Opcodes.AddLiquidity, 32)
-    .storeUint(params.liquidityType, 4)
+    .storeUint(params.depositType, 3)
+    .storeUint(params.liquidityType, 1)
     .storeDict(createLiquidityProvideDict(params.binsToProvide))
     .storeMaybeRef(params.rejectPayload)
     .storeMaybeRef(params.forwardPayload)

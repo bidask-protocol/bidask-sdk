@@ -1,3 +1,9 @@
+export enum DepositType {
+  Initial = 0,
+  Add = 1,
+  Update = 2,
+}
+
 export enum LiquidityType {
   TwoSides = 0,
   OneSide = 1,
