@@ -12,6 +12,7 @@ describe('createCurveShape', () => {
         toBin: 247,
         token0Amount: 1000000000n,
         token1Amount: 1000000000n,
+        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -25,6 +26,7 @@ describe('createCurveShape', () => {
         toBin: 241,
         token0Amount: 9000000000n,
         token1Amount: 2000000000n,
+        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -40,6 +42,7 @@ describe('createCurveShape', () => {
         toBin: 232,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
+        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -53,6 +56,7 @@ describe('createCurveShape', () => {
         toBin: 231,
         token0Amount: 0n,
         token1Amount: 2000000000n,
+        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -66,6 +70,7 @@ describe('createCurveShape', () => {
         toBin: 231,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
+        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -81,6 +86,7 @@ describe('createCurveShape', () => {
         toBin: 246,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
+        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -94,6 +100,7 @@ describe('createCurveShape', () => {
         toBin: 246,
         token0Amount: 1000000000n,
         token1Amount: 0n,
+        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -107,6 +114,7 @@ describe('createCurveShape', () => {
         toBin: 246,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
+        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()

@@ -20,4 +20,5 @@ export type CreateShapeParams = {
   fromBin: number
   toBin: number
   bps: bigint
+  ratio?: number // 0 - 1
 }

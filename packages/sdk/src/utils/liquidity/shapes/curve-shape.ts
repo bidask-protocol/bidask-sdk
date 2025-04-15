@@ -11,7 +11,7 @@ import {
 import { normalizeBinsAmounts } from './normalizer'
 
 export const createCurveShape = (params: CreateShapeParams): LiquidityProvideBins => {
-  const { token0Amount, token1Amount, currentPrice, fromBin, toBin, bps } = params
+  const { token0Amount, token1Amount, currentPrice, fromBin, toBin, bps, ratio = 0.8 } = params
 
   const token0AmountNumber = Number(token0Amount)
   const token1AmountNumber = Number(token1Amount)
@@ -39,6 +39,7 @@ export const createCurveShape = (params: CreateShapeParams): LiquidityProvideBin
         bps,
         fromBin,
         toBin,
+        ratio,
       })
     : [0, 0]
 
@@ -106,8 +107,9 @@ function calculateCurveCurrentBin(params: {
   toBin: number
   unitsOnSide: { left: number; right: number }
   bps: bigint
+  ratio: number
 }): [number, number] {
-  const { tokenAmountX, tokenAmountY, currentPrice, fromBin, toBin, unitsOnSide, bps } = params
+  const { tokenAmountX, tokenAmountY, currentPrice, fromBin, toBin, unitsOnSide, bps, ratio } = params
 
   const activeSqrtPrice = Math.sqrt(currentPrice)
   const activeBin = getBinByPrice(currentPrice, bps)
@@ -146,15 +148,15 @@ function calculateCurveCurrentBin(params: {
   const currentBinLiquidity =
     liquidityY > liquidityX
       ? calculateLiquidity(
-          tokenAmountX,
-          currentBinPotential.y,
+          tokenAmountX * ratio + currentBinPotential.x * (1 - ratio),
+          currentBinPotential.y * ratio + tokenAmountY * (1 - ratio),
           activeSqrtPrice,
           sqrtLowerBound,
           sqrtUpperBound,
         )
       : calculateLiquidity(
-          currentBinPotential.x,
-          tokenAmountY,
+          tokenAmountX * (1 - ratio) + currentBinPotential.x * ratio,
+          currentBinPotential.y * (1 - ratio) + tokenAmountY * ratio,
           activeSqrtPrice,
           sqrtLowerBound,
           sqrtUpperBound,

@@ -5,7 +5,7 @@ import { calculateCentralBinLiquidity } from './central-bin'
 import { normalizeBinsAmounts } from './normalizer'
 
 export const createSpotShape = (params: CreateShapeParams): LiquidityProvideBins => {
-  const { token0Amount, token1Amount, currentPrice, fromBin, toBin, bps } = params
+  const { token0Amount, token1Amount, currentPrice, fromBin, toBin, bps, ratio = 0.8 } = params
 
   const token0AmountNumber = Number(token0Amount)
   const token1AmountNumber = Number(token1Amount)
@@ -30,6 +30,7 @@ export const createSpotShape = (params: CreateShapeParams): LiquidityProvideBins
         token1Amount: token1AmountNumber,
         currentPrice,
         bps,
+        ratio,
         unitsOnSide,
       })
     : [0, 0]

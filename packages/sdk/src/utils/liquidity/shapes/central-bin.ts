@@ -24,12 +24,13 @@ export const calculateCentralBinLiquidity = (params: {
   token1Amount: number
   currentPrice: number
   bps: bigint
+  ratio: number
   unitsOnSide: {
     left: number
     right: number
   }
 }) => {
-  const { token0Amount, token1Amount, currentPrice, bps, unitsOnSide } = params
+  const { token0Amount, token1Amount, currentPrice, bps, unitsOnSide, ratio } = params
 
   const share = getCentralBinShares(currentPrice, bps)
 
@@ -54,15 +55,15 @@ export const calculateCentralBinLiquidity = (params: {
     calculateLiquidityForTokenY(currentBinPotential.y, sqrtLowerBound, sqrtUpperBound) >
     calculateLiquidityForTokenX(currentBinPotential.x, sqrtLowerBound, sqrtUpperBound)
       ? calculateLiquidity(
-          token0Amount,
-          currentBinPotential.y,
+          token0Amount * ratio + currentBinPotential.x * (1 - ratio),
+          currentBinPotential.y * ratio + token1Amount * (1 - ratio),
           sqrtCurrentPrice,
           sqrtLowerBound,
           sqrtUpperBound,
         )
       : calculateLiquidity(
-          currentBinPotential.x,
-          token0Amount,
+          token0Amount * (1 - ratio) + currentBinPotential.x * ratio,
+          currentBinPotential.y * (1 - ratio) + token1Amount * ratio,
           sqrtCurrentPrice,
           sqrtLowerBound,
           sqrtUpperBound,
