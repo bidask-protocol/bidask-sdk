@@ -33,7 +33,6 @@ export function normalizeBinsAmounts(
   // Adjust token1 amounts
   if (totalAmount1 < sumY) {
     let diff = sumY - totalAmount1
-    console.warn('diff', diff)
 
     // Remove excess from leftmost bins
     for (const [bin, [, y]] of entries) {

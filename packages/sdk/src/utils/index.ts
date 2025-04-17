@@ -1,7 +1,7 @@
 export { getDeadline } from './time'
 export {
-  getDenormalizedPrice,
-  getNormalizedPrice,
+  getRawPrice,
+  getReadablePrice,
   getPriceFromSqrtPriceX128,
   getSqrtPriceX128,
 } from './price'

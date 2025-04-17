@@ -2,8 +2,16 @@ import { Address, beginCell, toNano } from '@ton/ton'
 
 import { PoolContract } from '../contracts'
 import { TxParams } from '../types'
-import { SwapPartialParams } from '../types/transactions'
+import { SwapPartialExecutionParams } from '../types/swap'
 
+/**
+ * Creates a transaction parameters for swapping TON using a pool
+ * @param params - Parameters for the transaction
+ * @param params.amountIn - Amount of TON to swap
+ * @param params.receiverAddress - Address of the receiver
+ * @param params.senderAddress - Address of the sender
+ * @param params.poolAddress - Address of the pool
+ */
 export function createTonSwapTxParams(
   params: {
     amountIn: bigint
@@ -11,7 +19,7 @@ export function createTonSwapTxParams(
     senderAddress: Address
     poolAddress: Address
     exactOut?: bigint
-  } & SwapPartialParams,
+  } & SwapPartialExecutionParams,
 ): TxParams {
   const { exactOut = 0n } = params
 

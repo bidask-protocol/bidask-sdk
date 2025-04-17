@@ -1,6 +1,7 @@
-import { Address, Contract, type ContractProvider } from '@ton/ton'
+import { Address, beginCell, Contract, type ContractProvider } from '@ton/ton'
 
 import { PoolInfo } from '../types'
+import { bufferToBigInt } from '../utils/bigint'
 
 export class PoolContract implements Contract {
   static Opcodes = {
@@ -28,6 +29,19 @@ export class PoolContract implements Contract {
 
   async getActiveRange(provider: ContractProvider): Promise<Address> {
     const result = await provider.get('get_active_range', [])
+
+    return result.stack.readAddress()
+  }
+
+  async getTradeAccountAddress(
+    provider: ContractProvider,
+    params: { userAddress: Address; publicKey: Buffer; seed: number },
+  ): Promise<Address> {
+    const result = await provider.get('get_trade_account_address', [
+      { type: 'slice', cell: beginCell().storeAddress(params.userAddress).endCell() },
+      { type: 'int', value: bufferToBigInt(params.publicKey) },
+      { type: 'cell', cell: beginCell().storeUint(params.seed, 64).endCell() },
+    ])
 
     return result.stack.readAddress()
   }

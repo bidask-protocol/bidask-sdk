@@ -1,3 +1,10 @@
+
+/**
+ * Converts a number or string to a bigint
+ * @param amount - The amount to convert
+ * @param decimals - The number of decimals
+ * @returns The bigint value
+ */
 export const toBigInt = (amount: number | string, decimals: number | string = 0): bigint => {
   const decimalsNumber = Number(decimals)
   const multiplier = BigInt(10) ** BigInt(decimalsNumber)
@@ -15,6 +22,12 @@ export const toBigInt = (amount: number | string, decimals: number | string = 0)
   return BigInt(integerPart) * multiplier + BigInt(fractionStr)
 }
 
+/**
+ * Converts a bigint to a string
+ * @param amount - The amount to convert
+ * @param decimals - The number of decimals
+ * @returns The string value
+ */
 export const fromBigInt = (
   amount: number | string | bigint,
   decimals: number | string = 0,
@@ -32,4 +45,13 @@ export const fromBigInt = (
   const trimmedFractional = fractionalPart.replace(/0+$/, '')
 
   return trimmedFractional ? `${integerPart}.${trimmedFractional}` : integerPart
+}
+
+/**
+ * Converts a buffer to a bigint
+ * @param buffer - The buffer to convert
+ * @returns The bigint value
+ */
+export function bufferToBigInt(buffer: Buffer): bigint {
+  return BigInt('0x' + buffer.toString('hex'))
 }

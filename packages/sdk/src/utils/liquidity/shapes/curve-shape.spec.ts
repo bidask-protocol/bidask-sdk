@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import { getBinByPrice } from '../../bins'
+import { getSqrtPriceX128 } from '../../price'
 import { createCurveShape } from './curve-shape'
 
 describe('createCurveShape', () => {
@@ -12,7 +14,6 @@ describe('createCurveShape', () => {
         toBin: 247,
         token0Amount: 1000000000n,
         token1Amount: 1000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -26,10 +27,25 @@ describe('createCurveShape', () => {
         toBin: 241,
         token0Amount: 9000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
+    })
+
+    it.only('fallback ratio should work', () => {
+      console.warn(getSqrtPriceX128(10.0852))
+      console.warn(getBinByPrice(10.0852, 100n))
+      const shape = createCurveShape({
+        bps: 100n,
+        currentPrice: 10.0852,
+        fromBin: 224,
+        toBin: 240,
+        token0Amount: 10000000000n,
+        token1Amount: 10000000000n,
+        fallbackRatio: 0.8,
+      })
+
+      console.warn(shape)
     })
   })
 
@@ -42,7 +58,6 @@ describe('createCurveShape', () => {
         toBin: 232,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -56,7 +71,6 @@ describe('createCurveShape', () => {
         toBin: 231,
         token0Amount: 0n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -70,7 +84,6 @@ describe('createCurveShape', () => {
         toBin: 231,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -86,7 +99,6 @@ describe('createCurveShape', () => {
         toBin: 246,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -100,7 +112,6 @@ describe('createCurveShape', () => {
         toBin: 246,
         token0Amount: 1000000000n,
         token1Amount: 0n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -114,7 +125,6 @@ describe('createCurveShape', () => {
         toBin: 246,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()

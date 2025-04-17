@@ -4,8 +4,21 @@ import { getBinByPrice } from '../../bins'
 import { calculateCentralBinLiquidity } from './central-bin'
 import { normalizeBinsAmounts } from './normalizer'
 
+/**
+ * Creates bin dictionary for bidask shape
+ *
+ * @returns The bidask shape
+ */
 export const createBidaskShape = (params: CreateShapeParams): LiquidityProvideBins => {
-  const { token0Amount, token1Amount, currentPrice, fromBin, toBin, bps, ratio = 0.8 } = params
+  const {
+    token0Amount,
+    token1Amount,
+    currentPrice,
+    fromBin,
+    toBin,
+    bps,
+    fallbackRatio = 0.8,
+  } = params
 
   const token0AmountNumber = Number(token0Amount)
   const token1AmountNumber = Number(token1Amount)
@@ -30,8 +43,12 @@ export const createBidaskShape = (params: CreateShapeParams): LiquidityProvideBi
         token1Amount: token1AmountNumber,
         currentPrice,
         bps,
-        ratio,
+        fallbackRatio,
         unitsOnSide,
+        centralBinUnits: {
+          left: 1,
+          right: 1,
+        },
       })
     : [0, 0]
 

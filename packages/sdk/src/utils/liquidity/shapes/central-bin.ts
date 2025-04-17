@@ -1,4 +1,4 @@
-import { getBinByPrice, getBinPriceBounds, getPriceByBin } from '../../bins'
+import { getBinByPrice, getBinPriceBounds } from '../../bins'
 
 export const getCentralBinShares = (currentPrice: number, bps: bigint) => {
   const currentBin = getBinByPrice(currentPrice, bps)
@@ -24,13 +24,25 @@ export const calculateCentralBinLiquidity = (params: {
   token1Amount: number
   currentPrice: number
   bps: bigint
-  ratio: number
+  fallbackRatio: number
   unitsOnSide: {
     left: number
     right: number
   }
+  centralBinUnits: {
+    left: number
+    right: number
+  }
 }) => {
-  const { token0Amount, token1Amount, currentPrice, bps, unitsOnSide, ratio } = params
+  const {
+    token0Amount,
+    token1Amount,
+    currentPrice,
+    bps,
+    unitsOnSide,
+    fallbackRatio,
+    centralBinUnits,
+  } = params
 
   const share = getCentralBinShares(currentPrice, bps)
 
@@ -40,8 +52,8 @@ export const calculateCentralBinLiquidity = (params: {
   }
 
   const currentBinPotential = {
-    x: perUnit.x * share.x,
-    y: perUnit.y * share.y,
+    x: perUnit.x * share.x * centralBinUnits.right,
+    y: perUnit.y * share.y * centralBinUnits.left,
   }
 
   const activeBin = getBinByPrice(currentPrice, bps)
@@ -51,28 +63,65 @@ export const calculateCentralBinLiquidity = (params: {
   const sqrtUpperBound = Math.sqrt(upperBound)
   const sqrtCurrentPrice = Math.sqrt(currentPrice)
 
-  const currentBinL =
+  const defaultCurrentBinL =
     calculateLiquidityForTokenY(currentBinPotential.y, sqrtLowerBound, sqrtUpperBound) >
     calculateLiquidityForTokenX(currentBinPotential.x, sqrtLowerBound, sqrtUpperBound)
       ? calculateLiquidity(
-          token0Amount * ratio + currentBinPotential.x * (1 - ratio),
-          currentBinPotential.y * ratio + token1Amount * (1 - ratio),
+          token0Amount,
+          currentBinPotential.y,
           sqrtCurrentPrice,
           sqrtLowerBound,
           sqrtUpperBound,
         )
       : calculateLiquidity(
-          token0Amount * (1 - ratio) + currentBinPotential.x * ratio,
-          currentBinPotential.y * (1 - ratio) + token1Amount * ratio,
+          currentBinPotential.x,
+          token1Amount,
           sqrtCurrentPrice,
           sqrtLowerBound,
           sqrtUpperBound,
         )
 
-  return [
-    calculateTokenX(currentBinL, sqrtCurrentPrice, sqrtUpperBound),
-    calculateTokenY(currentBinL, sqrtLowerBound, sqrtCurrentPrice),
-  ]
+  const defaultTokenXLiquidity = calculateTokenX(
+    defaultCurrentBinL,
+    sqrtCurrentPrice,
+    sqrtUpperBound,
+  )
+  const defaultTokenYLiquidity = calculateTokenY(
+    defaultCurrentBinL,
+    sqrtLowerBound,
+    sqrtCurrentPrice,
+  )
+
+  if (defaultTokenXLiquidity >= token0Amount || defaultTokenYLiquidity >= token1Amount) {
+    if (fallbackRatio < 0 || fallbackRatio > 1) {
+      throw new Error('Fallback ratio must be between 0 and 1')
+    }
+
+    const fallbackCurrentBinL =
+      calculateLiquidityForTokenY(currentBinPotential.y, sqrtLowerBound, sqrtUpperBound) >
+      calculateLiquidityForTokenX(currentBinPotential.x, sqrtLowerBound, sqrtUpperBound)
+        ? calculateLiquidity(
+            token0Amount * fallbackRatio + currentBinPotential.x * (1 - fallbackRatio),
+            currentBinPotential.y * fallbackRatio + token1Amount * (1 - fallbackRatio),
+            sqrtCurrentPrice,
+            sqrtLowerBound,
+            sqrtUpperBound,
+          )
+        : calculateLiquidity(
+            token0Amount * (1 - fallbackRatio) + currentBinPotential.x * fallbackRatio,
+            currentBinPotential.y * (1 - fallbackRatio) + token1Amount * fallbackRatio,
+            sqrtCurrentPrice,
+            sqrtLowerBound,
+            sqrtUpperBound,
+          )
+
+    return [
+      calculateTokenX(fallbackCurrentBinL, sqrtLowerBound, sqrtUpperBound),
+      calculateTokenY(fallbackCurrentBinL, sqrtLowerBound, sqrtCurrentPrice),
+    ]
+  }
+
+  return [defaultTokenXLiquidity, defaultTokenYLiquidity]
 }
 
 /**
@@ -172,7 +221,6 @@ export const calculateCentralAmountXByAmountY = (
 ): number => {
   const [lowerPriceBound, upperPriceBound] = getBinPriceBounds(activeBin, bps)
 
-
   const sqrtLowerPriceBound = Math.sqrt(lowerPriceBound)
   const sqrtUpperPriceBound = Math.sqrt(upperPriceBound)
 
@@ -191,7 +239,6 @@ export const calculateCentralAmountYByAmountX = (
   bps: bigint,
 ): number => {
   const [lowerPriceBound, upperPriceBound] = getBinPriceBounds(activeBin, bps)
-
 
   const sqrtLowerPriceBound = Math.sqrt(lowerPriceBound)
   const sqrtUpperPriceBound = Math.sqrt(upperPriceBound)

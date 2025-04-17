@@ -12,7 +12,6 @@ describe('createSpotShape', () => {
         toBin: 10,
         token0Amount: 1000000000n,
         token1Amount: 1000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -26,7 +25,6 @@ describe('createSpotShape', () => {
         toBin: 239,
         token0Amount: 1000000000n,
         token1Amount: 1000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -41,7 +39,6 @@ describe('createSpotShape', () => {
           toBin: 232,
           token0Amount: 1000000000n,
           token1Amount: 1000000000n,
-          ratio: 1,
         })
 
         expect(shape).toMatchSnapshot()
@@ -55,7 +52,6 @@ describe('createSpotShape', () => {
           toBin: 231,
           token0Amount: 1000000000n,
           token1Amount: 1000000000n,
-          ratio: 1,
         })
 
         expect(shape).toMatchSnapshot()
@@ -69,7 +65,6 @@ describe('createSpotShape', () => {
           toBin: 231,
           token0Amount: 1000000000n,
           token1Amount: 1000000000n,
-          ratio: 1,
         })
 
         expect(shape).toMatchSnapshot()
@@ -86,7 +81,6 @@ describe('createSpotShape', () => {
         toBin: 250,
         token0Amount: 1000000000n,
         token1Amount: 1000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -100,7 +94,6 @@ describe('createSpotShape', () => {
         toBin: 250,
         token0Amount: 1000000000n,
         token1Amount: 1000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -114,7 +107,6 @@ describe('createSpotShape', () => {
         toBin: 250,
         token0Amount: 1000000000n,
         token1Amount: 1000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()

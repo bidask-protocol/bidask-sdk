@@ -1,4 +1,4 @@
-import type { Address, Contract, ContractProvider } from '@ton/ton'
+import type { Address, Contract, ContractProvider, JettonWallet } from '@ton/ton'
 
 export class JettonWalletContract implements Contract {
   static Opcodes = {

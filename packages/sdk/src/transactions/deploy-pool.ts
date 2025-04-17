@@ -3,7 +3,18 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { PoolFactory } from '../contracts'
 import type { TxParams } from '../types'
 import { getBinByPrice, getSqrtPriceX128 } from '../utils'
+import { POOL_FACTORY_ADDRESS } from '../constants'
 
+/**
+ * Creates a transaction parameters for deploying a pool
+ * @param params - Parameters for the transaction
+ * @param params.token0PoolWalletAddress - Address of the token0 pool wallet
+ * @param params.token1PoolWalletAddress - Address of the token1 pool wallet
+ * @param params.bps - Basis points for fee calculation
+ * @param params.lpFee - Liquidity provider fee
+ * @param params.initialPrice - Initial price of the pool
+ * @param params.seedCell - Seed cell for the pool
+ */
 export const createDeployPoolTxParams = (params: {
   token0PoolWalletAddress: Address
   token1PoolWalletAddress: Address
@@ -27,7 +38,7 @@ export const createDeployPoolTxParams = (params: {
   const constantGas = toNano('0.06')
 
   return {
-    to: Address.parse('kQCI3Ko1KNLXfgfngK5XjUSBA4FglcLbloHh71ceo8whl2ym'),
+    to: POOL_FACTORY_ADDRESS,
     value: constantGas,
     payload: deployPoolPayload,
   }

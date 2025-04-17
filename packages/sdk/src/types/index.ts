@@ -6,4 +6,5 @@ export {
   DepositType,
 } from './liquidity'
 export { PoolInfo } from './pool'
-export { TxParams, SwapPartialParams } from './transactions'
+export { TxParams } from './transactions'
+export { SwapPartialExecutionParams } from './swap'

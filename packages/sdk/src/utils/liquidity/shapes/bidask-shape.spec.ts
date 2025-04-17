@@ -12,7 +12,6 @@ describe('createBidaskShape', () => {
         toBin: 243,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
-        ratio: 1
       })
 
       expect(shape).toMatchSnapshot()
@@ -26,7 +25,6 @@ describe('createBidaskShape', () => {
         toBin: 240,
         token0Amount: 9000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -42,7 +40,6 @@ describe('createBidaskShape', () => {
         toBin: 232,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -56,7 +53,6 @@ describe('createBidaskShape', () => {
         toBin: 231,
         token0Amount: 0n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -70,7 +66,6 @@ describe('createBidaskShape', () => {
         toBin: 243,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -86,7 +81,6 @@ describe('createBidaskShape', () => {
         toBin: 242,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -100,7 +94,6 @@ describe('createBidaskShape', () => {
         toBin: 242,
         token0Amount: 1000000000n,
         token1Amount: 0n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()
@@ -114,7 +107,6 @@ describe('createBidaskShape', () => {
         toBin: 243,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
-        ratio: 1,
       })
 
       expect(shape).toMatchSnapshot()

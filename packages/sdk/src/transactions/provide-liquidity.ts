@@ -5,6 +5,22 @@ import { LiquidityType, TxParams } from '../types'
 import { DepositType, LiquidityProvideBins } from '../types/liquidity'
 import { createLiquidityProvideDict } from '../utils/liquidity/dictionary'
 
+/**
+ * Creates a transaction parameters for providing liquidity to a Jetton/Jetton pool
+ * @param params - Parameters for the transaction
+ * @param params.jettonAmount0 - Amount of token0 to provide
+ * @param params.jettonAmount1 - Amount of token1 to provide
+ * @param params.jettonWalletAddress0 - Address of the token0 Jetton wallet
+ * @param params.jettonWalletAddress1 - Address of the token1 Jetton wallet
+ * @param params.senderAddress - Address of the sender
+ * @param params.depositType - Type of deposit
+ * @param params.liquidityType - Type of liquidity
+ * @param params.binsToProvide - Bins to provide
+ * @param params.poolAddress - Address of the pool
+ * @param params.rejectPayload - Reject payload
+ * @param params.forwardPayload - Forward payload
+ * @returns Transaction parameters
+ */
 export function createProvideLiquidityTxParams(params: {
   jettonAmount0: bigint
   jettonAmount1: bigint

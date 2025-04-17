@@ -1,6 +1,6 @@
 {
   "name": "@foprta/sdk",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Bidask Protocol SDK",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -15,7 +15,8 @@
     "dev": "tsup --watch",
     "lint": "eslint src",
     "check-types": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "docs": "typedoc --out docs src"
   },
   "keywords": [
     "ton",
@@ -26,6 +27,7 @@
   "license": "MIT",
   "peerDependencies": {
     "@ton/ton": "^13.9.0 || ^14.0.0 || ^15.0.0",
+    "@ton/crypto": "^3.3.0",
     "buffer": "^6.0.0"
   },
   "devDependencies": {

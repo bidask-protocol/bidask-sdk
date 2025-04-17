@@ -2,6 +2,15 @@ import { beginCell, Dictionary } from '@ton/ton'
 
 import { LiquidityProvideBins, LiquidityRemoveBins } from '../../types/liquidity'
 
+/**
+ * Allows you to create bin dictionaries padded with placeholder bins in the start and end of binDictionary
+ *
+ * @param params - The parameters
+ * @param params.bins - The bins
+ * @param params.emptyBin - Placeholder for the empty bin
+ * @param params.result - The result
+ * @param params.iterator - The iterator
+ */
 export const createPaddedBinDict = <
   BinValue extends any,
   Bins extends Record<number, BinValue>,
@@ -49,6 +58,7 @@ export const createPaddedBinDict = <
 
   return result
 }
+
 
 export const createLiquidityProvideDict = (bins: LiquidityProvideBins) => {
   return createPaddedBinDict({
