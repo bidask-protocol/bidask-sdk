@@ -17,6 +17,7 @@
     "tsup": "8.4.0",
     "turbo": "2.4.4",
     "typedoc": "0.28.2",
+    "typedoc-plugin-markdown": "4.6.2",
     "typescript": "5.8.2",
     "vitest": "3.0.9"
   },
