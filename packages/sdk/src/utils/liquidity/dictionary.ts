@@ -59,7 +59,6 @@ export const createPaddedBinDict = <
   return result
 }
 
-
 export const createLiquidityProvideDict = (bins: LiquidityProvideBins) => {
   return createPaddedBinDict({
     bins,
@@ -69,7 +68,7 @@ export const createLiquidityProvideDict = (bins: LiquidityProvideBins) => {
       const liquidityCell = beginCell()
 
       for (const [, [amount0, amount1]] of paddedBinDict) {
-        liquidityCell.storeUint(amount0, 120).storeUint(amount1, 120)
+        liquidityCell.storeCoins(amount0).storeCoins(amount1)
       }
 
       return result.set(binDictIndex, liquidityCell.asSlice().loadBuffer(120))

@@ -1,13 +1,14 @@
 import { Address, beginCell, Contract, type ContractProvider } from '@ton/ton'
 
 import { PoolInfo } from '../types'
+import { createSeedCell } from '../utils'
 import { bufferToBigInt } from '../utils/bigint'
 
 export class PoolContract implements Contract {
   static Opcodes = {
     Swap: 0xca2663c4,
-    AddLiquidity: 0x406d7624,
-    AddBothLiquidity: 0x64dbad78,
+    AddLiquidity: 0x214ad1d2,
+    AddBothLiquidity: 0x3ea0bafc,
   }
 
   static create(address: Address) {
@@ -40,7 +41,7 @@ export class PoolContract implements Contract {
     const result = await provider.get('get_trade_account_address', [
       { type: 'slice', cell: beginCell().storeAddress(params.userAddress).endCell() },
       { type: 'int', value: bufferToBigInt(params.publicKey) },
-      { type: 'cell', cell: beginCell().storeUint(params.seed, 64).endCell() },
+      { type: 'cell', cell: createSeedCell(params.seed) },
     ])
 
     return result.stack.readAddress()

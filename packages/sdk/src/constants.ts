@@ -2,7 +2,7 @@ import { Address } from '@ton/ton'
 
 /**
  * Zero address
- * 
+ *
  * Used for native TON coin
  */
 export const ZERO_ADDRESS = Address.parse(
@@ -11,14 +11,14 @@ export const ZERO_ADDRESS = Address.parse(
 
 /**
  * TON address (alias for `ZERO_ADDRESS`)
- * 
+ *
  * Used for native TON coin
  */
 export const TON_ADDRESS = ZERO_ADDRESS
 
 /** Pool factory address */
 export const POOL_FACTORY_ADDRESS = Address.parse(
-  'EQCR31Muj9tUjYUnBZGrWOCvdIUstccviQCJxLbO9yWRjUC5',
+  'EQCXeklSavPod6x7zUWLSTzSjYGX7W8Ted4BaMA2OlY3ziNP',
 )
 
 /**

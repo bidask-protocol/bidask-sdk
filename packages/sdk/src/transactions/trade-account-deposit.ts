@@ -2,7 +2,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import { JettonWalletContract, TradeAccount } from '../contracts'
 import { TxParams } from '../types'
-import { isZeroAddress } from '../utils'
+import { createSeedCell, isZeroAddress } from '../utils'
 
 /**
  * Creates a transaction parameters for depositing tokens into a trade account
@@ -31,7 +31,7 @@ export const createTradeAccountDepositTxParams = (params: {
 }): TxParams[] => {
   const constantGas = toNano('0.5')
 
-  const seedCell = beginCell().storeUint(params.seed, 64).endCell()
+  const seedCell = createSeedCell(params.seed)
 
   const forwardPayload = beginCell()
     .storeUint(TradeAccount.Opcodes.DepositOnAccount, 32)
