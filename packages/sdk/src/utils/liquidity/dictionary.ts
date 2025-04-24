@@ -63,7 +63,7 @@ export const createLiquidityProvideDict = (bins: LiquidityProvideBins) => {
   return createPaddedBinDict({
     bins,
     emptyBin: [0n, 0n],
-    result: Dictionary.empty(Dictionary.Keys.Int(32), Dictionary.Values.Buffer(120)),
+    result: Dictionary.empty(Dictionary.Keys.Int(32), Dictionary.Values.Cell()),
     iterator: (paddedBinDict, result, binDictIndex) => {
       const liquidityCell = beginCell()
 
@@ -71,7 +71,10 @@ export const createLiquidityProvideDict = (bins: LiquidityProvideBins) => {
         liquidityCell.storeCoins(amount0).storeCoins(amount1)
       }
 
-      return result.set(binDictIndex, liquidityCell.asSlice().loadBuffer(120))
+      return result.set(
+        binDictIndex,
+        beginCell().storeBits(liquidityCell.asSlice().loadBits(liquidityCell.bits)).endCell(),
+      )
     },
   })
 }
