@@ -1,4 +1,4 @@
-import { beginCell, Dictionary } from '@ton/ton'
+import { beginCell, BitString, Builder, Dictionary, Slice } from '@ton/ton'
 
 import { LiquidityProvideBins, LiquidityRemoveBins } from '../../types/liquidity'
 
@@ -59,11 +59,20 @@ export const createPaddedBinDict = <
   return result
 }
 
+const BitStringProcessor = {
+  serialize: (src: BitString, builder: Builder) => {
+    builder.storeBits(src)
+  },
+  parse: (src: Slice) => {
+    return src.loadBits(src.asBuilder().bits)
+  },
+}
+
 export const createLiquidityProvideDict = (bins: LiquidityProvideBins) => {
   return createPaddedBinDict({
     bins,
     emptyBin: [0n, 0n],
-    result: Dictionary.empty(Dictionary.Keys.Int(32), Dictionary.Values.Cell()),
+    result: Dictionary.empty(Dictionary.Keys.Int(32), BitStringProcessor),
     iterator: (paddedBinDict, result, binDictIndex) => {
       const liquidityCell = beginCell()
 
@@ -71,10 +80,7 @@ export const createLiquidityProvideDict = (bins: LiquidityProvideBins) => {
         liquidityCell.storeCoins(amount0).storeCoins(amount1)
       }
 
-      return result.set(
-        binDictIndex,
-        beginCell().storeBits(liquidityCell.asSlice().loadBits(liquidityCell.bits)).endCell(),
-      )
+      return result.set(binDictIndex, liquidityCell.asSlice().loadBits(liquidityCell.bits))
     },
   })
 }
