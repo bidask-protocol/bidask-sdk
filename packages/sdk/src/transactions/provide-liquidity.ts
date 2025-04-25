@@ -42,7 +42,7 @@ export function createProvideLiquidityTxParams(params: {
     throw new Error('Cannot send both jetton tokens on OneSide liquidity type')
   }
 
-  const constantGas = toNano('4')
+  const constantGas = toNano('3')
 
   const forwardPayload = beginCell()
     .storeUint(PoolContract.Opcodes.AddLiquidity, 32)

@@ -20,7 +20,7 @@ import { createLiquidityProvideDict } from '../utils/liquidity/dictionary'
  * @param params.forwardPayload - Forward payload
  * @returns Transaction parameters
  */
-export function createProvideNativeLiquidityTxParams(params: {
+export function createProvideTonLiquidityTxParams(params: {
   tonAmount: bigint
   jettonAmount: bigint
   jettonWalletAddress: Address
@@ -32,6 +32,8 @@ export function createProvideNativeLiquidityTxParams(params: {
   rejectPayload?: Cell
   forwardPayload?: Cell
 }): TxParams {
+  console.warn('provie')
+
   if (
     params.liquidityType === LiquidityType.OneSide &&
     params.jettonAmount > 0n &&
@@ -83,7 +85,7 @@ export function createProvideNativeLiquidityTxParams(params: {
 
   return {
     to: params.jettonWalletAddress,
-    value: constantGas + params.tonAmount,
+    value: constantGas + constantGas + params.tonAmount,
     payload: jettonTransferBody,
   }
 }

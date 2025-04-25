@@ -1,4 +1,4 @@
-export { createProvideNativeLiquidityTxParams } from './provide-native-liquidity'
+export { createProvideTonLiquidityTxParams } from './provide-ton-liquidity'
 export { createTonSwapTxParams } from './ton-swap'
 export { createJettonSwapTxParams } from './jetton-swap'
 export { createProvideLiquidityTxParams } from './provide-liquidity'

@@ -2,8 +2,8 @@ import { Address, Cell, Contract, type ContractProvider, Dictionary } from '@ton
 
 export class LpMultitokenContract implements Contract {
   static Opcodes = {
-    BurnAll: 0x00beb5cf,
-    Burn: 0x595f07bc,
+    BurnAll: 0xebd6ec83,
+    Burn: 0x73403c43,
   }
 
   static create(address: Address) {

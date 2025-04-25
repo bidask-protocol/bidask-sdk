@@ -6,8 +6,8 @@ import { bufferToBigInt } from '../utils/bigint'
 
 export class PoolContract implements Contract {
   static Opcodes = {
-    Swap: 0xca2663c4,
-    AddLiquidity: 0x214ad1d2,
+    Swap: 0xf2ef6c1b,
+    AddLiquidity: 0x96feef7b,
     AddBothLiquidity: 0x3ea0bafc,
   }
 
