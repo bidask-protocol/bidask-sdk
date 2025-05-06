@@ -1,8 +1,6 @@
 import { CreateShapeParams, LiquidityProvideBins } from '../../../types/liquidity'
-import { toBigInt } from '../../bigint'
 import { getBinByPrice } from '../../bins'
-import { calculateCentralBinLiquidity } from './central-bin'
-import { normalizeBinsAmounts } from './normalizer'
+import { getNearestBinUnits, shapeCreator } from './shape-creator'
 
 /**
  * Creates bin dictionary for bidask shape
@@ -10,81 +8,23 @@ import { normalizeBinsAmounts } from './normalizer'
  * @returns The bidask shape
  */
 export const createBidaskShape = (params: CreateShapeParams): LiquidityProvideBins => {
-  const {
-    token0Amount,
-    token1Amount,
-    currentPrice,
-    fromBin,
-    toBin,
-    bps,
-    fallbackRatio = 0.8,
-  } = params
+  const activeBin = getBinByPrice(params.currentPrice, params.bps)
 
-  const token0AmountNumber = Number(token0Amount)
-  const token1AmountNumber = Number(token1Amount)
+  const nearestBinUnits = getNearestBinUnits(params.fromBin, activeBin, params.toBin)
 
-  const activeBin = getBinByPrice(currentPrice, bps)
-
-  const currentNearestBin = {
-    left: Math.min(toBin, activeBin - 1),
-    right: Math.max(activeBin + 1, fromBin),
-  }
-
-  const isTwoSided = fromBin <= activeBin && toBin >= activeBin
-
-  const unitsOnSide = {
-    left: bidaskSum(fromBin, currentNearestBin.left, activeBin),
-    right: bidaskSum(currentNearestBin.right, toBin, activeBin),
-  }
-
-  const currentBinLiquidity = isTwoSided
-    ? calculateCentralBinLiquidity({
-        token0Amount: token0AmountNumber,
-        token1Amount: token1AmountNumber,
-        currentPrice,
-        bps,
-        fallbackRatio,
-        unitsOnSide,
-        centralBinUnits: {
-          left: 1,
-          right: 1,
-        },
-      })
-    : [0, 0]
-
-  const perUnit = {
-    x:
-      unitsOnSide.right !== 0
-        ? (token0AmountNumber - currentBinLiquidity[0]) / unitsOnSide.right
-        : 0,
-    y:
-      unitsOnSide.left !== 0 ? (token1AmountNumber - currentBinLiquidity[1]) / unitsOnSide.left : 0,
-  }
-
-  const result: LiquidityProvideBins = {}
-
-  if (isTwoSided) {
-    for (let i = fromBin; i <= toBin; i++) {
-      if (i !== activeBin) {
-        const x = i > activeBin ? bidaskBinHeight(i, activeBin) * perUnit.x : 0
-        const y = i < activeBin ? bidaskBinHeight(i, activeBin) * perUnit.y : 0
-
-        result[i] = [toBigInt(x), toBigInt(y)]
-      } else {
-        const [x, y] = currentBinLiquidity
-        result[i] = [toBigInt(x), toBigInt(y)]
-      }
-    }
-  } else {
-    for (let i = fromBin; i <= toBin; i++) {
-      const x = i > activeBin ? bidaskBinHeight(i, activeBin) * perUnit.x : 0
-      const y = i < activeBin ? bidaskBinHeight(i, activeBin) * perUnit.y : 0
-
-      result[i] = [toBigInt(x), toBigInt(y)]
-    }
-  }
-
-  return normalizeBinsAmounts(result, token0Amount, token1Amount)
+  return shapeCreator({
+    ...params,
+    xBinCreator: (perUnit, bin) => bidaskBinHeight(bin, activeBin) * perUnit,
+    yBinCreator: (perUnit, bin) => bidaskBinHeight(bin, activeBin) * perUnit,
+    centralBinUnits: {
+      left: 1,
+      right: 1,
+    },
+    sideBinsUnits: {
+      left: bidaskSum(params.fromBin, nearestBinUnits.left, activeBin),
+      right: bidaskSum(nearestBinUnits.right, params.toBin, activeBin),
+    },
+  })
 }
 
 const countClosedInterval = (a: number, b: number) => {

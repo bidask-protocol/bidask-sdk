@@ -19,7 +19,7 @@ def get_liquidity(x, y, sp, sa, sb):
         return get_liquidity_y(y, sa, sb)
 
 def calculate_x(L, sp, sa, sb):
-    debug(L, sa, sp, sb)
+    # debug(L, sa, sp, sb)
     return L * (sb - sp) / (sp * sb)
 
 def calculate_y(L, sp, sa, sb):
@@ -109,6 +109,7 @@ def print_provision_array(x, y, shape, from_bin, to_bin, ratio, cur_bin, sqrt_p,
         in_cur_bin_potential = [per_unit[i] * share[i] * (curve_magnitude[i] if shape == 'curve' else 1) for i in (0, 1)]
         debug(f'share absolute', in_cur_bin_potential)
         # узнаём, что нам выгоднее положить для маленького эксцесса, считаем ликвидность
+        debug(x, y, ratio, in_cur_bin_potential[0], in_cur_bin_potential[1])
         if get_liquidity_y(in_cur_bin_potential[0], pa, pb) > get_liquidity_x(in_cur_bin_potential[1], pa, pb): # если больший excess в y
             debug('y is bigger')
             L = get_liquidity(x * ratio + in_cur_bin_potential[1] * (1 - ratio), in_cur_bin_potential[0] * ratio + y * (1 - ratio), sqrt_p, pa, pb)
@@ -117,6 +118,7 @@ def print_provision_array(x, y, shape, from_bin, to_bin, ratio, cur_bin, sqrt_p,
             L = get_liquidity(x * (1 - ratio) + in_cur_bin_potential[1] * ratio, in_cur_bin_potential[0] * (1 - ratio) + y * ratio, sqrt_p, pa, pb)
         debug('L:', L)
         # считаем, сколько токенов ляжет в центральный бин
+        debug(L, pa, pb, sqrt_p, calculate_y(L, sqrt_p, pa, pb), calculate_x(L, sqrt_p, pa, pb))
         in_cur_bin = (calculate_y(L, sqrt_p, pa, pb), calculate_x(L, sqrt_p, pa, pb))
     else:
         in_cur_bin = (0, 0)
@@ -163,7 +165,7 @@ def print_provision_array(x, y, shape, from_bin, to_bin, ratio, cur_bin, sqrt_p,
 # ТЕСТЫ
 ##################################################################
 
-# print_provision_array(10000000000, 100000000, 'curve', 224, 240, 0.8, 232, sqrt(10.0852), 0.01)
+print_provision_array(9 * 10 ** 9, 2 * 10 ** 9, 'bidask', 224, 240, 1, 232, sqrt(10.0852), 0.01)
 
 # for shape in ('spot', 'curve', 'bidask'): # по форме
 #     for (from_bin, to_bin) in ((-2, -1), (-2, 2), (1, 2), (-2, 4)): # по односторонности

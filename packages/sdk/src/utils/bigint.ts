@@ -1,4 +1,3 @@
-
 /**
  * Converts a number or string to a bigint
  * @param amount - The amount to convert
@@ -13,8 +12,7 @@ export const toBigInt = (amount: number | string, decimals: number | string = 0)
   if (typeof amount === 'string') {
     amountString = amount
   } else {
-    const re = new RegExp('^-?\\d+(?:.\\d{0,' + (decimalsNumber || -1) + '})?')
-    amountString = amount.toString().match(re)![0]
+    amountString = numberExponentToLarge(amount)
   }
 
   const [integerPart, fractionalPart = ''] = String(amountString).split('.')
@@ -54,4 +52,58 @@ export const fromBigInt = (
  */
 export function bufferToBigInt(buffer: Buffer): bigint {
   return BigInt('0x' + buffer.toString('hex'))
+}
+
+/**
+ * Converts a number in exponential (e-Notation) format to a decimal string.
+ * @param numIn - The input number, can be a string or number in exponent format.
+ * @returns A string representing the decimal number.
+ * @remarks No checks are made for NaN or undefined inputs. Non-exponential numbers are returned as is.
+ */
+export function numberExponentToLarge(numIn: string | number): string {
+  const inputStr = String(numIn)
+  let sign = ''
+  let numStr = inputStr
+
+  // Handle negative numbers
+  if (numStr.startsWith('-')) {
+    sign = '-'
+    numStr = numStr.slice(1)
+  }
+
+  // Split at 'e' or 'E' to check for exponent notation
+  const parts = numStr.split(/[eE]/)
+  if (parts.length < 2) {
+    return sign + numStr
+  }
+
+  const exponent = Number(parts[1])
+  const decimalSeparator = (1.1).toLocaleString().slice(1, 2)
+  const baseParts = parts[0].split(decimalSeparator)
+  let baseLeft = baseParts[0]
+  let baseRight = baseParts[1] || ''
+
+  if (exponent >= 0) {
+    // Handle positive exponents by padding and inserting decimal separator
+    if (exponent > baseRight.length) {
+      baseRight += '0'.repeat(exponent - baseRight.length)
+    }
+    baseRight = baseRight.slice(0, exponent) + decimalSeparator + baseRight.slice(exponent)
+    if (baseRight.endsWith(decimalSeparator)) {
+      baseRight = baseRight.slice(0, -1)
+    }
+  } else {
+    // Handle negative exponents by padding and inserting decimal separator
+    const deltaZeros = Math.abs(exponent) - baseLeft.length
+    if (deltaZeros > 0) {
+      baseLeft = '0'.repeat(deltaZeros) + baseLeft
+    }
+    baseLeft = baseLeft.slice(0, exponent) + decimalSeparator + baseLeft.slice(exponent)
+    if (baseLeft.startsWith(decimalSeparator)) {
+      baseLeft = '0' + baseLeft
+    }
+  }
+
+  // Combine parts, remove unnecessary leading/trailing zeros, and return with sign
+  return sign + (baseLeft + baseRight).replace(/^0*(\d+|\d+\.\d+?)\.?0*$/, '$1')
 }

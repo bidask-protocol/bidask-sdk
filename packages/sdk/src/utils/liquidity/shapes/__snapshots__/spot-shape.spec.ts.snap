@@ -52,7 +52,7 @@ exports[`createSpotShape > both sides of active bin > left side of active bin > 
   ],
   "231": [
     0n,
-    76923088n,
+    76923076n,
   ],
 }
 `;
@@ -109,7 +109,7 @@ exports[`createSpotShape > both sides of active bin > left side of active bin > 
   ],
   "231": [
     0n,
-    76923088n,
+    76923076n,
   ],
 }
 `;
@@ -161,8 +161,8 @@ exports[`createSpotShape > both sides of active bin > left side of active bin > 
     51056207n,
   ],
   "232": [
-    1000000000n,
-    438381723n,
+    123236558n,
+    438381720n,
   ],
 }
 `;
@@ -210,7 +210,7 @@ exports[`createSpotShape > both sides of active bin > return the correct shape #
     100000000n,
   ],
   "0": [
-    90909100n,
+    90909090n,
     0n,
   ],
   "1": [
@@ -287,8 +287,8 @@ exports[`createSpotShape > both sides of active bin > return the correct shape #
     123236919n,
   ],
   "232": [
-    38609052n,
-    137341567n,
+    38609050n,
+    137341564n,
   ],
   "233": [
     137341564n,
@@ -324,7 +324,7 @@ exports[`createSpotShape > both sides of active bin > return the correct shape #
 exports[`createSpotShape > right side of active bin > excluding active bin 1`] = `
 {
   "233": [
-    55555565n,
+    55555555n,
     0n,
   ],
   "234": [
@@ -401,7 +401,7 @@ exports[`createSpotShape > right side of active bin > excluding active bin 1`] =
 exports[`createSpotShape > right side of active bin > ignore tokens from left side 1`] = `
 {
   "233": [
-    55555565n,
+    55555555n,
     0n,
   ],
   "234": [
@@ -478,8 +478,8 @@ exports[`createSpotShape > right side of active bin > ignore tokens from left si
 exports[`createSpotShape > right side of active bin > including active bin 1`] = `
 {
   "232": [
-    93705688n,
-    1000000000n,
+    93705670n,
+    333333333n,
   ],
   "233": [
     50349684n,

@@ -32,8 +32,6 @@ export function createProvideTonLiquidityTxParams(params: {
   rejectPayload?: Cell
   forwardPayload?: Cell
 }): TxParams {
-  console.warn('provie')
-
   if (
     params.liquidityType === LiquidityType.OneSide &&
     params.jettonAmount > 0n &&

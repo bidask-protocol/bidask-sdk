@@ -43,8 +43,8 @@ exports[`createBidaskShape > both sides of active bin > return the correct shape
     61140314n,
   ],
   "232": [
-    3637595n,
-    12939777n,
+    3637589n,
+    12939771n,
   ],
   "233": [
     25879543n,
@@ -128,8 +128,8 @@ exports[`createBidaskShape > both sides of active bin > return the correct shape
     81670595n,
   ],
   "232": [
-    57136167n,
-    203246909n,
+    57136162n,
+    203246905n,
   ],
   "233": [
     406493810n,
@@ -202,7 +202,7 @@ exports[`createBidaskShape > left side of active bin > excluding active bin 1`] 
   ],
   "231": [
     0n,
-    74074076n,
+    74074074n,
   ],
 }
 `;
@@ -210,7 +210,7 @@ exports[`createBidaskShape > left side of active bin > excluding active bin 1`] 
 exports[`createBidaskShape > left side of active bin > ignore tokens from right side 1`] = `
 {
   "233": [
-    25974035n,
+    25974025n,
     0n,
   ],
   "234": [
@@ -295,8 +295,8 @@ exports[`createBidaskShape > left side of active bin > including active bin 1`] 
     62786138n,
   ],
   "232": [
-    1000000000n,
-    304774262n,
+    85677228n,
+    304774257n,
   ],
 }
 `;
@@ -304,7 +304,7 @@ exports[`createBidaskShape > left side of active bin > including active bin 1`] 
 exports[`createBidaskShape > right side of active bin > excluding active bin 1`] = `
 {
   "233": [
-    30769235n,
+    30769230n,
     0n,
   ],
   "234": [
@@ -349,7 +349,7 @@ exports[`createBidaskShape > right side of active bin > excluding active bin 1`]
 exports[`createBidaskShape > right side of active bin > ignore tokens from left side 1`] = `
 {
   "233": [
-    25974035n,
+    25974025n,
     0n,
   ],
   "234": [
@@ -398,8 +398,8 @@ exports[`createBidaskShape > right side of active bin > ignore tokens from left 
 exports[`createBidaskShape > right side of active bin > including active bin 1`] = `
 {
   "232": [
-    140558510n,
-    2000000000n,
+    140558505n,
+    500000000n,
   ],
   "233": [
     26444353n,

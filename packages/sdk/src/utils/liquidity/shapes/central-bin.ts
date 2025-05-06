@@ -116,7 +116,7 @@ export const calculateCentralBinLiquidity = (params: {
           )
 
     return [
-      calculateTokenX(fallbackCurrentBinL, sqrtLowerBound, sqrtUpperBound),
+      calculateTokenX(fallbackCurrentBinL, sqrtCurrentPrice, sqrtUpperBound),
       calculateTokenY(fallbackCurrentBinL, sqrtLowerBound, sqrtCurrentPrice),
     ]
   }

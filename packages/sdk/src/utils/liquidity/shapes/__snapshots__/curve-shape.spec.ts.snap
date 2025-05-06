@@ -1,5 +1,78 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`createCurveShape > both sides of active bin > fallback ratio should work 1`] = `
+{
+  "224": [
+    0n,
+    208871409n,
+  ],
+  "225": [
+    0n,
+    417742819n,
+  ],
+  "226": [
+    0n,
+    626614229n,
+  ],
+  "227": [
+    0n,
+    835485639n,
+  ],
+  "228": [
+    0n,
+    1044357048n,
+  ],
+  "229": [
+    0n,
+    1253228458n,
+  ],
+  "230": [
+    0n,
+    1462099868n,
+  ],
+  "231": [
+    0n,
+    1670971278n,
+  ],
+  "232": [
+    697347079n,
+    2480629247n,
+  ],
+  "233": [
+    2067256204n,
+    0n,
+  ],
+  "234": [
+    1808849179n,
+    0n,
+  ],
+  "235": [
+    1550442153n,
+    0n,
+  ],
+  "236": [
+    1292035127n,
+    0n,
+  ],
+  "237": [
+    1033628102n,
+    0n,
+  ],
+  "238": [
+    775221076n,
+    0n,
+  ],
+  "239": [
+    516814051n,
+    0n,
+  ],
+  "240": [
+    258407025n,
+    0n,
+  ],
+}
+`;
+
 exports[`createCurveShape > both sides of active bin > return the correct shape #1 1`] = `
 {
   "219": [
@@ -55,8 +128,8 @@ exports[`createCurveShape > both sides of active bin > return the correct shape 
     123854041n,
   ],
   "232": [
-    37394673n,
-    133021719n,
+    37394665n,
+    133021711n,
   ],
   "233": [
     120325666n,
@@ -148,8 +221,8 @@ exports[`createCurveShape > both sides of active bin > return the correct shape 
     3547577n,
   ],
   "232": [
-    558743531n,
-    1987583483n,
+    558743526n,
+    1987583477n,
   ],
   "233": [
     1688251294n,
@@ -210,7 +283,7 @@ exports[`createCurveShape > left side of active bin > excluding active bin 1`] =
   ],
   "231": [
     0n,
-    666666668n,
+    666666666n,
   ],
 }
 `;
@@ -235,7 +308,7 @@ exports[`createCurveShape > left side of active bin > ignore tokens from right s
   ],
   "231": [
     0n,
-    666666668n,
+    666666666n,
   ],
 }
 `;
@@ -263,8 +336,8 @@ exports[`createCurveShape > left side of active bin > including active bin 1`] =
     565075247n,
   ],
   "232": [
-    1000000000n,
-    304774259n,
+    85677228n,
+    304774257n,
   ],
 }
 `;
@@ -272,7 +345,7 @@ exports[`createCurveShape > left side of active bin > including active bin 1`] =
 exports[`createCurveShape > right side of active bin > excluding active bin 1`] = `
 {
   "233": [
-    133333339n,
+    133333333n,
     0n,
   ],
   "234": [
@@ -333,7 +406,7 @@ exports[`createCurveShape > right side of active bin > excluding active bin 1`] 
 exports[`createCurveShape > right side of active bin > ignore tokens from left side 1`] = `
 {
   "233": [
-    133333339n,
+    133333333n,
     0n,
   ],
   "234": [
@@ -394,8 +467,8 @@ exports[`createCurveShape > right side of active bin > ignore tokens from left s
 exports[`createCurveShape > right side of active bin > including active bin 1`] = `
 {
   "232": [
-    140558512n,
-    2000000000n,
+    140558505n,
+    500000000n,
   ],
   "233": [
     114592199n,
@@ -451,6 +524,71 @@ exports[`createCurveShape > right side of active bin > including active bin 1`] 
   ],
   "246": [
     8185157n,
+    0n,
+  ],
+}
+`;
+
+exports[`createCurveShape > with fallback ratio > ignore tokens from left side 1`] = `
+{
+  "455": [
+    0n,
+    344507976n,
+  ],
+  "456": [
+    0n,
+    689015953n,
+  ],
+  "457": [
+    0n,
+    1033523929n,
+  ],
+  "458": [
+    0n,
+    1378031906n,
+  ],
+  "459": [
+    0n,
+    1722539883n,
+  ],
+  "460": [
+    0n,
+    2067047859n,
+  ],
+  "461": [
+    0n,
+    2411555836n,
+  ],
+  "462": [
+    800129n,
+    353776654n,
+  ],
+  "463": [
+    49967n,
+    0n,
+  ],
+  "464": [
+    42829n,
+    0n,
+  ],
+  "465": [
+    35691n,
+    0n,
+  ],
+  "466": [
+    28552n,
+    0n,
+  ],
+  "467": [
+    21414n,
+    0n,
+  ],
+  "468": [
+    14276n,
+    0n,
+  ],
+  "469": [
+    7138n,
     0n,
   ],
 }

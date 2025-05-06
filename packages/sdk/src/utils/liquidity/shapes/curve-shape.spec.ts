@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { getBinByPrice } from '../../bins'
-import { getSqrtPriceX128 } from '../../price'
 import { createCurveShape } from './curve-shape'
 
 describe('createCurveShape', () => {
@@ -32,9 +30,7 @@ describe('createCurveShape', () => {
       expect(shape).toMatchSnapshot()
     })
 
-    it.only('fallback ratio should work', () => {
-      console.warn(getSqrtPriceX128(10.0852))
-      console.warn(getBinByPrice(10.0852, 100n))
+    it('fallback ratio should work', () => {
       const shape = createCurveShape({
         bps: 100n,
         currentPrice: 10.0852,
@@ -42,10 +38,9 @@ describe('createCurveShape', () => {
         toBin: 240,
         token0Amount: 10000000000n,
         token1Amount: 10000000000n,
-        fallbackRatio: 0.8,
       })
 
-      console.warn(shape)
+      expect(shape).toMatchSnapshot()
     })
   })
 
@@ -97,8 +92,8 @@ describe('createCurveShape', () => {
         currentPrice: 10.0852,
         fromBin: 232,
         toBin: 246,
-        token0Amount: 1000000000n,
-        token1Amount: 2000000000n,
+        token0Amount: 1_000_000_000n,
+        token1Amount: 2_000_000_000n,
       })
 
       expect(shape).toMatchSnapshot()
@@ -125,6 +120,21 @@ describe('createCurveShape', () => {
         toBin: 246,
         token0Amount: 1000000000n,
         token1Amount: 2000000000n,
+      })
+
+      expect(shape).toMatchSnapshot()
+    })
+  })
+
+  describe('with fallback ratio', () => {
+    it('ignore tokens from left side', () => {
+      const shape = createCurveShape({
+        bps: 100n,
+        currentPrice: 100,
+        fromBin: 455,
+        toBin: 469,
+        token0Amount: 1n * 10n ** 6n,
+        token1Amount: 10n * 10n ** 9n,
       })
 
       expect(shape).toMatchSnapshot()
