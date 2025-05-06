@@ -3,13 +3,11 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { LiquidityType, TxParams } from '../types'
 import { DepositType, LiquidityProvideBins } from '../types/liquidity'
-import { createLiquidityProvideDict } from '../utils/liquidity/dictionary'
+import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liquidity/dictionary'
 
 /**
  * Creates a transaction parameters for providing liquidity to a TON/Jetton pool
  * @param params - Parameters for the transaction
- * @param params.tonAmount - Amount of TON to provide
- * @param params.jettonAmount - Amount of token to provide
  * @param params.jettonWalletAddress - Address of the token Jetton wallet
  * @param params.depositType - Type of deposit
  * @param params.liquidityType - Type of liquidity
@@ -18,11 +16,9 @@ import { createLiquidityProvideDict } from '../utils/liquidity/dictionary'
  * @param params.poolAddress - Address of the pool
  * @param params.rejectPayload - Reject payload
  * @param params.forwardPayload - Forward payload
- * @returns Transaction parameters
+ * @returns Transactions parameters
  */
 export function createProvideTonLiquidityTxParams(params: {
-  tonAmount: bigint
-  jettonAmount: bigint
   jettonWalletAddress: Address
   depositType: DepositType
   liquidityType: LiquidityType
@@ -31,59 +27,89 @@ export function createProvideTonLiquidityTxParams(params: {
   poolAddress: Address
   rejectPayload?: Cell
   forwardPayload?: Cell
-}): TxParams {
+}): TxParams[] {
+  let totalJettonAmount = 0n
+  let totalTonAmount = 0n
+  Object.values(params.binsToProvide).forEach(([x, y]) => {
+    totalJettonAmount += x
+    totalTonAmount += y
+  })
+
   if (
     params.liquidityType === LiquidityType.OneSide &&
-    params.jettonAmount > 0n &&
-    params.tonAmount > 0n
+    totalJettonAmount > 0n &&
+    totalTonAmount > 0n
   ) {
     throw new Error('Cannot send both tokens on OneSide liquidity type')
   }
 
-  const constantGas = toNano('3')
+  const messages: TxParams[] = []
 
-  const onlyTon = params.jettonAmount === 0n
+  const batches = divideBinsIntoBatches(params.binsToProvide)
 
-  const opCode = onlyTon ? PoolContract.Opcodes.AddLiquidity : PoolContract.Opcodes.AddBothLiquidity
+  batches.forEach((binGroup) => {
+    let jettonAmount = 0n
+    let tonAmount = 0n
+    Object.values(params.binsToProvide).forEach(([x, y]) => {
+      jettonAmount += x
+      tonAmount += y
+    })
 
-  let forwardPayloadBuilder = beginCell().storeUint(opCode, 32)
+    const providingGas = calculateGas(Object.keys(binGroup).length)
 
-  // Add queryId to forwardPayload if only TON is provided
-  if (onlyTon) {
-    forwardPayloadBuilder = forwardPayloadBuilder.storeUint(0, 64)
-  }
+    const onlyTon = jettonAmount === 0n
 
-  const forwardPayloadCell = forwardPayloadBuilder
-    .storeCoins(params.tonAmount)
-    .storeUint(params.depositType, 3)
-    .storeUint(params.liquidityType, 1)
-    .storeDict(createLiquidityProvideDict(params.binsToProvide))
-    .storeMaybeRef(params.rejectPayload)
-    .storeMaybeRef(params.forwardPayload)
-    .endCell()
+    const opCode = onlyTon
+      ? PoolContract.Opcodes.AddLiquidity
+      : PoolContract.Opcodes.AddBothLiquidity
 
-  if (onlyTon) {
-    return {
-      to: params.poolAddress,
-      value: constantGas + params.tonAmount,
-      payload: forwardPayloadCell,
+    let forwardPayloadBuilder = beginCell().storeUint(opCode, 32)
+
+    // Add queryId to forwardPayload if only TON is provided
+    if (onlyTon) {
+      forwardPayloadBuilder = forwardPayloadBuilder.storeUint(0, 64)
     }
-  }
 
-  const jettonTransferBody = beginCell()
-    .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-    .storeUint(0, 64)
-    .storeCoins(params.jettonAmount)
-    .storeAddress(params.poolAddress)
-    .storeAddress(params.senderAddress)
-    .storeMaybeRef(Cell.EMPTY)
-    .storeCoins(params.tonAmount + constantGas)
-    .storeMaybeRef(forwardPayloadCell)
-    .endCell()
+    const forwardPayloadCell = forwardPayloadBuilder
+      .storeCoins(tonAmount)
+      .storeUint(params.depositType, 3)
+      .storeUint(params.liquidityType, 1)
+      .storeDict(createLiquidityProvideDict(params.binsToProvide))
+      .storeMaybeRef(params.rejectPayload)
+      .storeMaybeRef(params.forwardPayload)
+      .endCell()
 
-  return {
-    to: params.jettonWalletAddress,
-    value: constantGas + constantGas + params.tonAmount,
-    payload: jettonTransferBody,
-  }
+    if (onlyTon) {
+      messages.push({
+        to: params.poolAddress,
+        value: providingGas + tonAmount,
+        payload: forwardPayloadCell,
+      })
+    } else {
+      const jettonTransferBody = beginCell()
+        .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
+        .storeUint(0, 64)
+        .storeCoins(jettonAmount)
+        .storeAddress(params.poolAddress)
+        .storeAddress(params.senderAddress)
+        .storeMaybeRef(Cell.EMPTY)
+        .storeCoins(tonAmount + providingGas)
+        .storeMaybeRef(forwardPayloadCell)
+        .endCell()
+
+      const jettonTransferGas = toNano('0.2')
+
+      messages.push({
+        to: params.jettonWalletAddress,
+        value: providingGas + jettonTransferGas + tonAmount,
+        payload: jettonTransferBody,
+      })
+    }
+  })
+
+  return messages
+}
+
+const calculateGas = (binsAmount: number): bigint => {
+  return toNano('0.4') + BigInt(binsAmount) * toNano('0.004')
 }

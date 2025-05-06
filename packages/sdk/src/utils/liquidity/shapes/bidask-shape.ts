@@ -21,8 +21,12 @@ export const createBidaskShape = (params: CreateShapeParams): LiquidityProvideBi
       right: 1,
     },
     sideBinsUnits: {
-      left: bidaskSum(params.fromBin, nearestBinUnits.left, activeBin),
-      right: bidaskSum(nearestBinUnits.right, params.toBin, activeBin),
+      left:
+        activeBin === params.fromBin
+          ? 0
+          : bidaskSum(params.fromBin, nearestBinUnits.left, activeBin),
+      right:
+        activeBin === params.toBin ? 0 : bidaskSum(nearestBinUnits.right, params.toBin, activeBin),
     },
   })
 }

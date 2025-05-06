@@ -81,18 +81,18 @@ export const calculateCentralBinLiquidity = (params: {
           sqrtUpperBound,
         )
 
-  const defaultTokenXLiquidity = calculateTokenX(
-    defaultCurrentBinL,
-    sqrtCurrentPrice,
-    sqrtUpperBound,
-  )
-  const defaultTokenYLiquidity = calculateTokenY(
-    defaultCurrentBinL,
-    sqrtLowerBound,
-    sqrtCurrentPrice,
+  const defaultTokenXLiquidity = Math.round(
+    calculateTokenX(defaultCurrentBinL, sqrtCurrentPrice, sqrtUpperBound),
   )
 
-  if (defaultTokenXLiquidity >= token0Amount || defaultTokenYLiquidity >= token1Amount) {
+  const defaultTokenYLiquidity = Math.round(
+    calculateTokenY(defaultCurrentBinL, sqrtLowerBound, sqrtCurrentPrice),
+  )
+
+  if (
+    (unitsOnSide.left !== 0 && defaultTokenYLiquidity >= token1Amount) ||
+    (unitsOnSide.right !== 0 && defaultTokenXLiquidity >= token0Amount)
+  ) {
     if (fallbackRatio < 0 || fallbackRatio > 1) {
       throw new Error('Fallback ratio must be between 0 and 1')
     }
@@ -116,8 +116,8 @@ export const calculateCentralBinLiquidity = (params: {
           )
 
     return [
-      calculateTokenX(fallbackCurrentBinL, sqrtCurrentPrice, sqrtUpperBound),
-      calculateTokenY(fallbackCurrentBinL, sqrtLowerBound, sqrtCurrentPrice),
+      Math.round(calculateTokenX(fallbackCurrentBinL, sqrtCurrentPrice, sqrtUpperBound)),
+      Math.round(calculateTokenY(fallbackCurrentBinL, sqrtLowerBound, sqrtCurrentPrice)),
     ]
   }
 

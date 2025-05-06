@@ -62,7 +62,7 @@ export function createJettonSwapTxParams(
     .storeMaybeRef(forwardPayloadCell)
     .endCell()
 
-  const constantGas = toNano('2')
+  const constantGas = toNano('1')
 
   return {
     to: params.jettonWalletAddress,

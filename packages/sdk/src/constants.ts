@@ -44,3 +44,7 @@ export const BIN_STEP_COEFFICIENT = 10000
  * 10000 = 100%
  */
 export const LP_FEE_COEFFICIENT = 10000
+
+export const BINS_IN_RANGE = 2048
+export const ZERO_RANGE_START = -BINS_IN_RANGE / 2
+export const MAX_PROVIDED_BINS_IN_MESSAGE = 260

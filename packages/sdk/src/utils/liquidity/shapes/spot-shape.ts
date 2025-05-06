@@ -21,8 +21,12 @@ export const createSpotShape = (params: CreateShapeParams): LiquidityProvideBins
       right: 1,
     },
     sideBinsUnits: {
-      left: countClosedInterval(params.fromBin, nearestBinUnits.left),
-      right: countClosedInterval(nearestBinUnits.right, params.toBin),
+      left:
+        activeBin === params.fromBin
+          ? 0
+          : countClosedInterval(params.fromBin, nearestBinUnits.left),
+      right:
+        activeBin === params.toBin ? 0 : countClosedInterval(nearestBinUnits.right, params.toBin),
     },
   })
 }

@@ -36,7 +36,7 @@ exports[`createCurveShape > both sides of active bin > fallback ratio should wor
   ],
   "232": [
     697347079n,
-    2480629247n,
+    2480629248n,
   ],
   "233": [
     2067256204n,
@@ -128,7 +128,7 @@ exports[`createCurveShape > both sides of active bin > return the correct shape 
     123854041n,
   ],
   "232": [
-    37394665n,
+    37394666n,
     133021711n,
   ],
   "233": [
@@ -198,27 +198,27 @@ exports[`createCurveShape > both sides of active bin > return the correct shape 
 {
   "226": [
     0n,
-    591262n,
+    591263n,
   ],
   "227": [
     0n,
-    1182525n,
+    1182526n,
   ],
   "228": [
     0n,
-    1773788n,
+    1773789n,
   ],
   "229": [
     0n,
-    2365051n,
+    2365052n,
   ],
   "230": [
     0n,
-    2956314n,
+    2956315n,
   ],
   "231": [
     0n,
-    3547577n,
+    3547578n,
   ],
   "232": [
     558743526n,
@@ -241,7 +241,7 @@ exports[`createCurveShape > both sides of active bin > return the correct shape 
     0n,
   ],
   "237": [
-    937917385n,
+    937917386n,
     0n,
   ],
   "238": [
@@ -317,27 +317,27 @@ exports[`createCurveShape > left side of active bin > including active bin 1`] =
 {
   "227": [
     0n,
-    113015049n,
+    16666666n,
   ],
   "228": [
     0n,
-    226030099n,
+    33333333n,
   ],
   "229": [
     0n,
-    339045148n,
+    50000000n,
   ],
   "230": [
     0n,
-    452060198n,
+    66666666n,
   ],
   "231": [
     0n,
-    565075247n,
+    83333333n,
   ],
   "232": [
-    85677228n,
-    304774257n,
+    491954769n,
+    1750000000n,
   ],
 }
 `;
@@ -467,63 +467,63 @@ exports[`createCurveShape > right side of active bin > ignore tokens from left s
 exports[`createCurveShape > right side of active bin > including active bin 1`] = `
 {
   "232": [
-    140558505n,
-    500000000n,
+    562234022n,
+    2000000000n,
   ],
   "233": [
-    114592199n,
+    58368797n,
     0n,
   ],
   "234": [
-    106407042n,
+    54199597n,
     0n,
   ],
   "235": [
-    98221885n,
+    50030397n,
     0n,
   ],
   "236": [
-    90036727n,
+    45861197n,
     0n,
   ],
   "237": [
-    81851570n,
+    41691997n,
     0n,
   ],
   "238": [
-    73666413n,
+    37522798n,
     0n,
   ],
   "239": [
-    65481256n,
+    33353598n,
     0n,
   ],
   "240": [
-    57296099n,
+    29184398n,
     0n,
   ],
   "241": [
-    49110942n,
+    25015198n,
     0n,
   ],
   "242": [
-    40925785n,
+    20845998n,
     0n,
   ],
   "243": [
-    32740628n,
+    16676799n,
     0n,
   ],
   "244": [
-    24555471n,
+    12507599n,
     0n,
   ],
   "245": [
-    16370314n,
+    8338399n,
     0n,
   ],
   "246": [
-    8185157n,
+    4169199n,
     0n,
   ],
 }
@@ -576,7 +576,7 @@ exports[`createCurveShape > with fallback ratio > ignore tokens from left side 1
     0n,
   ],
   "466": [
-    28552n,
+    28553n,
     0n,
   ],
   "467": [

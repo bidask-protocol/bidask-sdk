@@ -21,8 +21,12 @@ export const createCurveShape = (params: CreateShapeParams): LiquidityProvideBin
       right: countClosedInterval(activeBin, params.toBin),
     },
     sideBinsUnits: {
-      left: curveSum(params.fromBin, nearestBinUnits.left, activeBin),
-      right: curveSum(nearestBinUnits.right, params.toBin, activeBin),
+      left:
+        activeBin === params.fromBin
+          ? 0
+          : curveSum(params.fromBin, nearestBinUnits.left, activeBin),
+      right:
+        activeBin === params.toBin ? 0 : curveSum(nearestBinUnits.right, params.toBin, activeBin),
     },
   })
 }
