@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / calculateCentralAmountYByAmountX
+[@bidask-protocol/sdk](../globals.md) / calculateCentralAmountYByAmountX
 
 # Function: calculateCentralAmountYByAmountX()
 
 > **calculateCentralAmountYByAmountX**(`tokenXAmount`, `activeBin`, `bps`): `number`
 
-Defined in: [utils/liquidity/shapes/central-bin.ts:236](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/utils/liquidity/shapes/central-bin.ts#L236)
+Defined in: [utils/liquidity/shapes/central-bin.ts:236](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/utils/liquidity/shapes/central-bin.ts#L236)
 
 ## Parameters
 

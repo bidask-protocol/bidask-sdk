@@ -1,7 +1,8 @@
 import { beginCell, BitString, Builder, Dictionary, Slice } from '@ton/ton'
 
-import { BINS_IN_RANGE, MAX_PROVIDED_BINS_IN_MESSAGE, ZERO_RANGE_START } from '../../constants'
+import { MAX_PROVIDED_BINS_IN_MESSAGE } from '../../constants'
 import { LiquidityProvideBins, LiquidityRemoveBins } from '../../types/liquidity'
+import { getRangeByBin } from '../ranges'
 
 /**
  * Allows you to create bin dictionaries padded with placeholder bins in the start and end of binDictionary
@@ -108,7 +109,7 @@ export const divideBinsIntoBatches = (bins: LiquidityProvideBins) => {
   const binsByRange: Record<number, LiquidityProvideBins> = {}
   Object.entries(bins).forEach(([binId, amounts]) => {
     const binNum = Number(binId)
-    const rangeNum = Math.floor((binNum - ZERO_RANGE_START) / BINS_IN_RANGE)
+    const rangeNum = getRangeByBin(binNum)
     binsByRange[rangeNum] ??= {}
     binsByRange[rangeNum][binNum] = amounts
   })

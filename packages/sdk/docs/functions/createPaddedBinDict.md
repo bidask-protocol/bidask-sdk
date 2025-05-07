@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / createPaddedBinDict
+[@bidask-protocol/sdk](../globals.md) / createPaddedBinDict
 
 # Function: createPaddedBinDict()
 
 > **createPaddedBinDict**\<`BinValue`, `Bins`, `Result`\>(`params`): `Result`
 
-Defined in: [utils/liquidity/dictionary.ts:14](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/utils/liquidity/dictionary.ts#L14)
+Defined in: [utils/liquidity/dictionary.ts:16](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/utils/liquidity/dictionary.ts#L16)
 
 Allows you to create bin dictionaries padded with placeholder bins in the start and end of binDictionary
 

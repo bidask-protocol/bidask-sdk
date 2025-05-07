@@ -1,5 +1,7 @@
 # Bidask SDK
 
+> **Warning**: This library is in beta. It may contain bugs and is subject to breaking changes in future updates
+
 ## Providing Liquidity
 
 ### Usage Example
@@ -12,16 +14,15 @@ import {
   RangeContract,
   JettonMaster,
   createProvideNativeLiquidityTxParams,
-  DepositType,
   createProvideLiquidityTxParams,
   getBinByPrice,
   getPriceFromSqrtPriceX128,
   toBigInt,
   isZeroAddress,
   getDeadline,
-  LiquidityType,
   createCurveShape,
-} from "@bidask/sdk";
+  TxParams,
+} from "@bidask-protocol/sdk";
 
 // The pool you want to provide liquidity to
 const selectedPool = {
@@ -73,12 +74,6 @@ const binsToProvide = createCurveShape({
   bps: binStep,
 })
 
-// Determine liquidity type (single or both tokens)
-const liquidityType =
-  token0AmountBN > 0 && token1AmountBN > 0
-    ? LiquidityType.TwoSides
-    : LiquidityType.OneSide;
-
 // Get token wallet addresses
 const jetton0 = await JettonMaster.create(
   Address.parse(selectedPool.token0.address)
@@ -88,30 +83,23 @@ const jetton0Wallet = await jetton0Contract.getWalletAddress(
   Address.parse(userAddress)
 );
 
+// Get initialized ranges
+const rangesStatuses = await poolContract.getRangesStatusesByLiquidityBins(binsToProvide);
+
+const initializedRanges = Object.entries(rangesStatuses)
+  .filter(([, status]) => status === RangeStatus.Initialized)
+  .map(([range]) => Number(range));
+
+let txParams
 // Handle TON + Jetton case
 if (isZeroAddress(selectedPool.token1.address)) {
   // Create transaction parameters for providing TON + Jetton
-  const txParams = createProvideNativeLiquidityTxParams({
+  txParams = createProvideNativeLiquidityTxParams({
     poolAddress: pool.address,
-    jettonAmount: token0AmountBN,
-    tonAmount: token1AmountBN,
     senderAddress: Address.parse(userAddress),
-    depositType: DepositType.Add,
-    liquidityType: liquidityType,
     binsToProvide: binsToProvide,
     jettonWalletAddress: jetton0Wallet,
-  });
-
-  // Send transaction
-  const tx = await tonConnectUI.sendTransaction({
-    validUntil: getDeadline(),
-    messages: [
-      {
-        address: txParams.to.toString(),
-        amount: txParams.value.toString(),
-        payload: txParams.payload.toBoc().toString("base64"),
-      },
-    ],
+    initializedRanges: initializedRanges,
   });
 } else {
   // Handle Jetton + Jetton case
@@ -124,28 +112,25 @@ if (isZeroAddress(selectedPool.token1.address)) {
   );
 
   // Create transaction parameters for providing two jettons
-  const txParams = createProvideLiquidityTxParams({
+  txParams = createProvideLiquidityTxParams({
     poolAddress: pool.address,
     jettonWalletAddress0: jetton0Wallet,
     jettonWalletAddress1: jetton1Wallet,
-    jettonAmount0: token0AmountBN,
-    jettonAmount1: token1AmountBN,
     senderAddress: Address.parse(userAddress),
-    liquidityType: liquidityType,
-    depositType: DepositType.Add,
     binsToProvide: binsToProvide,
-  });
-
-  // Send transactions
-  const tx = await tonConnectUI.sendTransaction({
-    validUntil: getDeadline(),
-    messages: txParams.map((tx) => ({
-      address: tx.to.toString(),
-      amount: tx.value.toString(),
-      payload: tx.payload.toBoc().toString("base64"),
-    })),
+    initializedRanges: initializedRanges,
   });
 }
+
+// Send transactions
+tonConnectUI.sendTransaction({
+  validUntil: getDeadline(),
+  messages: txParams.map((tx) => ({
+    address: tx.to.toString(),
+    amount: tx.value.toString(),
+    payload: tx.payload.toBoc().toString("base64"),
+  })),
+});
 ```
 
 ## Burning Liquidity
@@ -162,6 +147,7 @@ import {
   createBurnAllTxParams,
   createBurnTxParams,
   getDeadline,
+  TxParams,
 } from "@bidask/sdk";
 
 // The pool you want to burn liquidity from
@@ -196,20 +182,10 @@ const lpMultitokenAddress = await activeRangeContract.getLpMultitokenWallet(
   Address.parse(tonConnectUI.account!.address)
 );
 
+let txParams: TxParams;
 // Burn all liquidity
 if (burnPercentage === 100) {
-  const burnAllTxParams = createBurnAllTxParams({ lpMultitokenAddress });
-
-  await tonConnectUI.sendTransaction({
-    validUntil: getDeadline(),
-    messages: [
-      {
-        address: burnAllTxParams.to.toRawString(),
-        amount: burnAllTxParams.value.toString(),
-        payload: burnAllTxParams.payload.toBoc().toString("base64"),
-      },
-    ],
-  });
+  txParams = createBurnAllTxParams({ lpMultitokenAddress });
 } else {
   // Burn partial liquidity
   const lpMultitokenContract = tonapiClientAdapter.open(
@@ -218,7 +194,7 @@ if (burnPercentage === 100) {
 
   const lpTokenBins = await lpMultitokenContract.getTokens();
 
-  const burnTxParams = createBurnTxParams({
+  txParams = createBurnTxParams({
     lpMultitokenAddress,
     binsToBurn: Object.fromEntries(
       Object.entries(lpTokenBins).map(([bin, amount]) => {
@@ -226,18 +202,18 @@ if (burnPercentage === 100) {
       })
     ),
   });
-
-  await tonConnectUI.sendTransaction({
-    validUntil: getDeadline(),
-    messages: [
-      {
-        address: burnTxParams.to.toRawString(),
-        amount: burnTxParams.value.toString(),
-        payload: burnTxParams.payload.toBoc().toString("base64"),
-      },
-    ],
-  });
 }
+
+tonConnectUI.sendTransaction({
+  validUntil: getDeadline(),
+  messages: [
+    {
+      address: burnTxParams.to.toRawString(),
+      amount: burnTxParams.value.toString(),
+      payload: burnTxParams.payload.toBoc().toString("base64"),
+    },
+  ],
+});
 ```
 
 ## Swapping Tokens
@@ -258,6 +234,7 @@ import {
   RangeContract,
   SwapPartialExecutionParams,
   toBigInt,
+  TxParams,
 } from '@bidask/sdk'
 import { Address } from '@ton/ton'
 import { TonConnectUI } from '@tonconnect/ui-react'
@@ -319,27 +296,17 @@ if (partialExecution) {
   }
 }
 
+let txParams: TxParams
 if (isZeroAddress(Address.parse(tokenFrom.address))) {
   // Handle TON swap -> Jetton case
   const lastPrice = currentPrice * (1 + slippage)
 
-  const swapParams = createTonSwapTxParams({
+  txParams = createTonSwapTxParams({
     poolAddress: pool.address,
     amountIn: toBigInt(amountFromRaw, 9),
     senderAddress: Address.parse(userAddress),
     receiverAddress: Address.parse(userAddress),
     ...partialExecutionParams,
-  })
-
-  await tonConnectUI.sendTransaction({
-    validUntil: getDeadline(),
-    messages: [
-      {
-        address: swapParams.to.toRawString(),
-        amount: swapParams.value.toString(),
-        payload: swapParams.payload.toBoc().toString('base64'),
-      },
-    ],
   })
 } else {
   // Handle Jetton swap -> Jetton/TON case
@@ -351,7 +318,7 @@ if (isZeroAddress(Address.parse(tokenFrom.address))) {
     Address.parse(walletAddress),
   )
 
-  const swapParams = createJettonSwapTxParams({
+  txParams = createJettonSwapTxParams({
     poolAddress: pool.address,
     amountIn: toBigInt(amountFromRaw, tokenFrom.decimals),
     tokenIn: tokenFromJettonContract.address,
@@ -361,18 +328,18 @@ if (isZeroAddress(Address.parse(tokenFrom.address))) {
     jettonWalletAddress: tokenFromUserWallet,
     ...partialExecutionParams,
   })
-
-  await tonConnectUI.sendTransaction({
-    validUntil: getDeadline(),
-    messages: [
-      {
-        address: swapParams.to.toRawString(),
-        amount: swapParams.value.toString(),
-        payload: swapParams.payload.toBoc().toString('base64'),
-      },
-    ],
-  })
 }
+
+tonConnectUI.sendTransaction({
+  validUntil: getDeadline(),
+  messages: [
+    {
+      address: txParams.to.toRawString(),
+      amount: swapParams.value.toString(),
+      payload: txParams.payload.toBoc().toString('base64'),
+    },
+  ],
+})
 ```
 
 ## Trading Account

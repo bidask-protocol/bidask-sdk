@@ -51,6 +51,8 @@ export function createJettonSwapTxParams(
     .storeMaybeRef(null)
     .endCell()
 
+  const transferGas = toNano(0.2)
+
   const jettonTransferBody = beginCell()
     .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
     .storeUint(0, 64)
@@ -58,15 +60,15 @@ export function createJettonSwapTxParams(
     .storeAddress(params.poolAddress)
     .storeAddress(params.senderAddress)
     .storeMaybeRef(Cell.EMPTY)
-    .storeCoins(toNano(0.5))
+    .storeCoins(transferGas)
     .storeMaybeRef(forwardPayloadCell)
     .endCell()
 
-  const constantGas = toNano('1')
+  const constantGas = toNano('0.5')
 
   return {
     to: params.jettonWalletAddress,
-    value: constantGas,
+    value: constantGas + transferGas,
     payload: jettonTransferBody,
   }
 }

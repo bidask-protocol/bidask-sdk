@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / createTradeAccountDepositTxParams
+[@bidask-protocol/sdk](../globals.md) / createTradeAccountDepositTxParams
 
 # Function: createTradeAccountDepositTxParams()
 
 > **createTradeAccountDepositTxParams**(`params`): [`TxParams`](../type-aliases/TxParams.md)[]
 
-Defined in: [transactions/trade-account-deposit.ts:21](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/transactions/trade-account-deposit.ts#L21)
+Defined in: [transactions/trade-account-deposit.ts:21](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/transactions/trade-account-deposit.ts#L21)
 
 Creates a transaction parameters for depositing tokens into a trade account
 

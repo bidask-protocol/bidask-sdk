@@ -3,6 +3,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { LiquidityType, TxParams } from '../types'
 import { DepositType, LiquidityProvideBins } from '../types/liquidity'
+import { getRangeByBin } from '../utils'
 import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liquidity/dictionary'
 
 /**
@@ -20,29 +21,13 @@ import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liqu
  */
 export function createProvideTonLiquidityTxParams(params: {
   jettonWalletAddress: Address
-  depositType: DepositType
-  liquidityType: LiquidityType
   binsToProvide: LiquidityProvideBins
   senderAddress: Address
   poolAddress: Address
+  initializedRanges: number[]
   rejectPayload?: Cell
   forwardPayload?: Cell
 }): TxParams[] {
-  let totalJettonAmount = 0n
-  let totalTonAmount = 0n
-  Object.values(params.binsToProvide).forEach(([x, y]) => {
-    totalJettonAmount += x
-    totalTonAmount += y
-  })
-
-  if (
-    params.liquidityType === LiquidityType.OneSide &&
-    totalJettonAmount > 0n &&
-    totalTonAmount > 0n
-  ) {
-    throw new Error('Cannot send both tokens on OneSide liquidity type')
-  }
-
   const messages: TxParams[] = []
 
   const batches = divideBinsIntoBatches(params.binsToProvide)
@@ -70,10 +55,19 @@ export function createProvideTonLiquidityTxParams(params: {
       forwardPayloadBuilder = forwardPayloadBuilder.storeUint(0, 64)
     }
 
+    const liquidityType =
+      jettonAmount > 0n && tonAmount > 0n ? LiquidityType.TwoSides : LiquidityType.OneSide
+
+    const rangeNumber = getRangeByBin(Number(Object.keys(binGroup)[0]))
+
+    const depositType = params.initializedRanges.includes(rangeNumber)
+      ? DepositType.Add
+      : DepositType.Initial
+
     const forwardPayloadCell = forwardPayloadBuilder
       .storeCoins(tonAmount)
-      .storeUint(params.depositType, 3)
-      .storeUint(params.liquidityType, 1)
+      .storeUint(depositType, 3)
+      .storeUint(liquidityType, 1)
       .storeDict(createLiquidityProvideDict(params.binsToProvide))
       .storeMaybeRef(params.rejectPayload)
       .storeMaybeRef(params.forwardPayload)

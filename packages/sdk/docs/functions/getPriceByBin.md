@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / getPriceByBin
+[@bidask-protocol/sdk](../globals.md) / getPriceByBin
 
 # Function: getPriceByBin()
 
 > **getPriceByBin**(`bin`, `bps`): `number`
 
-Defined in: [utils/bins.ts:19](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/utils/bins.ts#L19)
+Defined in: [utils/bins.ts:19](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/utils/bins.ts#L19)
 
 Gets the price by bin
 

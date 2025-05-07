@@ -3,6 +3,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { LiquidityType, TxParams } from '../types'
 import { DepositType, LiquidityProvideBins } from '../types/liquidity'
+import { getRangeByBin } from '../utils'
 import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liquidity/dictionary'
 
 /**
@@ -11,40 +12,24 @@ import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liqu
  * @param params.jettonWalletAddress0 - Address of the token0 Jetton wallet
  * @param params.jettonWalletAddress1 - Address of the token1 Jetton wallet
  * @param params.senderAddress - Address of the sender
- * @param params.depositType - Type of deposit
  * @param params.liquidityType - Type of liquidity
  * @param params.binsToProvide - Bins to provide
  * @param params.poolAddress - Address of the pool
  * @param params.rejectPayload - Reject payload
  * @param params.forwardPayload - Forward payload
+ * @param params.initializedRanges - Ranges that are already initialized
  * @returns Transactions parameters
  */
 export function createProvideLiquidityTxParams(params: {
   jettonWalletAddress0: Address
   jettonWalletAddress1: Address
   senderAddress: Address
-  depositType: DepositType
-  liquidityType: LiquidityType
   binsToProvide: LiquidityProvideBins
   poolAddress: Address
+  initializedRanges: number[]
   rejectPayload?: Cell
   forwardPayload?: Cell
 }): TxParams[] {
-  let totalJettonAmount0 = 0n
-  let totalJettonAmount1 = 0n
-  Object.values(params.binsToProvide).forEach(([x, y]) => {
-    totalJettonAmount0 += x
-    totalJettonAmount1 += y
-  })
-
-  if (
-    params.liquidityType === LiquidityType.OneSide &&
-    totalJettonAmount1 > 0n &&
-    totalJettonAmount0 > 0n
-  ) {
-    throw new Error('Cannot send both jetton tokens on OneSide liquidity type')
-  }
-
   const messages: TxParams[] = []
 
   const batches = divideBinsIntoBatches(params.binsToProvide)
@@ -61,9 +46,15 @@ export function createProvideLiquidityTxParams(params: {
     const liquidityType =
       jettonAmount0 > 0n && jettonAmount1 > 0n ? LiquidityType.TwoSides : LiquidityType.OneSide
 
+    const rangeNumber = getRangeByBin(Number(Object.keys(binGroup)[0]))
+
+    const depositType = params.initializedRanges.includes(rangeNumber)
+      ? DepositType.Add
+      : DepositType.Initial
+
     const forwardPayload = beginCell()
       .storeUint(PoolContract.Opcodes.AddLiquidity, 32)
-      .storeUint(params.depositType, 3)
+      .storeUint(depositType, 3)
       .storeUint(liquidityType, 1)
       .storeDict(createLiquidityProvideDict(binGroup))
       .storeMaybeRef(params.rejectPayload)

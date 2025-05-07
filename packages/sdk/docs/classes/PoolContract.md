@@ -1,12 +1,12 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / PoolContract
+[@bidask-protocol/sdk](../globals.md) / PoolContract
 
 # Class: PoolContract
 
-Defined in: [contracts/PoolContract.ts:6](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/PoolContract.ts#L6)
+Defined in: [contracts/PoolContract.ts:8](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L8)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [contracts/PoolContract.ts:6](https://github.com/bidask-protocol/bid
 
 > **address**: `Address`
 
-Defined in: [contracts/PoolContract.ts:17](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/PoolContract.ts#L17)
+Defined in: [contracts/PoolContract.ts:19](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L19)
 
 #### Implementation of
 
@@ -30,19 +30,19 @@ Defined in: [contracts/PoolContract.ts:17](https://github.com/bidask-protocol/bi
 
 > `static` **Opcodes**: `object`
 
-Defined in: [contracts/PoolContract.ts:7](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/PoolContract.ts#L7)
+Defined in: [contracts/PoolContract.ts:9](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L9)
 
 #### AddBothLiquidity
 
-> **AddBothLiquidity**: `number` = `0x64dbad78`
+> **AddBothLiquidity**: `number` = `0x3ea0bafc`
 
 #### AddLiquidity
 
-> **AddLiquidity**: `number` = `0x406d7624`
+> **AddLiquidity**: `number` = `0x96feef7b`
 
 #### Swap
 
-> **Swap**: `number` = `0xca2663c4`
+> **Swap**: `number` = `0xf2ef6c1b`
 
 ## Methods
 
@@ -50,7 +50,7 @@ Defined in: [contracts/PoolContract.ts:7](https://github.com/bidask-protocol/bid
 
 > **getActiveRange**(`provider`): `Promise`\<`Address`\>
 
-Defined in: [contracts/PoolContract.ts:30](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/PoolContract.ts#L30)
+Defined in: [contracts/PoolContract.ts:32](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L32)
 
 #### Parameters
 
@@ -68,7 +68,7 @@ Defined in: [contracts/PoolContract.ts:30](https://github.com/bidask-protocol/bi
 
 > **getPoolInfo**(`provider`): `Promise`\<[`PoolInfo`](../type-aliases/PoolInfo.md)\>
 
-Defined in: [contracts/PoolContract.ts:19](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/PoolContract.ts#L19)
+Defined in: [contracts/PoolContract.ts:21](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L21)
 
 #### Parameters
 
@@ -82,11 +82,77 @@ Defined in: [contracts/PoolContract.ts:19](https://github.com/bidask-protocol/bi
 
 ***
 
+### getRangeAddress()
+
+> **getRangeAddress**(`provider`, `firstBin`): `Promise`\<`Address`\>
+
+Defined in: [contracts/PoolContract.ts:51](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L51)
+
+#### Parameters
+
+##### provider
+
+`ContractProvider`
+
+##### firstBin
+
+`number`
+
+#### Returns
+
+`Promise`\<`Address`\>
+
+***
+
+### getRangesStatusesByLiquidityBins()
+
+> **getRangesStatusesByLiquidityBins**(`provider`, `liquidityBins`): `Promise`\<`Record`\<`number`, [`RangeStatus`](../enumerations/RangeStatus.md)\>\>
+
+Defined in: [contracts/PoolContract.ts:59](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L59)
+
+#### Parameters
+
+##### provider
+
+`ContractProvider`
+
+##### liquidityBins
+
+[`LiquidityProvideBins`](../type-aliases/LiquidityProvideBins.md)
+
+#### Returns
+
+`Promise`\<`Record`\<`number`, [`RangeStatus`](../enumerations/RangeStatus.md)\>\>
+
+***
+
+### getRangeStatus()
+
+> **getRangeStatus**(`provider`, `range`): `Promise`\<[`RangeStatus`](../enumerations/RangeStatus.md)\>
+
+Defined in: [contracts/PoolContract.ts:84](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L84)
+
+#### Parameters
+
+##### provider
+
+`ContractProvider`
+
+##### range
+
+`number`
+
+#### Returns
+
+`Promise`\<[`RangeStatus`](../enumerations/RangeStatus.md)\>
+
+***
+
 ### getTradeAccountAddress()
 
 > **getTradeAccountAddress**(`provider`, `params`): `Promise`\<`Address`\>
 
-Defined in: [contracts/PoolContract.ts:36](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/PoolContract.ts#L36)
+Defined in: [contracts/PoolContract.ts:38](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L38)
 
 #### Parameters
 
@@ -118,7 +184,7 @@ Defined in: [contracts/PoolContract.ts:36](https://github.com/bidask-protocol/bi
 
 > `static` **create**(`address`): `PoolContract`
 
-Defined in: [contracts/PoolContract.ts:13](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/PoolContract.ts#L13)
+Defined in: [contracts/PoolContract.ts:15](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/PoolContract.ts#L15)
 
 #### Parameters
 

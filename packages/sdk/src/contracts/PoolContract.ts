@@ -1,8 +1,9 @@
 import { Address, beginCell, Contract, type ContractProvider } from '@ton/ton'
 
-import { PoolInfo } from '../types'
-import { createSeedCell } from '../utils'
+import { LiquidityProvideBins, PoolInfo, RangeStatus } from '../types'
+import { createSeedCell, getFirstBinByRange, getRangeByBin } from '../utils'
 import { bufferToBigInt } from '../utils/bigint'
+import { RangeContract } from './RangeContract'
 
 export class PoolContract implements Contract {
   static Opcodes = {
@@ -45,5 +46,53 @@ export class PoolContract implements Contract {
     ])
 
     return result.stack.readAddress()
+  }
+
+  async getRangeAddress(provider: ContractProvider, firstBin: number): Promise<Address> {
+    const result = await provider.get('get_range_address', [
+      { type: 'int', value: BigInt(firstBin) },
+    ])
+
+    return result.stack.readAddress()
+  }
+
+  async getRangesStatusesByLiquidityBins(
+    provider: ContractProvider,
+    liquidityBins: LiquidityProvideBins,
+  ): Promise<Record<number, RangeStatus>> {
+    const ranges = Object.keys(liquidityBins).reduce((acc, bin) => {
+      const range = getRangeByBin(Number(bin))
+
+      acc.add(range)
+
+      return acc
+    }, new Set<number>())
+
+    const rangeStatuses = await Promise.all(
+      Array.from(ranges).map(async (range) => {
+        const status = await this.getRangeStatus(provider, range).catch(
+          () => RangeStatus.Uninitialized,
+        )
+
+        return [range, status]
+      }),
+    )
+
+    return Object.fromEntries(rangeStatuses)
+  }
+
+  async getRangeStatus(provider: ContractProvider, range: number): Promise<RangeStatus> {
+    const rangeAddress = await this.getRangeAddress(provider, getFirstBinByRange(range))
+
+    const rangeContract = RangeContract.create(rangeAddress)
+    const openedRangeContract = provider.open(rangeContract)
+
+    const sqrtPrice = await openedRangeContract.getSqrtPrice()
+
+    if (sqrtPrice === 0n) {
+      return RangeStatus.Uninitialized
+    }
+
+    return RangeStatus.Initialized
   }
 }

@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / getDeadline
+[@bidask-protocol/sdk](../globals.md) / getDeadline
 
 # Function: getDeadline()
 
 > **getDeadline**(`ttlMs`): `number`
 
-Defined in: [utils/time.ts:6](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/utils/time.ts#L6)
+Defined in: [utils/time.ts:6](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/utils/time.ts#L6)
 
 Gets the deadline for a transaction from the current time
 

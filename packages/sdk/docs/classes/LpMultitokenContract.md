@@ -1,12 +1,12 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / LpMultitokenContract
+[@bidask-protocol/sdk](../globals.md) / LpMultitokenContract
 
 # Class: LpMultitokenContract
 
-Defined in: [contracts/LpMultitokenContract.ts:3](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/LpMultitokenContract.ts#L3)
+Defined in: [contracts/LpMultitokenContract.ts:3](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/LpMultitokenContract.ts#L3)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [contracts/LpMultitokenContract.ts:3](https://github.com/bidask-prot
 
 > **address**: `Address`
 
-Defined in: [contracts/LpMultitokenContract.ts:13](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/LpMultitokenContract.ts#L13)
+Defined in: [contracts/LpMultitokenContract.ts:13](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/LpMultitokenContract.ts#L13)
 
 #### Implementation of
 
@@ -30,15 +30,15 @@ Defined in: [contracts/LpMultitokenContract.ts:13](https://github.com/bidask-pro
 
 > `static` **Opcodes**: `object`
 
-Defined in: [contracts/LpMultitokenContract.ts:4](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/LpMultitokenContract.ts#L4)
+Defined in: [contracts/LpMultitokenContract.ts:4](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/LpMultitokenContract.ts#L4)
 
 #### Burn
 
-> **Burn**: `number` = `0x595f07bc`
+> **Burn**: `number` = `0x73403c43`
 
 #### BurnAll
 
-> **BurnAll**: `number` = `0x00beb5cf`
+> **BurnAll**: `number` = `0xebd6ec83`
 
 ## Methods
 
@@ -46,7 +46,7 @@ Defined in: [contracts/LpMultitokenContract.ts:4](https://github.com/bidask-prot
 
 > **getBinsNumber**(`provider`): `Promise`\<`number`\>
 
-Defined in: [contracts/LpMultitokenContract.ts:49](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/LpMultitokenContract.ts#L49)
+Defined in: [contracts/LpMultitokenContract.ts:49](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/LpMultitokenContract.ts#L49)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [contracts/LpMultitokenContract.ts:49](https://github.com/bidask-pro
 
 > **getTokens**(`provider`): `Promise`\<`Record`\<`number`, `bigint`\>\>
 
-Defined in: [contracts/LpMultitokenContract.ts:15](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/LpMultitokenContract.ts#L15)
+Defined in: [contracts/LpMultitokenContract.ts:15](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/LpMultitokenContract.ts#L15)
 
 #### Parameters
 
@@ -82,7 +82,7 @@ Defined in: [contracts/LpMultitokenContract.ts:15](https://github.com/bidask-pro
 
 > `static` **create**(`address`): `LpMultitokenContract`
 
-Defined in: [contracts/LpMultitokenContract.ts:9](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/LpMultitokenContract.ts#L9)
+Defined in: [contracts/LpMultitokenContract.ts:9](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/LpMultitokenContract.ts#L9)
 
 #### Parameters
 

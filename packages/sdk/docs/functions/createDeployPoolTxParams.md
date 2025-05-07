@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / createDeployPoolTxParams
+[@bidask-protocol/sdk](../globals.md) / createDeployPoolTxParams
 
 # Function: createDeployPoolTxParams()
 
 > **createDeployPoolTxParams**(`params`): [`TxParams`](../type-aliases/TxParams.md)
 
-Defined in: [transactions/deploy-pool.ts:18](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/transactions/deploy-pool.ts#L18)
+Defined in: [transactions/deploy-pool.ts:18](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/transactions/deploy-pool.ts#L18)
 
 Creates a transaction parameters for deploying a pool
 
@@ -24,11 +24,11 @@ Parameters for the transaction
 
 Basis points for fee calculation
 
-#### initialPrice
+#### initialRawPrice
 
 `number`
 
-Initial price of the pool
+Initial raw price of the pool
 
 #### lpFee
 

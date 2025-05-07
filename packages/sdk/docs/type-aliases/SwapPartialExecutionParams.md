@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / SwapPartialExecutionParams
+[@bidask-protocol/sdk](../globals.md) / SwapPartialExecutionParams
 
 # Type Alias: SwapPartialExecutionParams
 
 > **SwapPartialExecutionParams** = \{ `allowPartial`: `true`; `sqrtX128LastPrice`: `bigint`; \} \| \{ `allowPartial`: `false`; `minAmountToReceive`: `bigint`; \}
 
-Defined in: [types/swap.ts:4](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/types/swap.ts#L4)
+Defined in: [types/swap.ts:4](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/types/swap.ts#L4)
 
 Parameters for swap operations that control partial execution behavior
 

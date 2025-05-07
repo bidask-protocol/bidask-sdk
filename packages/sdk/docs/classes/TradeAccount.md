@@ -1,12 +1,12 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / TradeAccount
+[@bidask-protocol/sdk](../globals.md) / TradeAccount
 
 # Class: TradeAccount
 
-Defined in: [contracts/TradeAccountContract.ts:37](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L37)
+Defined in: [contracts/TradeAccountContract.ts:37](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L37)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [contracts/TradeAccountContract.ts:37](https://github.com/bidask-pro
 
 > **new TradeAccount**(`address`, `init?`): `TradeAccount`
 
-Defined in: [contracts/TradeAccountContract.ts:46](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L46)
+Defined in: [contracts/TradeAccountContract.ts:46](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L46)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [contracts/TradeAccountContract.ts:46](https://github.com/bidask-pro
 
 > `readonly` **address**: `Address`
 
-Defined in: [contracts/TradeAccountContract.ts:47](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L47)
+Defined in: [contracts/TradeAccountContract.ts:47](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L47)
 
 #### Implementation of
 
@@ -58,7 +58,7 @@ Defined in: [contracts/TradeAccountContract.ts:47](https://github.com/bidask-pro
 
 > `readonly` `optional` **init**: `object`
 
-Defined in: [contracts/TradeAccountContract.ts:48](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L48)
+Defined in: [contracts/TradeAccountContract.ts:48](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L48)
 
 #### code
 
@@ -78,7 +78,7 @@ Defined in: [contracts/TradeAccountContract.ts:48](https://github.com/bidask-pro
 
 > `readonly` `static` **Opcodes**: `object`
 
-Defined in: [contracts/TradeAccountContract.ts:38](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L38)
+Defined in: [contracts/TradeAccountContract.ts:38](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L38)
 
 #### CancelLimitOrder
 
@@ -86,7 +86,7 @@ Defined in: [contracts/TradeAccountContract.ts:38](https://github.com/bidask-pro
 
 #### DepositOnAccount
 
-> **DepositOnAccount**: `number` = `0x52d84692`
+> **DepositOnAccount**: `number` = `0xd8e04bf6`
 
 #### LimitOrder
 
@@ -94,11 +94,11 @@ Defined in: [contracts/TradeAccountContract.ts:38](https://github.com/bidask-pro
 
 #### Swap
 
-> **Swap**: `number` = `0x94eb79d3`
+> **Swap**: `number` = `0xefbbd1b8`
 
 #### Withdraw
 
-> **Withdraw**: `number` = `0xe5fb23df`
+> **Withdraw**: `number` = `0xa3dbaae5`
 
 ## Methods
 
@@ -106,7 +106,7 @@ Defined in: [contracts/TradeAccountContract.ts:38](https://github.com/bidask-pro
 
 > **getDepositBalance**(`provider`): `Promise`\<\{ `token0Amount`: `bigint`; `token1Amount`: `bigint`; \}\>
 
-Defined in: [contracts/TradeAccountContract.ts:216](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L216)
+Defined in: [contracts/TradeAccountContract.ts:216](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L216)
 
 #### Parameters
 
@@ -124,7 +124,7 @@ Defined in: [contracts/TradeAccountContract.ts:216](https://github.com/bidask-pr
 
 > **getPoolAddress**(`provider`): `Promise`\<`Address`\>
 
-Defined in: [contracts/TradeAccountContract.ts:223](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L223)
+Defined in: [contracts/TradeAccountContract.ts:223](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L223)
 
 #### Parameters
 
@@ -142,7 +142,7 @@ Defined in: [contracts/TradeAccountContract.ts:223](https://github.com/bidask-pr
 
 > **getSeqno**(`provider`): `Promise`\<`number`\>
 
-Defined in: [contracts/TradeAccountContract.ts:228](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L228)
+Defined in: [contracts/TradeAccountContract.ts:228](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L228)
 
 #### Parameters
 
@@ -160,7 +160,7 @@ Defined in: [contracts/TradeAccountContract.ts:228](https://github.com/bidask-pr
 
 > **sendDeploy**(`provider`, `via`, `value`): `Promise`\<`void`\>
 
-Defined in: [contracts/TradeAccountContract.ts:61](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L61)
+Defined in: [contracts/TradeAccountContract.ts:61](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L61)
 
 #### Parameters
 
@@ -186,7 +186,7 @@ Defined in: [contracts/TradeAccountContract.ts:61](https://github.com/bidask-pro
 
 > **sendDeposit**(`provider`, `via`, `opts`, `value`): `Promise`\<`void`\>
 
-Defined in: [contracts/TradeAccountContract.ts:68](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L68)
+Defined in: [contracts/TradeAccountContract.ts:68](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L68)
 
 #### Parameters
 
@@ -226,7 +226,7 @@ Defined in: [contracts/TradeAccountContract.ts:68](https://github.com/bidask-pro
 
 > **sendExternalSignedMessage**(`provider`, `body`): `Promise`\<`void`\>
 
-Defined in: [contracts/TradeAccountContract.ts:212](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L212)
+Defined in: [contracts/TradeAccountContract.ts:212](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L212)
 
 #### Parameters
 
@@ -248,7 +248,7 @@ Defined in: [contracts/TradeAccountContract.ts:212](https://github.com/bidask-pr
 
 > **sendExternalSwap**(`provider`, `keypair`, `validUntil`, `seqno`, `poolAddress`, `seed`, `params`): `Promise`\<`void`\>
 
-Defined in: [contracts/TradeAccountContract.ts:111](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L111)
+Defined in: [contracts/TradeAccountContract.ts:111](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L111)
 
 Send swap
 
@@ -306,7 +306,7 @@ Options
 
 > **sendExternalWithdraw**(`provider`, `keypair`, `validUntil`, `seqno`, `poolAddress`, `seed`, `params`): `Promise`\<`void`\>
 
-Defined in: [contracts/TradeAccountContract.ts:176](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L176)
+Defined in: [contracts/TradeAccountContract.ts:176](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L176)
 
 Withdraw tokens from trading account
 
@@ -392,7 +392,7 @@ Token1 amount
 
 > `static` **createFromAddress**(`address`): `TradeAccount`
 
-Defined in: [contracts/TradeAccountContract.ts:51](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L51)
+Defined in: [contracts/TradeAccountContract.ts:51](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L51)
 
 #### Parameters
 
@@ -410,7 +410,7 @@ Defined in: [contracts/TradeAccountContract.ts:51](https://github.com/bidask-pro
 
 > `static` **createFromConfig**(`config`, `code`, `workchain`): `TradeAccount`
 
-Defined in: [contracts/TradeAccountContract.ts:55](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/TradeAccountContract.ts#L55)
+Defined in: [contracts/TradeAccountContract.ts:55](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/TradeAccountContract.ts#L55)
 
 #### Parameters
 

@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / getRawPrice
+[@bidask-protocol/sdk](../globals.md) / getRawPrice
 
 # Function: getRawPrice()
 
 > **getRawPrice**(`humanReadablePrice`, `jetton0Decimals`, `jetton1Decimals`): `number`
 
-Defined in: [utils/price.ts:43](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/utils/price.ts#L43)
+Defined in: [utils/price.ts:43](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/utils/price.ts#L43)
 
 Converts a human-readable price to its blockchain representation accounting for decimal differences
 

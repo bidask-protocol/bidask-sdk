@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / createBidaskShape
+[@bidask-protocol/sdk](../globals.md) / createBidaskShape
 
 # Function: createBidaskShape()
 
 > **createBidaskShape**(`params`): [`LiquidityProvideBins`](../type-aliases/LiquidityProvideBins.md)
 
-Defined in: [utils/liquidity/shapes/bidask-shape.ts:12](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/utils/liquidity/shapes/bidask-shape.ts#L12)
+Defined in: [utils/liquidity/shapes/bidask-shape.ts:10](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/utils/liquidity/shapes/bidask-shape.ts#L10)
 
 Creates bin dictionary for bidask shape
 

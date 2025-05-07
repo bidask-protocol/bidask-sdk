@@ -1,12 +1,12 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / LiquidityType
+[@bidask-protocol/sdk](../globals.md) / LiquidityType
 
 # Enumeration: LiquidityType
 
-Defined in: [types/liquidity.ts:13](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/types/liquidity.ts#L13)
+Defined in: [types/liquidity.ts:13](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/types/liquidity.ts#L13)
 
 Types of liquidity operations
 
@@ -16,7 +16,7 @@ Types of liquidity operations
 
 > **OneSide**: `1`
 
-Defined in: [types/liquidity.ts:15](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/types/liquidity.ts#L15)
+Defined in: [types/liquidity.ts:15](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/types/liquidity.ts#L15)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [types/liquidity.ts:15](https://github.com/bidask-protocol/bidask-sd
 
 > **TwoSides**: `0`
 
-Defined in: [types/liquidity.ts:14](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/types/liquidity.ts#L14)
+Defined in: [types/liquidity.ts:14](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/types/liquidity.ts#L14)

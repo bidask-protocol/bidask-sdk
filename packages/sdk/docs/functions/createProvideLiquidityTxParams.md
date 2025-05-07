@@ -1,14 +1,14 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / createProvideLiquidityTxParams
+[@bidask-protocol/sdk](../globals.md) / createProvideLiquidityTxParams
 
 # Function: createProvideLiquidityTxParams()
 
 > **createProvideLiquidityTxParams**(`params`): [`TxParams`](../type-aliases/TxParams.md)[]
 
-Defined in: [transactions/provide-liquidity.ts:24](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/transactions/provide-liquidity.ts#L24)
+Defined in: [transactions/provide-liquidity.ts:23](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/transactions/provide-liquidity.ts#L23)
 
 Creates a transaction parameters for providing liquidity to a Jetton/Jetton pool
 
@@ -24,29 +24,17 @@ Parameters for the transaction
 
 Bins to provide
 
-#### depositType
-
-[`DepositType`](../enumerations/DepositType.md)
-
-Type of deposit
-
 #### forwardPayload?
 
 `Cell`
 
 Forward payload
 
-#### jettonAmount0
+#### initializedRanges
 
-`bigint`
+`number`[]
 
-Amount of token0 to provide
-
-#### jettonAmount1
-
-`bigint`
-
-Amount of token1 to provide
+Ranges that are already initialized
 
 #### jettonWalletAddress0
 
@@ -59,12 +47,6 @@ Address of the token0 Jetton wallet
 `Address`
 
 Address of the token1 Jetton wallet
-
-#### liquidityType
-
-[`LiquidityType`](../enumerations/LiquidityType.md)
-
-Type of liquidity
 
 #### poolAddress
 
@@ -88,4 +70,4 @@ Address of the sender
 
 [`TxParams`](../type-aliases/TxParams.md)[]
 
-Transaction parameters
+Transactions parameters

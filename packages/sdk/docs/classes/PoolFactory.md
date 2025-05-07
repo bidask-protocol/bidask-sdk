@@ -1,12 +1,12 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / PoolFactory
+[@bidask-protocol/sdk](../globals.md) / PoolFactory
 
 # Class: PoolFactory
 
-Defined in: [contracts/tact\_PoolFactory.ts:2100](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2100)
+Defined in: [contracts/tact\_PoolFactory.ts:2100](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2100)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2100](https://github.com/bidask-prot
 
 > **new PoolFactory**(`address`, `init?`): `PoolFactory`
 
-Defined in: [contracts/tact\_PoolFactory.ts:2164](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2164)
+Defined in: [contracts/tact\_PoolFactory.ts:2164](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2164)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2164](https://github.com/bidask-prot
 
 > `readonly` **abi**: `ContractABI`
 
-Defined in: [contracts/tact\_PoolFactory.ts:2157](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2157)
+Defined in: [contracts/tact\_PoolFactory.ts:2157](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2157)
 
 #### Implementation of
 
@@ -58,7 +58,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2157](https://github.com/bidask-prot
 
 > `readonly` **address**: `Address`
 
-Defined in: [contracts/tact\_PoolFactory.ts:2155](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2155)
+Defined in: [contracts/tact\_PoolFactory.ts:2155](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2155)
 
 #### Implementation of
 
@@ -70,7 +70,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2155](https://github.com/bidask-prot
 
 > `readonly` `optional` **init**: `object`
 
-Defined in: [contracts/tact\_PoolFactory.ts:2156](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2156)
+Defined in: [contracts/tact\_PoolFactory.ts:2156](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2156)
 
 #### code
 
@@ -90,7 +90,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2156](https://github.com/bidask-prot
 
 > `readonly` `static` **errors**: `object` = `PoolFactory_errors_backward`
 
-Defined in: [contracts/tact\_PoolFactory.ts:2102](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2102)
+Defined in: [contracts/tact\_PoolFactory.ts:2102](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2102)
 
 #### 'Unknown' error
 
@@ -238,7 +238,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2102](https://github.com/bidask-prot
 
 > `readonly` `static` **opcodes**: `object` = `PoolFactory_opcodes`
 
-Defined in: [contracts/tact\_PoolFactory.ts:2103](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2103)
+Defined in: [contracts/tact\_PoolFactory.ts:2103](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2103)
 
 #### ChangeCodes
 
@@ -290,7 +290,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2103](https://github.com/bidask-prot
 
 > `readonly` `static` **storageReserve**: `0n` = `0n`
 
-Defined in: [contracts/tact\_PoolFactory.ts:2101](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2101)
+Defined in: [contracts/tact\_PoolFactory.ts:2101](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2101)
 
 ## Methods
 
@@ -298,7 +298,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2101](https://github.com/bidask-prot
 
 > **getFees**(`provider`): `Promise`\<\{ `$$type`: `"FeesData"`; `protocol_fee`: `bigint`; `ref_fee`: `bigint`; \}\>
 
-Defined in: [contracts/tact\_PoolFactory.ts:2235](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2235)
+Defined in: [contracts/tact\_PoolFactory.ts:2235](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2235)
 
 #### Parameters
 
@@ -316,7 +316,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2235](https://github.com/bidask-prot
 
 > **getGetPoolAddress**(`provider`, `deployer`, `seed`): `Promise`\<`Address`\>
 
-Defined in: [contracts/tact\_PoolFactory.ts:2226](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2226)
+Defined in: [contracts/tact\_PoolFactory.ts:2226](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2226)
 
 #### Parameters
 
@@ -342,7 +342,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2226](https://github.com/bidask-prot
 
 > **getOwner**(`provider`): `Promise`\<`Address`\>
 
-Defined in: [contracts/tact\_PoolFactory.ts:2242](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2242)
+Defined in: [contracts/tact\_PoolFactory.ts:2242](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2242)
 
 #### Parameters
 
@@ -360,7 +360,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2242](https://github.com/bidask-prot
 
 > **send**(`provider`, `via`, `args`, `message`): `Promise`\<`void`\>
 
-Defined in: [contracts/tact\_PoolFactory.ts:2169](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2169)
+Defined in: [contracts/tact\_PoolFactory.ts:2169](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2169)
 
 #### Parameters
 
@@ -396,7 +396,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2169](https://github.com/bidask-prot
 
 > `static` **fromAddress**(`address`): `PoolFactory`
 
-Defined in: [contracts/tact\_PoolFactory.ts:2151](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2151)
+Defined in: [contracts/tact\_PoolFactory.ts:2151](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2151)
 
 #### Parameters
 
@@ -414,7 +414,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2151](https://github.com/bidask-prot
 
 > `static` **fromInit**(`owner`, `pool_code`, `range_code`, `multitoken_code`, `trade_account_code`, `lp_account_code`, `protocol_fee`, `ref_fee`): `Promise`\<`PoolFactory`\>
 
-Defined in: [contracts/tact\_PoolFactory.ts:2127](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2127)
+Defined in: [contracts/tact\_PoolFactory.ts:2127](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2127)
 
 #### Parameters
 
@@ -460,7 +460,7 @@ Defined in: [contracts/tact\_PoolFactory.ts:2127](https://github.com/bidask-prot
 
 > `static` **init**(`owner`, `pool_code`, `range_code`, `multitoken_code`, `trade_account_code`, `lp_account_code`, `protocol_fee`, `ref_fee`): `Promise`\<\{ `code`: `Cell`; `data`: `Cell`; \}\>
 
-Defined in: [contracts/tact\_PoolFactory.ts:2105](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/tact_PoolFactory.ts#L2105)
+Defined in: [contracts/tact\_PoolFactory.ts:2105](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/tact_PoolFactory.ts#L2105)
 
 #### Parameters
 

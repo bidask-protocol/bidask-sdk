@@ -1,12 +1,12 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / RangeContract
+[@bidask-protocol/sdk](../globals.md) / RangeContract
 
 # Class: RangeContract
 
-Defined in: [contracts/RangeContract.ts:3](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/RangeContract.ts#L3)
+Defined in: [contracts/RangeContract.ts:3](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/RangeContract.ts#L3)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [contracts/RangeContract.ts:3](https://github.com/bidask-protocol/bi
 
 > **address**: `Address`
 
-Defined in: [contracts/RangeContract.ts:8](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/RangeContract.ts#L8)
+Defined in: [contracts/RangeContract.ts:8](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/RangeContract.ts#L8)
 
 #### Implementation of
 
@@ -30,7 +30,7 @@ Defined in: [contracts/RangeContract.ts:8](https://github.com/bidask-protocol/bi
 
 > **getLpMultitokenWallet**(`provider`, `userAddress`): `Promise`\<`Address`\>
 
-Defined in: [contracts/RangeContract.ts:16](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/RangeContract.ts#L16)
+Defined in: [contracts/RangeContract.ts:16](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/RangeContract.ts#L16)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: [contracts/RangeContract.ts:16](https://github.com/bidask-protocol/b
 
 > **getSqrtPrice**(`provider`): `Promise`\<`bigint`\>
 
-Defined in: [contracts/RangeContract.ts:10](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/RangeContract.ts#L10)
+Defined in: [contracts/RangeContract.ts:10](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/RangeContract.ts#L10)
 
 #### Parameters
 
@@ -70,7 +70,7 @@ Defined in: [contracts/RangeContract.ts:10](https://github.com/bidask-protocol/b
 
 > `static` **create**(`address`): `RangeContract`
 
-Defined in: [contracts/RangeContract.ts:4](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/RangeContract.ts#L4)
+Defined in: [contracts/RangeContract.ts:4](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/RangeContract.ts#L4)
 
 #### Parameters
 

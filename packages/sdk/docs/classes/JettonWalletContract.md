@@ -1,12 +1,12 @@
-[**@foprta/sdk**](../README.md)
+[**@bidask-protocol/sdk**](../README.md)
 
 ***
 
-[@foprta/sdk](../globals.md) / JettonWalletContract
+[@bidask-protocol/sdk](../globals.md) / JettonWalletContract
 
 # Class: JettonWalletContract
 
-Defined in: [contracts/JettonWalletContract.ts:3](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/JettonWalletContract.ts#L3)
+Defined in: [contracts/JettonWalletContract.ts:3](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/JettonWalletContract.ts#L3)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [contracts/JettonWalletContract.ts:3](https://github.com/bidask-prot
 
 > **address**: `Address`
 
-Defined in: [contracts/JettonWalletContract.ts:12](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/JettonWalletContract.ts#L12)
+Defined in: [contracts/JettonWalletContract.ts:12](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/JettonWalletContract.ts#L12)
 
 #### Implementation of
 
@@ -30,7 +30,7 @@ Defined in: [contracts/JettonWalletContract.ts:12](https://github.com/bidask-pro
 
 > `static` **Opcodes**: `object`
 
-Defined in: [contracts/JettonWalletContract.ts:4](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/JettonWalletContract.ts#L4)
+Defined in: [contracts/JettonWalletContract.ts:4](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/JettonWalletContract.ts#L4)
 
 #### JettonTransfer
 
@@ -42,7 +42,7 @@ Defined in: [contracts/JettonWalletContract.ts:4](https://github.com/bidask-prot
 
 > **getWalletData**(`provider`): `Promise`\<\{ `balance`: `bigint`; `jettonMaster`: `Address`; `jettonWalletCode`: `string`; `owner`: `Address`; \}\>
 
-Defined in: [contracts/JettonWalletContract.ts:14](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/JettonWalletContract.ts#L14)
+Defined in: [contracts/JettonWalletContract.ts:14](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/JettonWalletContract.ts#L14)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: [contracts/JettonWalletContract.ts:14](https://github.com/bidask-pro
 
 > `static` **create**(`address`): `JettonWalletContract`
 
-Defined in: [contracts/JettonWalletContract.ts:8](https://github.com/bidask-protocol/bidask-sdk/blob/9a0a4707cd57b081e295f71ea9b8f0b19f6c835c/packages/sdk/src/contracts/JettonWalletContract.ts#L8)
+Defined in: [contracts/JettonWalletContract.ts:8](https://github.com/bidask-protocol/bidask-sdk/blob/545ce6f0b69b63e9adb5d1887eecab168c52c07d/packages/sdk/src/contracts/JettonWalletContract.ts#L8)
 
 #### Parameters
 
