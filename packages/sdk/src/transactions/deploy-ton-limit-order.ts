@@ -12,6 +12,7 @@ import { greatestCommonDivisor } from '../utils/math'
  * @param params.buyAmount - Amount of Y to buy
  * @param params.reward - Reward in TON for executors
  * @param params.finalPayload - Optional final payload cell
+ * @param params.expirationTimestamp - Expiration timestamp in seconds (default: no expiration)
  * @param params.queryId - Query ID (default: 0n)
  */
 export function createDeployTonLimitOrderTxParams(params: {
@@ -21,9 +22,10 @@ export function createDeployTonLimitOrderTxParams(params: {
   buyAmount: bigint
   reward: bigint
   finalPayload?: Cell
+  expirationTimestamp?: number
   queryId?: bigint
 }): TxParams {
-  const { queryId = 0n } = params
+  const { queryId = 0n, expirationTimestamp = Number.MAX_SAFE_INTEGER } = params
 
   // reduce price fraction
   const gcd = greatestCommonDivisor(params.buyAmount, params.sellAmount)
@@ -41,6 +43,7 @@ export function createDeployTonLimitOrderTxParams(params: {
     .storeUint(params.salt, 64)
     .storeUint(factor, 128)
     .storeUint(base, 128)
+    .storeUint(expirationTimestamp, 64)
     .storeMaybeRef(params.finalPayload)
     .endCell()
 
