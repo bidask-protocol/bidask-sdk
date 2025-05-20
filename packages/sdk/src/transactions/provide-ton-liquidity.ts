@@ -32,12 +32,6 @@ export function createProvideTonLiquidityTxParams(params: {
 
   const batches = divideBinsIntoBatches(params.binsToProvide)
 
-  console.warn(batches, 'batches')
-  console.warn(params, 'params')
-  console.warn('sender', params.senderAddress.toRawString())
-  console.warn('pool', params.poolAddress.toRawString())
-  console.warn('jetton', params.jettonWalletAddress.toRawString())
-
   batches.forEach((binGroup) => {
     let jettonAmount = 0n
     let tonAmount = 0n
