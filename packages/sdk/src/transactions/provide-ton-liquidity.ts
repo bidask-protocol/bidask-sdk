@@ -105,5 +105,5 @@ export function createProvideTonLiquidityTxParams(params: {
 }
 
 const calculateGas = (binsAmount: number): bigint => {
-  return toNano('0.4') + BigInt(binsAmount) * toNano('0.004')
+  return toNano('0.8') + BigInt(binsAmount) * toNano('0.004')
 }
