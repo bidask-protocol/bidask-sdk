@@ -28,6 +28,7 @@ export const createBidaskShape = (params: CreateShapeParams): LiquidityProvideBi
       right:
         activeBin === params.toBin ? 0 : bidaskSum(nearestBinUnits.right, params.toBin, activeBin),
     },
+    fallbackRatio: 0.2,
   })
 }
 
