@@ -23,11 +23,15 @@ export function createBurnTxParams(params: {
     .storeMaybeRef(null)
     .endCell()
 
-  const constantGas = toNano('1')
+  const providingGas = calculateGas(Object.keys(params.binsToBurn).length)
 
   return {
     to: params.lpMultitokenAddress,
-    value: constantGas,
+    value: providingGas,
     payload,
   }
+}
+
+const calculateGas = (binsAmount: number): bigint => {
+  return toNano('0.8') + BigInt(binsAmount) * toNano('0.005')
 }
