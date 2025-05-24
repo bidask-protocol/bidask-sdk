@@ -237,7 +237,9 @@ export const calculateCentralAmountXByAmountY = (
 
   const tokenXPerTokenY = centralBinLiquidity[0] / centralBinLiquidity[1]
 
-  return tokenXPerTokenY * tokenYAmount
+  const result = tokenXPerTokenY * tokenYAmount
+
+  return Number.isFinite(result) ? result : 0
 }
 
 export const calculateCentralAmountYByAmountX = (
@@ -263,5 +265,7 @@ export const calculateCentralAmountYByAmountX = (
 
   const tokenYPerTokenX = centralBinLiquidity[1] / centralBinLiquidity[0]
 
-  return tokenYPerTokenX * tokenXAmount
+  const result = tokenYPerTokenX * tokenXAmount
+
+  return Number.isFinite(result) ? result : 0
 }

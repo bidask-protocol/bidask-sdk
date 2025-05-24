@@ -1,6 +1,6 @@
 {
   "name": "@bidask-protocol/sdk",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Bidask Protocol SDK",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
