@@ -11,13 +11,19 @@ export const toBigInt = (amount: number | string, decimals: number | string = 0)
   let amountString: string
   if (typeof amount === 'string') {
     amountString = amount
-  } else {
+  } else if (Number.isFinite(amount)) {
     amountString = numberExponentToLarge(amount)
+  } else {
+    amountString = '0'
   }
 
   const [integerPart, fractionalPart = ''] = String(amountString).split('.')
   const fractionStr = (fractionalPart + '0'.repeat(decimalsNumber)).slice(0, decimalsNumber)
-  return BigInt(integerPart) * multiplier + BigInt(fractionStr)
+
+  const integerPartBigInt = BigInt(integerPart)
+  const fractionalPartBigInt = BigInt(fractionStr)
+
+  return integerPartBigInt * multiplier + fractionalPartBigInt
 }
 
 /**
