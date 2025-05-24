@@ -17,5 +17,6 @@ export {
   ZERO_ADDRESS,
   TON_ADDRESS,
   POOL_FACTORY_ADDRESS,
+  TESTNET_POOL_FACTORY_ADDRESS,
 } from './constants'
 export * from './transactions'

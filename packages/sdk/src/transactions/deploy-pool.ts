@@ -22,7 +22,10 @@ export const createDeployPoolTxParams = (params: {
   lpFee: bigint
   initialRawPrice: number
   seedCell: Cell
+  poolDeployerAddress?: Address
 }): TxParams => {
+  const { poolDeployerAddress = POOL_FACTORY_ADDRESS } = params
+
   const deployPoolPayload = beginCell()
     .storeUint(PoolFactory.opcodes.DeployPoolMsg, 32)
     .storeUint(0, 64)
@@ -38,7 +41,7 @@ export const createDeployPoolTxParams = (params: {
   const constantGas = toNano('0.06')
 
   return {
-    to: POOL_FACTORY_ADDRESS,
+    to: poolDeployerAddress,
     value: constantGas,
     payload: deployPoolPayload,
   }

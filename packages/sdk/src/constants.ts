@@ -16,9 +16,14 @@ export const ZERO_ADDRESS = Address.parse(
  */
 export const TON_ADDRESS = ZERO_ADDRESS
 
-/** Pool factory address */
-export const POOL_FACTORY_ADDRESS = Address.parse(
+/** Testnet pool factory address */
+export const TESTNET_POOL_FACTORY_ADDRESS = Address.parse(
   'EQCXeklSavPod6x7zUWLSTzSjYGX7W8Ted4BaMA2OlY3ziNP',
+)
+
+/** Mainnet pool factory address */
+export const POOL_FACTORY_ADDRESS = Address.parse(
+  'EQAuBZGak9BdkxuCC9gWUsY4Em3jog94BI4eRzX-3_Bidask',
 )
 
 /**

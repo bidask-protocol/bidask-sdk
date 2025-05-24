@@ -15,9 +15,10 @@ export function createDeployLimitPoolTxParams(params: {
   seedCell: Cell
   token0PoolWalletAddress: Address
   token1PoolWalletAddress: Address
+  poolDeployerAddress?: Address
   queryId?: bigint
 }): TxParams {
-  const { queryId = 0n } = params
+  const { queryId = 0n, poolDeployerAddress = POOL_FACTORY_ADDRESS } = params
 
   const constantGas = toNano('0.1')
 
@@ -30,7 +31,7 @@ export function createDeployLimitPoolTxParams(params: {
     .endCell()
 
   return {
-    to: POOL_FACTORY_ADDRESS,
+    to: poolDeployerAddress,
     value: constantGas,
     payload,
   }
