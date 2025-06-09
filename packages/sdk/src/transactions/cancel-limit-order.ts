@@ -8,6 +8,7 @@ import { generateRandomQueryId } from '../utils'
  * @param params - Cancellation parameters
  * @param params.orderAddress - Address of the limit order contract
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
+ * @returns Transaction parameters
  */
 export function createCancelLimitOrderTxParams(params: {
   orderAddress: Address

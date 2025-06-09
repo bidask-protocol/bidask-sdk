@@ -6,17 +6,19 @@ import { greatestCommonDivisor } from '../utils/math'
 import { generateRandomQueryId } from '../utils'
 
 /**
- * Creates transaction parameters for creating a limit order pool
- * It actually creates a limit order within a limit pool
+ * Creates transaction parameters for deploying a jetton limit order
  * @param params - Order parameters
- * @param params.pool - Address of the limit pool
+ * @param params.poolAddress - Address of the limit pool
+ * @param params.sellJettonWalletAddress - Address of the sender's jetton wallet
+ * @param params.senderAddress - Address of the order sender
  * @param params.salt - Salt for shard brute-forcing
- * @param params.sellAmount - Amount of X to sell
- * @param params.buyAmount - Amount of Y to buy
+ * @param params.sellAmount - Amount of jettons to sell
+ * @param params.buyAmount - Amount of tokens to buy
  * @param params.reward - Reward in TON for executors
  * @param params.finalPayload - Optional final payload cell
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @param params.expirationTimestamp - Expiration timestamp in seconds (default: no expiration)
+ * @returns Transaction parameters
  */
 export function createDeployJettonLimitOrderTxParams(params: {
   poolAddress: Address

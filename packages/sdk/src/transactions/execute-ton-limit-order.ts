@@ -6,14 +6,14 @@ import { generateRandomQueryId } from '../utils'
 /**
  * Creates transaction parameters to execute a limit order using native TON
  * @param params - Execution parameters
- * @param params.nativeAmount - Amount of native TON to use for the swap
+ * @param params.sellAmount - Amount of native TON to use for the execution
  * @param params.salt - Salt for shard brute-forcing the order address
- * @param params.orderIndex - Index of the limit order on the pool (default: 0n)
- * @param params.pool - Address of the limit pool
- * @param params.forwardPayload - Optional payload on successful swap
- * @param params.rejectPayload - Optional payload on unused ton return
+ * @param params.orderIndex - Index of the limit order on the pool
+ * @param params.poolAddress - Address of the limit pool
+ * @param params.forwardPayload - Optional payload on successful execution
+ * @param params.rejectPayload - Optional payload on execution failure
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
- * @param params.value - TON value for gas (default: toNano('1'))
+ * @returns Transaction parameters
  */
 export function createExecuteTonLimitOrderTxParams(params: {
   sellAmount: bigint

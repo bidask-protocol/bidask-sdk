@@ -8,17 +8,17 @@ import { generateRandomQueryId } from '../utils'
 /**
  * Creates a transaction parameters for swapping tokens using a Jetton wallet
  * @param params - Parameters for the transaction
- * @param params.amountIn - Amount of tokens to swap
- * @param params.tokenIn - Address of the token to swap
- * @param params.receiverAddress - Address of the receiver
- * @param params.senderAddress - Address of the sender
- * @param params.exactOut - Exact amount of tokens to receive
- * @param params.jettonWalletAddress - Address of the Jetton wallet
- * @param params.poolAddress - Address of the pool
- * @param params.allowPartial - Allow partial swap execution
+ * @param params.amountIn - Amount of jettons to swap
+ * @param params.tokenIn - Address of the input token
+ * @param params.receiverAddress - Address of the swap result receiver
+ * @param params.senderAddress - Address of the swap sender
+ * @param params.exactOut - Exact amount of tokens to receive (optional, defaults to 0)
+ * @param params.jettonWalletAddress - Address of the sender's jetton wallet
+ * @param params.poolAddress - Address of the liquidity pool
+ * @param params.allowPartial - Allow partial swap execution if true, require exact amount if false
  * @param params.sqrtX128LastPrice - Last price in sqrt price X 2^128 format (required if `allowPartial` is true)
  * @param params.minAmountToReceive - Minimum amount of tokens to receive (required if `allowPartial` is false)
- * @param params.queryId - Optional query ID for the transaction (defaults to 0)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @returns Transaction parameters
  */
 export function createJettonSwapTxParams(

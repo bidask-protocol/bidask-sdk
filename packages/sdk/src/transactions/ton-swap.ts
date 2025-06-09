@@ -6,13 +6,18 @@ import { SwapPartialExecutionParams } from '../types/swap'
 import { generateRandomQueryId } from '../utils'
 
 /**
- * Creates a transaction parameters for swapping TON using a pool
+ * Creates transaction parameters for swapping TON using a pool
  * @param params - Parameters for the transaction
  * @param params.amountIn - Amount of TON to swap
- * @param params.receiverAddress - Address of the receiver
- * @param params.senderAddress - Address of the sender
- * @param params.poolAddress - Address of the pool
- * @param params.queryId - Optional query ID for the transaction (defaults to 0)
+ * @param params.receiverAddress - Address of the swap result receiver
+ * @param params.senderAddress - Address of the swap sender
+ * @param params.poolAddress - Address of the liquidity pool
+ * @param params.exactOut - Exact amount of tokens to receive (optional, defaults to 0)
+ * @param params.allowPartial - Allow partial swap execution if true, require exact amount if false
+ * @param params.sqrtX128LastPrice - Last price in sqrt price X 2^128 format (required if `allowPartial` is true)
+ * @param params.minAmountToReceive - Minimum amount of tokens to receive (required if `allowPartial` is false)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
+ * @returns Transaction parameters
  */
 export function createTonSwapTxParams(
   params: {

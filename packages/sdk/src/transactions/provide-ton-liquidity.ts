@@ -3,22 +3,21 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { LiquidityType, TxParams } from '../types'
 import { DepositType, LiquidityProvideBins } from '../types/liquidity'
-import { getRangeByBin, generateRandomQueryId } from '../utils'
+import { generateRandomQueryId, getRangeByBin } from '../utils'
 import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liquidity/dictionary'
 
 /**
- * Creates a transaction parameters for providing liquidity to a TON/Jetton pool
+ * Creates transaction parameters for providing liquidity to a TON/Jetton pool
  * @param params - Parameters for the transaction
- * @param params.jettonWalletAddress - Address of the token Jetton wallet
- * @param params.depositType - Type of deposit
- * @param params.liquidityType - Type of liquidity
- * @param params.binsToProvide - Bins to provide
- * @param params.senderAddress - Address of the sender
- * @param params.poolAddress - Address of the pool
- * @param params.rejectPayload - Reject payload
- * @param params.forwardPayload - Forward payload
- * @param params.queryId - Optional query ID for the transaction (defaults to 0)
- * @returns Transactions parameters
+ * @param params.jettonWalletAddress - Address of the jetton wallet
+ * @param params.binsToProvide - Bins with amounts to provide liquidity for
+ * @param params.senderAddress - Address of the liquidity provider
+ * @param params.poolAddress - Address of the liquidity pool
+ * @param params.initializedRanges - Array of range numbers that are already initialized
+ * @param params.rejectPayload - Optional payload for transaction rejection
+ * @param params.forwardPayload - Optional payload for successful transaction
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
+ * @returns Array of transaction parameters
  */
 export function createProvideTonLiquidityTxParams(params: {
   jettonWalletAddress: Address
@@ -38,7 +37,7 @@ export function createProvideTonLiquidityTxParams(params: {
   batches.forEach((binGroup) => {
     let jettonAmount = 0n
     let tonAmount = 0n
-    Object.values(params.binsToProvide).forEach(([x, y]) => {
+    Object.values(binGroup).forEach(([x, y]) => {
       jettonAmount += x
       tonAmount += y
     })

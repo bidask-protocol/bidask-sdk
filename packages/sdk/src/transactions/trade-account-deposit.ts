@@ -2,7 +2,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import { JettonWalletContract, TradeAccount } from '../contracts'
 import { TxParams } from '../types'
-import { createSeedCell, isZeroAddress, generateRandomQueryId } from '../utils'
+import { createSeedCell, generateRandomQueryId, isZeroAddress } from '../utils'
 
 /**
  * Creates a transaction parameters for depositing tokens into a trade account
@@ -17,7 +17,7 @@ import { createSeedCell, isZeroAddress, generateRandomQueryId } from '../utils'
  * @param params.senderAddress - Address of the sender
  * @param params.publicKey - Public key of the trading account
  * @param params.seed - Seed of the trading account
- * @param params.queryId - Optional query ID for the transaction (defaults to 0)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
  */
 export const createTradeAccountDepositTxParams = (params: {
   poolAddress: Address

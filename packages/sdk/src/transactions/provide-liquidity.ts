@@ -3,23 +3,22 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { LiquidityType, TxParams } from '../types'
 import { DepositType, LiquidityProvideBins } from '../types/liquidity'
-import { getRangeByBin, generateRandomQueryId } from '../utils'
+import { generateRandomQueryId, getRangeByBin } from '../utils'
 import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liquidity/dictionary'
 
 /**
- * Creates a transaction parameters for providing liquidity to a Jetton/Jetton pool
+ * Creates transaction parameters for providing liquidity to a Jetton/Jetton pool
  * @param params - Parameters for the transaction
- * @param params.jettonWalletAddress0 - Address of the token0 Jetton wallet
- * @param params.jettonWalletAddress1 - Address of the token1 Jetton wallet
- * @param params.senderAddress - Address of the sender
- * @param params.liquidityType - Type of liquidity
- * @param params.binsToProvide - Bins to provide
- * @param params.poolAddress - Address of the pool
- * @param params.rejectPayload - Reject payload
- * @param params.forwardPayload - Forward payload
- * @param params.initializedRanges - Ranges that are already initialized
- * @param params.queryId - Optional query ID for the transaction (defaults to 0)
- * @returns Transactions parameters
+ * @param params.jettonWalletAddress0 - Address of the token0 jetton wallet
+ * @param params.jettonWalletAddress1 - Address of the token1 jetton wallet
+ * @param params.senderAddress - Address of the liquidity provider
+ * @param params.binsToProvide - Bins with amounts to provide liquidity for
+ * @param params.poolAddress - Address of the liquidity pool
+ * @param params.initializedRanges - Array of range numbers that are already initialized
+ * @param params.rejectPayload - Optional payload for transaction rejection
+ * @param params.forwardPayload - Optional payload for successful transaction
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
+ * @returns Array of transaction parameters
  */
 export function createProvideLiquidityTxParams(params: {
   jettonWalletAddress0: Address

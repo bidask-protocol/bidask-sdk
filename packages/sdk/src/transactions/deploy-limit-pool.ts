@@ -7,10 +7,12 @@ import { generateRandomQueryId } from '../utils'
 /**
  * Creates transaction parameters for deploying a limit pool
  * @param params - Parameters for deployment
- * @param params.seed - Seed for shard brute-forcing
- * @param params.token0Address - Address of token0
- * @param params.token1Address - Address of token1
+ * @param params.seedCell - Seed cell for shard brute-forcing
+ * @param params.token0PoolWalletAddress - Address of token0 pool wallet
+ * @param params.token1PoolWalletAddress - Address of token1 pool wallet
+ * @param params.poolDeployerAddress - Optional address of the pool deployer (defaults to factory)
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
+ * @returns Transaction parameters
  */
 export function createDeployLimitPoolTxParams(params: {
   seedCell: Cell

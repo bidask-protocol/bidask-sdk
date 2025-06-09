@@ -3,15 +3,15 @@ import { Address, beginCell, toNano } from '@ton/ton'
 import { LpMultitokenContract } from '../contracts'
 import { TxParams } from '../types'
 import { LiquidityRemoveBins } from '../types/liquidity'
-import { createLiquidityBurnDict } from '../utils/liquidity/dictionary'
 import { generateRandomQueryId } from '../utils'
+import { createLiquidityBurnDict } from '../utils/liquidity/dictionary'
 
 /**
  * Creates a transaction parameters for burning liquidity from a pool
  * @param params - Parameters for the transaction
  * @param params.lpMultitokenAddress - Address of the liquidity pool contract
  * @param params.binsToBurn - Bins to burn
- * @param params.queryId - Optional query ID for the transaction (defaults to 0)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @returns Transaction parameters
  */
 export function createBurnTxParams(params: {

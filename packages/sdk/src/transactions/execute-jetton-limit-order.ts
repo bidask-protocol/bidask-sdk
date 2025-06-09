@@ -7,15 +7,16 @@ import { generateRandomQueryId } from '../utils'
 /**
  * Creates transaction parameters to execute a limit order by sending Jettons
  * @param params - Execution parameters
+ * @param params.poolAddress - Address of the limit pool
  * @param params.orderIndex - Index of the limit order on the pool
  * @param params.salt - Salt for shard brute-forcing
- * @param params.amountIn - Amount of X to buy
- * @param params.pool - Address of the limit pool
- * @param params.from - Address of the buyer (referral)
- * @param params.forwardPayload - Optional payload on success
- * @param params.rejectPayload - Optional payload on failure
+ * @param params.sellJettonWalletAddress - Address of the seller's jetton wallet
+ * @param params.sellAmount - Amount of jettons to sell for execution
+ * @param params.senderAddress - Address of the order executor
+ * @param params.forwardPayload - Optional payload on successful execution
+ * @param params.rejectPayload - Optional payload on execution failure
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
- * @param params.value - TON value for gas (default: toNano('0.5'))
+ * @returns Transaction parameters
  */
 export function createExecuteJettonLimitOrderTxParams(params: {
   poolAddress: Address
