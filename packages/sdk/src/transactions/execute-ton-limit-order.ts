@@ -1,6 +1,7 @@
 import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import type { TxParams } from '../types'
+import { generateRandomQueryId } from '../utils'
 
 /**
  * Creates transaction parameters to execute a limit order using native TON
@@ -11,7 +12,7 @@ import type { TxParams } from '../types'
  * @param params.pool - Address of the limit pool
  * @param params.forwardPayload - Optional payload on successful swap
  * @param params.rejectPayload - Optional payload on unused ton return
- * @param params.queryId - Query ID (default: 0n)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @param params.value - TON value for gas (default: toNano('1'))
  */
 export function createExecuteTonLimitOrderTxParams(params: {
@@ -23,7 +24,7 @@ export function createExecuteTonLimitOrderTxParams(params: {
   rejectPayload?: Cell
   queryId?: bigint
 }): TxParams {
-  const { queryId = 0n } = params
+  const { queryId = generateRandomQueryId() } = params
 
   const constantGas = toNano('1')
 

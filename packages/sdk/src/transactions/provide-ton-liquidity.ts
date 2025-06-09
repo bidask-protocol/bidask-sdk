@@ -3,7 +3,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { LiquidityType, TxParams } from '../types'
 import { DepositType, LiquidityProvideBins } from '../types/liquidity'
-import { getRangeByBin } from '../utils'
+import { getRangeByBin, generateRandomQueryId } from '../utils'
 import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liquidity/dictionary'
 
 /**
@@ -17,6 +17,7 @@ import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liqu
  * @param params.poolAddress - Address of the pool
  * @param params.rejectPayload - Reject payload
  * @param params.forwardPayload - Forward payload
+ * @param params.queryId - Optional query ID for the transaction (defaults to 0)
  * @returns Transactions parameters
  */
 export function createProvideTonLiquidityTxParams(params: {
@@ -27,7 +28,9 @@ export function createProvideTonLiquidityTxParams(params: {
   initializedRanges: number[]
   rejectPayload?: Cell
   forwardPayload?: Cell
+  queryId?: bigint
 }): TxParams[] {
+  const { queryId = generateRandomQueryId() } = params
   const messages: TxParams[] = []
 
   const batches = divideBinsIntoBatches(params.binsToProvide)
@@ -52,7 +55,7 @@ export function createProvideTonLiquidityTxParams(params: {
 
     // Add queryId to forwardPayload if only TON is provided
     if (onlyTon) {
-      forwardPayloadBuilder = forwardPayloadBuilder.storeUint(0, 64)
+      forwardPayloadBuilder = forwardPayloadBuilder.storeUint(queryId, 64)
     }
 
     const liquidityType =
@@ -82,7 +85,7 @@ export function createProvideTonLiquidityTxParams(params: {
     } else {
       const jettonTransferBody = beginCell()
         .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-        .storeUint(0, 64)
+        .storeUint(queryId, 64)
         .storeCoins(jettonAmount)
         .storeAddress(params.poolAddress)
         .storeAddress(params.senderAddress)

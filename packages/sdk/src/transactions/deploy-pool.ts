@@ -3,7 +3,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { POOL_FACTORY_ADDRESS } from '../constants'
 import { PoolFactory } from '../contracts'
 import type { TxParams } from '../types'
-import { getBinByPrice, getSqrtPriceX128 } from '../utils'
+import { getBinByPrice, getSqrtPriceX128, generateRandomQueryId } from '../utils'
 
 /**
  * Creates a transaction parameters for deploying a pool
@@ -14,6 +14,7 @@ import { getBinByPrice, getSqrtPriceX128 } from '../utils'
  * @param params.lpFee - Liquidity provider fee
  * @param params.initialRawPrice - Initial raw price of the pool
  * @param params.seedCell - Seed cell for the pool
+ * @param params.queryId - Optional query ID for the transaction (defaults to 0)
  */
 export const createDeployPoolTxParams = (params: {
   token0PoolWalletAddress: Address
@@ -23,12 +24,13 @@ export const createDeployPoolTxParams = (params: {
   initialRawPrice: number
   seedCell: Cell
   poolDeployerAddress?: Address
+  queryId?: bigint
 }): TxParams => {
-  const { poolDeployerAddress = POOL_FACTORY_ADDRESS } = params
+  const { poolDeployerAddress = POOL_FACTORY_ADDRESS, queryId = generateRandomQueryId() } = params
 
   const deployPoolPayload = beginCell()
     .storeUint(PoolFactory.opcodes.DeployPoolMsg, 32)
-    .storeUint(0, 64)
+    .storeUint(queryId, 64)
     .storeRef(params.seedCell)
     .storeAddress(params.token0PoolWalletAddress)
     .storeAddress(params.token1PoolWalletAddress)

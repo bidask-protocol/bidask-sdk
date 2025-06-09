@@ -3,6 +3,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { JettonWalletContract } from '../contracts'
 import type { TxParams } from '../types'
 import { greatestCommonDivisor } from '../utils/math'
+import { generateRandomQueryId } from '../utils'
 
 /**
  * Creates transaction parameters for creating a limit order pool
@@ -14,7 +15,7 @@ import { greatestCommonDivisor } from '../utils/math'
  * @param params.buyAmount - Amount of Y to buy
  * @param params.reward - Reward in TON for executors
  * @param params.finalPayload - Optional final payload cell
- * @param params.queryId - Query ID (default: 0n)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @param params.expirationTimestamp - Expiration timestamp in seconds (default: no expiration)
  */
 export function createDeployJettonLimitOrderTxParams(params: {
@@ -29,7 +30,7 @@ export function createDeployJettonLimitOrderTxParams(params: {
   finalPayload?: Cell
   queryId?: bigint
 }): TxParams {
-  const { queryId = 0n, expirationTimestamp = Number.MAX_SAFE_INTEGER } = params
+  const { queryId = generateRandomQueryId(), expirationTimestamp = Number.MAX_SAFE_INTEGER } = params
 
   const gcd = greatestCommonDivisor(params.buyAmount, params.sellAmount)
   const factor = params.buyAmount / gcd

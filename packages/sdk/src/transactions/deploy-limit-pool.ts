@@ -2,6 +2,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import { POOL_FACTORY_ADDRESS } from '../constants'
 import type { TxParams } from '../types'
+import { generateRandomQueryId } from '../utils'
 
 /**
  * Creates transaction parameters for deploying a limit pool
@@ -9,7 +10,7 @@ import type { TxParams } from '../types'
  * @param params.seed - Seed for shard brute-forcing
  * @param params.token0Address - Address of token0
  * @param params.token1Address - Address of token1
- * @param params.queryId - Query ID (default: 0n)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
  */
 export function createDeployLimitPoolTxParams(params: {
   seedCell: Cell
@@ -18,7 +19,7 @@ export function createDeployLimitPoolTxParams(params: {
   poolDeployerAddress?: Address
   queryId?: bigint
 }): TxParams {
-  const { queryId = 0n, poolDeployerAddress = POOL_FACTORY_ADDRESS } = params
+  const { queryId = generateRandomQueryId(), poolDeployerAddress = POOL_FACTORY_ADDRESS } = params
 
   const constantGas = toNano('0.1')
 

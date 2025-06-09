@@ -3,6 +3,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { TxParams } from '../types'
 import { SwapPartialExecutionParams } from '../types/swap'
+import { generateRandomQueryId } from '../utils'
 
 /**
  * Creates a transaction parameters for swapping tokens using a Jetton wallet
@@ -17,6 +18,7 @@ import { SwapPartialExecutionParams } from '../types/swap'
  * @param params.allowPartial - Allow partial swap execution
  * @param params.sqrtX128LastPrice - Last price in sqrt price X 2^128 format (required if `allowPartial` is true)
  * @param params.minAmountToReceive - Minimum amount of tokens to receive (required if `allowPartial` is false)
+ * @param params.queryId - Optional query ID for the transaction (defaults to 0)
  * @returns Transaction parameters
  */
 export function createJettonSwapTxParams(
@@ -28,9 +30,10 @@ export function createJettonSwapTxParams(
     exactOut?: bigint
     jettonWalletAddress: Address
     poolAddress: Address
+    queryId?: bigint
   } & SwapPartialExecutionParams,
 ): TxParams {
-  const { exactOut = 0n } = params
+  const { exactOut = 0n, queryId = generateRandomQueryId() } = params
 
   let forwardPayloadBuilder = beginCell()
     .storeUint(PoolContract.Opcodes.Swap, 32)
@@ -55,7 +58,7 @@ export function createJettonSwapTxParams(
 
   const jettonTransferBody = beginCell()
     .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-    .storeUint(0, 64)
+    .storeUint(queryId, 64)
     .storeCoins(params.amountIn)
     .storeAddress(params.poolAddress)
     .storeAddress(params.senderAddress)

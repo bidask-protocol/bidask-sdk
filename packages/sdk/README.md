@@ -1,4 +1,4 @@
-# Bidask SDK (TON Testnet version)
+# Bidask SDK
 
 > **Warning**: This library is in beta. It may contain bugs and is subject to breaking changes in future updates
 

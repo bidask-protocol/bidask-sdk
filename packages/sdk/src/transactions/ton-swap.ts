@@ -3,6 +3,7 @@ import { Address, beginCell, toNano } from '@ton/ton'
 import { PoolContract } from '../contracts'
 import { TxParams } from '../types'
 import { SwapPartialExecutionParams } from '../types/swap'
+import { generateRandomQueryId } from '../utils'
 
 /**
  * Creates a transaction parameters for swapping TON using a pool
@@ -11,6 +12,7 @@ import { SwapPartialExecutionParams } from '../types/swap'
  * @param params.receiverAddress - Address of the receiver
  * @param params.senderAddress - Address of the sender
  * @param params.poolAddress - Address of the pool
+ * @param params.queryId - Optional query ID for the transaction (defaults to 0)
  */
 export function createTonSwapTxParams(
   params: {
@@ -19,13 +21,14 @@ export function createTonSwapTxParams(
     senderAddress: Address
     poolAddress: Address
     exactOut?: bigint
+    queryId?: bigint
   } & SwapPartialExecutionParams,
 ): TxParams {
-  const { exactOut = 0n } = params
+  const { exactOut = 0n, queryId = generateRandomQueryId() } = params
 
   let payloadBuilder = beginCell()
     .storeUint(PoolContract.Opcodes.Swap, 32) // Opcode
-    .storeUint(0, 64) // Query ID
+    .storeUint(queryId, 64) // Query ID
     .storeCoins(params.amountIn) // TON amount in
     .storeAddress(params.receiverAddress) // Receiver address
     .storeBit(params.allowPartial) // Allow partial swap

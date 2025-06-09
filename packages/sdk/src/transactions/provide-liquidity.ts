@@ -3,7 +3,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { LiquidityType, TxParams } from '../types'
 import { DepositType, LiquidityProvideBins } from '../types/liquidity'
-import { getRangeByBin } from '../utils'
+import { getRangeByBin, generateRandomQueryId } from '../utils'
 import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liquidity/dictionary'
 
 /**
@@ -18,6 +18,7 @@ import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liqu
  * @param params.rejectPayload - Reject payload
  * @param params.forwardPayload - Forward payload
  * @param params.initializedRanges - Ranges that are already initialized
+ * @param params.queryId - Optional query ID for the transaction (defaults to 0)
  * @returns Transactions parameters
  */
 export function createProvideLiquidityTxParams(params: {
@@ -29,7 +30,9 @@ export function createProvideLiquidityTxParams(params: {
   initializedRanges: number[]
   rejectPayload?: Cell
   forwardPayload?: Cell
+  queryId?: bigint
 }): TxParams[] {
+  const { queryId = generateRandomQueryId() } = params
   const messages: TxParams[] = []
 
   const batches = divideBinsIntoBatches(params.binsToProvide)
@@ -67,7 +70,7 @@ export function createProvideLiquidityTxParams(params: {
     if (jettonAmount0 > 0n) {
       const jettonTransferBody0 = beginCell()
         .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-        .storeUint(0, 64)
+        .storeUint(queryId, 64)
         .storeCoins(jettonAmount0)
         .storeAddress(params.poolAddress)
         .storeAddress(params.senderAddress)
@@ -86,7 +89,7 @@ export function createProvideLiquidityTxParams(params: {
     if (jettonAmount1 > 0n) {
       const jettonTransferBody1 = beginCell()
         .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-        .storeUint(0, 64)
+        .storeUint(queryId, 64)
         .storeCoins(jettonAmount1)
         .storeAddress(params.poolAddress)
         .storeAddress(params.senderAddress)

@@ -2,7 +2,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import { JettonWalletContract, TradeAccount } from '../contracts'
 import { TxParams } from '../types'
-import { createSeedCell, isZeroAddress } from '../utils'
+import { createSeedCell, isZeroAddress, generateRandomQueryId } from '../utils'
 
 /**
  * Creates a transaction parameters for depositing tokens into a trade account
@@ -17,6 +17,7 @@ import { createSeedCell, isZeroAddress } from '../utils'
  * @param params.senderAddress - Address of the sender
  * @param params.publicKey - Public key of the trading account
  * @param params.seed - Seed of the trading account
+ * @param params.queryId - Optional query ID for the transaction (defaults to 0)
  */
 export const createTradeAccountDepositTxParams = (params: {
   poolAddress: Address
@@ -28,7 +29,9 @@ export const createTradeAccountDepositTxParams = (params: {
   senderAddress: Address
   publicKey: Buffer
   seed: number
+  queryId?: bigint
 }): TxParams[] => {
+  const { queryId = generateRandomQueryId() } = params
   const constantGas = toNano('0.5')
 
   const seedCell = createSeedCell(params.seed)
@@ -46,7 +49,7 @@ export const createTradeAccountDepositTxParams = (params: {
     if (isZeroAddress(params.token0UserWalletAddress)) {
       const tonPayload = beginCell()
         .storeUint(TradeAccount.Opcodes.DepositOnAccount, 32)
-        .storeUint(0, 64)
+        .storeUint(queryId, 64)
         .storeAddress(params.userAddress)
         .storeBuffer(params.publicKey, 32)
         .storeRef(seedCell)
@@ -61,7 +64,7 @@ export const createTradeAccountDepositTxParams = (params: {
     } else {
       const jettonPayload = beginCell()
         .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-        .storeUint(0, 64)
+        .storeUint(queryId, 64)
         .storeCoins(params.token0Amount)
         .storeAddress(params.poolAddress)
         .storeAddress(params.senderAddress)
@@ -82,7 +85,7 @@ export const createTradeAccountDepositTxParams = (params: {
     if (isZeroAddress(params.token1UserWalletAddress)) {
       const tonPayload = beginCell()
         .storeUint(TradeAccount.Opcodes.DepositOnAccount, 32)
-        .storeUint(0, 64)
+        .storeUint(queryId, 64)
         .storeAddress(params.userAddress)
         .storeBuffer(params.publicKey, 32)
         .storeRef(seedCell)
@@ -97,7 +100,7 @@ export const createTradeAccountDepositTxParams = (params: {
     } else {
       const jettonPayload = beginCell()
         .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-        .storeUint(0, 64)
+        .storeUint(queryId, 64)
         .storeCoins(params.token1Amount)
         .storeAddress(params.poolAddress)
         .storeAddress(params.senderAddress)

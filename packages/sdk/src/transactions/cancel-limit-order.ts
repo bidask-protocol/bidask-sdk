@@ -1,18 +1,19 @@
 import { Address, beginCell, toNano } from '@ton/ton'
 
 import type { TxParams } from '../types'
+import { generateRandomQueryId } from '../utils'
 
 /**
  * Creates transaction parameters for canceling a limit order
  * @param params - Cancellation parameters
  * @param params.orderAddress - Address of the limit order contract
- * @param params.queryId - Query ID (default: 0n)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
  */
 export function createCancelLimitOrderTxParams(params: {
   orderAddress: Address
   queryId?: bigint
 }): TxParams {
-  const { orderAddress, queryId = 0n } = params
+  const { orderAddress, queryId = generateRandomQueryId() } = params
 
   const constantGas = toNano('1')
 

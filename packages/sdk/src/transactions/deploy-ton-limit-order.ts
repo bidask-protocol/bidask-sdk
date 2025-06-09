@@ -2,6 +2,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import type { TxParams } from '../types'
 import { greatestCommonDivisor } from '../utils/math'
+import { generateRandomQueryId } from '../utils'
 
 /**
  * Creates transaction parameters for deploying a limit order pool
@@ -13,7 +14,7 @@ import { greatestCommonDivisor } from '../utils/math'
  * @param params.reward - Reward in TON for executors
  * @param params.finalPayload - Optional final payload cell
  * @param params.expirationTimestamp - Expiration timestamp in seconds (default: no expiration)
- * @param params.queryId - Query ID (default: 0n)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
  */
 export function createDeployTonLimitOrderTxParams(params: {
   poolAddress: Address
@@ -25,7 +26,7 @@ export function createDeployTonLimitOrderTxParams(params: {
   expirationTimestamp?: number
   queryId?: bigint
 }): TxParams {
-  const { queryId = 0n, expirationTimestamp = Number.MAX_SAFE_INTEGER } = params
+  const { queryId = generateRandomQueryId(), expirationTimestamp = Number.MAX_SAFE_INTEGER } = params
 
   // reduce price fraction
   const gcd = greatestCommonDivisor(params.buyAmount, params.sellAmount)

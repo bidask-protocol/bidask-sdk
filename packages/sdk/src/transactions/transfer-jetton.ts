@@ -2,6 +2,7 @@ import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import { JettonWalletContract } from '../contracts'
 import type { TxParams } from '../types'
+import { generateRandomQueryId } from '../utils'
 
 /**
  * Creates transaction parameters for transferring a jetton token
@@ -12,7 +13,7 @@ import type { TxParams } from '../types'
  * @param params.senderAddress - Address of the sender
  * @param params.forwardGas - Optional forward gas amount
  * @param params.forwardPayload - Optional forward payload cell
- * @param params.queryId - Query ID (default: 0n)
+ * @param params.queryId - Optional query ID for the transaction (defaults to random)
  */
 export function createTransferJettonTxParams(params: {
   jettonWalletAddress: Address
@@ -23,7 +24,7 @@ export function createTransferJettonTxParams(params: {
   forwardPayload?: Cell
   queryId?: bigint
 }): TxParams {
-  const { queryId = 0n, forwardGas = 0n } = params
+  const { queryId = generateRandomQueryId(), forwardGas = 0n } = params
 
   const constantGas = toNano('0.2')
 
