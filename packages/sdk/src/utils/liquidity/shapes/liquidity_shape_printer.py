@@ -10,6 +10,8 @@ def get_liquidity_y(y, sa, sb):
     return y / (sb - sa)
 
 def get_liquidity(x, y, sp, sa, sb):
+    debug('get_liquidity', x, y, sp, sa, sb)
+
     if sp <= sa:
         return get_liquidity_x(x, sa, sb)
     elif sp < sb:
@@ -101,6 +103,7 @@ def print_provision_array(x, y, shape, from_bin, to_bin, ratio, cur_bin, sqrt_p,
     two_sided = from_bin <= cur_bin <= to_bin
     if two_sided:
         single_L = get_liquidity(1, 1, sqrt_p, pa, pb)
+        debug('single_L:', single_L)
         share = (calculate_y(single_L, sqrt_p, pa, pb), calculate_x(single_L, sqrt_p, pa, pb))
         debug('share:', share)
         per_unit = [amount[i] / (units[i] + share[i]) for i in (0, 1)]
@@ -110,6 +113,7 @@ def print_provision_array(x, y, shape, from_bin, to_bin, ratio, cur_bin, sqrt_p,
         debug(f'share absolute', in_cur_bin_potential)
         # узнаём, что нам выгоднее положить для маленького эксцесса, считаем ликвидность
         debug(x, y, ratio, in_cur_bin_potential[0], in_cur_bin_potential[1])
+        debug(get_liquidity_y(in_cur_bin_potential[0], pa, pb), get_liquidity_x(in_cur_bin_potential[1], pa, pb))
         if get_liquidity_y(in_cur_bin_potential[0], pa, pb) > get_liquidity_x(in_cur_bin_potential[1], pa, pb): # если больший excess в y
             debug('y is bigger')
             L = get_liquidity(x * ratio + in_cur_bin_potential[1] * (1 - ratio), in_cur_bin_potential[0] * ratio + y * (1 - ratio), sqrt_p, pa, pb)
@@ -165,9 +169,7 @@ def print_provision_array(x, y, shape, from_bin, to_bin, ratio, cur_bin, sqrt_p,
 # ТЕСТЫ
 ##################################################################
 
-print_provision_array(9 * 10 ** 9, 2 * 10 ** 9, 'bidask', 224, 240, 1, 232, sqrt(10.0852), 0.01)
-
-# for shape in ('spot', 'curve', 'bidask'): # по форме
-#     for (from_bin, to_bin) in ((-2, -1), (-2, 2), (1, 2), (-2, 4)): # по односторонности
-#         print_provision_array(4500, 4500, shape, from_bin, to_bin, 1)
-#     print()
+# print_provision_array(1000000000, 1000000000, 'curve', 219, 247, 1, 232, sqrt(10.0852), 0.01)
+# print_provision_array(1000000000, 2000000000, 'bidask', 232, 242, 1, 232, sqrt(10.0852), 0.01)
+# print_provision_array(1 * 10 ** 6, 10 * 10 ** 9, 'curve', 455, 469, 0.8, 462, sqrt(100), 0.01)
+print_provision_array(1000000000, 2000000000, 'curve', 227, 232, 1, 232, sqrt(10.0852), 0.01)

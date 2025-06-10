@@ -1,3 +1,5 @@
+import Big from 'bignumber.js'
+
 import { CreateShapeParams, LiquidityProvideBins } from '../../../types/liquidity'
 import { toBigInt } from '../../bigint'
 import { getBinByPrice } from '../../bins'
@@ -5,8 +7,8 @@ import { calculateCentralBinLiquidity } from './central-bin'
 
 export const shapeCreator = (
   params: CreateShapeParams & {
-    xBinCreator: (perUnit: number, bin: number) => number
-    yBinCreator: (perUnit: number, bin: number) => number
+    xBinCreator: (perUnit: Big, bin: number) => Big
+    yBinCreator: (perUnit: Big, bin: number) => Big
     centralBinUnits: {
       left: number
       right: number
@@ -31,9 +33,6 @@ export const shapeCreator = (
     sideBinsUnits,
   } = params
 
-  const token0AmountNumber = Number(token0Amount)
-  const token1AmountNumber = Number(token1Amount)
-
   const activeBin = getBinByPrice(currentPrice, bps)
 
   const unitsOnSide = {
@@ -45,39 +44,41 @@ export const shapeCreator = (
 
   const currentBinLiquidity = isTwoSided
     ? calculateCentralBinLiquidity({
-        token0Amount: token0AmountNumber,
-        token1Amount: token1AmountNumber,
+        token0Amount: Big(token0Amount),
+        token1Amount: Big(token1Amount),
         currentPrice,
         bps,
         fallbackRatio,
         unitsOnSide,
         centralBinUnits,
       })
-    : [0, 0]
+    : [Big(0), Big(0)]
 
   const perUnit = {
     x:
       unitsOnSide.right !== 0
-        ? (token0AmountNumber - currentBinLiquidity[0]) / unitsOnSide.right
-        : 0,
+        ? Big(token0Amount).minus(currentBinLiquidity[0]).div(unitsOnSide.right)
+        : Big(0),
     y:
-      unitsOnSide.left !== 0 ? (token1AmountNumber - currentBinLiquidity[1]) / unitsOnSide.left : 0,
+      unitsOnSide.left !== 0
+        ? Big(token1Amount).minus(currentBinLiquidity[1]).div(unitsOnSide.left)
+        : Big(0),
   }
 
   const result: LiquidityProvideBins = {}
 
   for (let i = fromBin; i <= toBin; i++) {
     if (i < activeBin) {
-      const y = Math.max(0, yBinCreator(perUnit.y, i))
+      const y = Big.max(0, yBinCreator(perUnit.y, i))
 
-      result[i] = [0n, toBigInt(y)]
+      result[i] = [0n, toBigInt(y.toString())]
     } else if (i === activeBin) {
       const [x, y] = currentBinLiquidity
-      result[i] = [toBigInt(x), toBigInt(y)]
+      result[i] = [BigInt(x.toFixed(0)), BigInt(y.toFixed(0))]
     } else {
-      const x = Math.max(0, xBinCreator(perUnit.x, i))
+      const x = Big.max(0, xBinCreator(perUnit.x, i))
 
-      result[i] = [toBigInt(x), 0n]
+      result[i] = [toBigInt(x.toString()), 0n]
     }
   }
 

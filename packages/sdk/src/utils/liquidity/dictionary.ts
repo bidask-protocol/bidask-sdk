@@ -1,6 +1,6 @@
 import { beginCell, BitString, Builder, Dictionary, Slice } from '@ton/ton'
 
-import { MAX_PROVIDED_BINS_IN_MESSAGE } from '../../constants'
+import { MAX_BURNED_BINS_IN_MESSAGE, MAX_PROVIDED_BINS_IN_MESSAGE } from '../../constants'
 import { LiquidityProvideBins, LiquidityRemoveBins } from '../../types/liquidity'
 import { getRangeByBin } from '../ranges'
 
@@ -104,7 +104,7 @@ export const createLiquidityBurnDict = (bins: LiquidityRemoveBins) => {
   })
 }
 
-export const divideBinsIntoBatches = (bins: LiquidityProvideBins) => {
+export const divideProvideBinsIntoBatches = (bins: LiquidityProvideBins) => {
   // Split bins into ranges
   const binsByRange: Record<number, LiquidityProvideBins> = {}
   Object.entries(bins).forEach(([binId, amounts]) => {
@@ -126,6 +126,39 @@ export const divideBinsIntoBatches = (bins: LiquidityProvideBins) => {
       for (let i = 0; i < binIds.length; i += MAX_PROVIDED_BINS_IN_MESSAGE) {
         const chunk: LiquidityProvideBins = {}
         const chunkIds = binIds.slice(i, i + MAX_PROVIDED_BINS_IN_MESSAGE)
+        chunkIds.forEach((id) => {
+          chunk[id] = rangeBins[id]
+        })
+        finalBinGroups.push(chunk)
+      }
+    }
+  })
+
+  return finalBinGroups
+}
+
+export const divideBurnBinsIntoBatches = (bins: LiquidityRemoveBins) => {
+  // Split bins into ranges
+  const binsByRange: Record<number, LiquidityRemoveBins> = {}
+  Object.entries(bins).forEach(([binId, amount]) => {
+    const binNum = Number(binId)
+    const rangeNum = getRangeByBin(binNum)
+    binsByRange[rangeNum] ??= {}
+    binsByRange[rangeNum][binNum] = amount
+  })
+
+  // Further split ranges if they exceed MAX_BURNED_BINS_IN_MESSAGE
+  const finalBinGroups: LiquidityRemoveBins[] = []
+  Object.values(binsByRange).forEach((rangeBins) => {
+    const binIds = Object.keys(rangeBins)
+      .map(Number)
+      .sort((a, b) => a - b)
+    if (binIds.length <= MAX_BURNED_BINS_IN_MESSAGE) {
+      finalBinGroups.push(rangeBins)
+    } else {
+      for (let i = 0; i < binIds.length; i += MAX_BURNED_BINS_IN_MESSAGE) {
+        const chunk: LiquidityRemoveBins = {}
+        const chunkIds = binIds.slice(i, i + MAX_BURNED_BINS_IN_MESSAGE)
         chunkIds.forEach((id) => {
           chunk[id] = rangeBins[id]
         })

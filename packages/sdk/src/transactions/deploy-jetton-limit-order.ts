@@ -1,9 +1,10 @@
 import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
+import { JETTON_TRANSFER_GAS } from '../constants'
 import { JettonWalletContract } from '../contracts'
 import type { TxParams } from '../types'
-import { greatestCommonDivisor } from '../utils/math'
 import { generateRandomQueryId } from '../utils'
+import { greatestCommonDivisor } from '../utils/math'
 
 /**
  * Creates transaction parameters for deploying a jetton limit order
@@ -32,15 +33,12 @@ export function createDeployJettonLimitOrderTxParams(params: {
   finalPayload?: Cell
   queryId?: bigint
 }): TxParams {
-  const { queryId = generateRandomQueryId(), expirationTimestamp = Number.MAX_SAFE_INTEGER } = params
+  const { queryId = generateRandomQueryId(), expirationTimestamp = Number.MAX_SAFE_INTEGER } =
+    params
 
   const gcd = greatestCommonDivisor(params.buyAmount, params.sellAmount)
   const factor = params.buyAmount / gcd
   const base = params.sellAmount / gcd
-
-  const constantGas = toNano('0.2')
-
-  const forwardGas = constantGas + params.reward
 
   const forwardPayloadCell = beginCell()
     .storeUint(0xa05f9758, 32)
@@ -58,13 +56,13 @@ export function createDeployJettonLimitOrderTxParams(params: {
     .storeAddress(params.poolAddress)
     .storeAddress(params.senderAddress)
     .storeMaybeRef(Cell.EMPTY)
-    .storeCoins(forwardGas)
+    .storeCoins(params.reward)
     .storeMaybeRef(forwardPayloadCell)
     .endCell()
 
   return {
     to: params.sellJettonWalletAddress,
-    value: forwardGas + constantGas,
+    value: JETTON_TRANSFER_GAS + params.reward,
     payload: jettonTransferBody,
   }
 }

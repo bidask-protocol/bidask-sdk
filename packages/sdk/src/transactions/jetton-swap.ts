@@ -1,9 +1,11 @@
 import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
+import { JETTON_TRANSFER_GAS } from '../constants'
 import { JettonWalletContract, PoolContract } from '../contracts'
 import { TxParams } from '../types'
 import { SwapPartialExecutionParams } from '../types/swap'
 import { generateRandomQueryId } from '../utils'
+import { createTransferJettonTxParams } from './transfer-jetton'
 
 /**
  * Creates a transaction parameters for swapping tokens using a Jetton wallet
@@ -54,24 +56,17 @@ export function createJettonSwapTxParams(
     .storeMaybeRef(null)
     .endCell()
 
-  const transferGas = toNano(0.2)
+  const constantSwapGas = toNano('0.2')
 
-  const jettonTransferBody = beginCell()
-    .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-    .storeUint(queryId, 64)
-    .storeCoins(params.amountIn)
-    .storeAddress(params.poolAddress)
-    .storeAddress(params.senderAddress)
-    .storeMaybeRef(Cell.EMPTY)
-    .storeCoins(transferGas)
-    .storeMaybeRef(forwardPayloadCell)
-    .endCell()
+  const jettonTransferTxParams = createTransferJettonTxParams({
+    jettonWalletAddress: params.jettonWalletAddress,
+    receiverAddress: params.poolAddress,
+    amount: params.amountIn,
+    senderAddress: params.senderAddress,
+    forwardPayload: forwardPayloadCell,
+    forwardAmount: constantSwapGas,
+    queryId,
+  })
 
-  const constantGas = toNano('0.5')
-
-  return {
-    to: params.jettonWalletAddress,
-    value: constantGas + transferGas,
-    payload: jettonTransferBody,
-  }
+  return jettonTransferTxParams
 }

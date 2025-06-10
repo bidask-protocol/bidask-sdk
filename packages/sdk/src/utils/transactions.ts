@@ -7,10 +7,10 @@ export function generateRandomQueryId(): bigint {
   // Use crypto.getRandomValues for better randomness
   const buffer = new Uint32Array(2)
   crypto.getRandomValues(buffer)
-  
+
   // Combine two 32-bit values into a 64-bit value
   const high = BigInt(buffer[0]) << 32n
   const low = BigInt(buffer[1])
-  
+
   return high | low
 }

@@ -1,5 +1,6 @@
 import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
+import { JETTON_TRANSFER_GAS } from '../constants'
 import { JettonWalletContract } from '../contracts'
 import type { TxParams } from '../types'
 import { generateRandomQueryId } from '../utils'
@@ -11,8 +12,9 @@ import { generateRandomQueryId } from '../utils'
  * @param params.receiverAddress - Address of the receiver
  * @param params.amount - Amount of jetton to transfer
  * @param params.senderAddress - Address of the sender
- * @param params.forwardGas - Optional forward gas amount
+ * @param params.forwardAmount - Optional forward amount
  * @param params.forwardPayload - Optional forward payload cell
+ * @param params.customPayload - Optional custom payload cell
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  */
 export function createTransferJettonTxParams(params: {
@@ -20,13 +22,12 @@ export function createTransferJettonTxParams(params: {
   receiverAddress: Address
   amount: bigint
   senderAddress: Address
-  forwardGas?: bigint
+  forwardAmount?: bigint
   forwardPayload?: Cell
+  customPayload?: Cell
   queryId?: bigint
 }): TxParams {
-  const { queryId = generateRandomQueryId(), forwardGas = 0n } = params
-
-  const constantGas = toNano('0.2')
+  const { queryId = generateRandomQueryId(), forwardAmount = 0n } = params
 
   const jettonTransferBody = beginCell()
     .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
@@ -34,14 +35,14 @@ export function createTransferJettonTxParams(params: {
     .storeCoins(params.amount)
     .storeAddress(params.receiverAddress)
     .storeAddress(params.senderAddress)
-    .storeMaybeRef(Cell.EMPTY)
-    .storeCoins(forwardGas)
+    .storeMaybeRef(params.customPayload)
+    .storeCoins(forwardAmount)
     .storeMaybeRef(params.forwardPayload)
     .endCell()
 
   return {
     to: params.jettonWalletAddress,
-    value: forwardGas + constantGas,
+    value: forwardAmount + JETTON_TRANSFER_GAS,
     payload: jettonTransferBody,
   }
 }
@@ -59,7 +60,7 @@ export function parseTransferJettonPayload(payload: Cell) {
   const amount = parsingPayload.loadCoins()
   const receiverAddress = parsingPayload.loadAddress()
   const senderAddress = parsingPayload.loadAddress()
-  parsingPayload.loadMaybeRef() // skip forward payload
+  const customPayload = parsingPayload.loadMaybeRef()
   const forwardGas = parsingPayload.loadCoins()
   const forwardPayload = parsingPayload.loadMaybeRef() || undefined
   parsingPayload.endParse()
@@ -69,6 +70,7 @@ export function parseTransferJettonPayload(payload: Cell) {
     amount,
     receiverAddress,
     senderAddress,
+    customPayload,
     forwardGas,
     forwardPayload,
   }

@@ -14,19 +14,17 @@ export const createCurveShape = (params: CreateShapeParams): LiquidityProvideBin
 
   return shapeCreator({
     ...params,
-    xBinCreator: (perUnit, bin) => curveBinHeight(bin, params.toBin, activeBin) * perUnit,
-    yBinCreator: (perUnit, bin) => curveBinHeight(bin, params.fromBin, activeBin) * perUnit,
+    xBinCreator: (perUnit, bin) =>
+      perUnit.multipliedBy(curveBinHeight(bin, params.toBin, activeBin)),
+    yBinCreator: (perUnit, bin) =>
+      perUnit.multipliedBy(curveBinHeight(bin, params.fromBin, activeBin)),
     centralBinUnits: {
       left: countClosedInterval(params.fromBin, activeBin),
       right: countClosedInterval(activeBin, params.toBin),
     },
     sideBinsUnits: {
-      left:
-        activeBin === params.fromBin
-          ? 0
-          : curveSum(params.fromBin, nearestBinUnits.left, activeBin),
-      right:
-        activeBin === params.toBin ? 0 : curveSum(nearestBinUnits.right, params.toBin, activeBin),
+      left: curveSum(params.fromBin, nearestBinUnits.left, activeBin),
+      right: curveSum(nearestBinUnits.right, params.toBin, activeBin),
     },
   })
 }

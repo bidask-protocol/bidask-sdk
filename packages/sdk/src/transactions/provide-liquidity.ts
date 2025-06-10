@@ -1,10 +1,14 @@
 import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
-import { JettonWalletContract, PoolContract } from '../contracts'
+import { PoolContract } from '../contracts'
 import { LiquidityType, TxParams } from '../types'
 import { DepositType, LiquidityProvideBins } from '../types/liquidity'
 import { generateRandomQueryId, getRangeByBin } from '../utils'
-import { createLiquidityProvideDict, divideBinsIntoBatches } from '../utils/liquidity/dictionary'
+import {
+  createLiquidityProvideDict,
+  divideProvideBinsIntoBatches,
+} from '../utils/liquidity/dictionary'
+import { createTransferJettonTxParams } from './transfer-jetton'
 
 /**
  * Creates transaction parameters for providing liquidity to a Jetton/Jetton pool
@@ -32,12 +36,10 @@ export function createProvideLiquidityTxParams(params: {
   queryId?: bigint
 }): TxParams[] {
   const { queryId = generateRandomQueryId() } = params
-  const messages: TxParams[] = []
 
-  const batches = divideBinsIntoBatches(params.binsToProvide)
+  const batches = divideProvideBinsIntoBatches(params.binsToProvide)
 
-  // Create messages for each bin group
-  batches.forEach((binGroup) => {
+  return batches.flatMap((binGroup) => {
     let jettonAmount0 = 0n
     let jettonAmount1 = 0n
     Object.values(binGroup).forEach(([x, y]) => {
@@ -63,51 +65,47 @@ export function createProvideLiquidityTxParams(params: {
       .storeMaybeRef(params.forwardPayload)
       .endCell()
 
-    const providingGas = calculateGas(Object.keys(binGroup).length)
-    const jettonTransferGas = toNano('0.2')
+    const providingGas = calculateGas(Object.keys(binGroup).length, batches.length)
+
+    const groupMessages: TxParams[] = []
 
     if (jettonAmount0 > 0n) {
-      const jettonTransferBody0 = beginCell()
-        .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-        .storeUint(queryId, 64)
-        .storeCoins(jettonAmount0)
-        .storeAddress(params.poolAddress)
-        .storeAddress(params.senderAddress)
-        .storeMaybeRef(Cell.EMPTY)
-        .storeCoins(providingGas)
-        .storeMaybeRef(forwardPayload)
-        .endCell()
-
-      messages.push({
-        to: params.jettonWalletAddress0,
-        value: providingGas + jettonTransferGas,
-        payload: jettonTransferBody0,
-      })
+      groupMessages.push(
+        createTransferJettonTxParams({
+          jettonWalletAddress: params.jettonWalletAddress0,
+          receiverAddress: params.poolAddress,
+          amount: jettonAmount0,
+          senderAddress: params.senderAddress,
+          forwardPayload: forwardPayload,
+          forwardAmount: providingGas,
+          queryId,
+        }),
+      )
     }
 
     if (jettonAmount1 > 0n) {
-      const jettonTransferBody1 = beginCell()
-        .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-        .storeUint(queryId, 64)
-        .storeCoins(jettonAmount1)
-        .storeAddress(params.poolAddress)
-        .storeAddress(params.senderAddress)
-        .storeMaybeRef(Cell.EMPTY)
-        .storeCoins(providingGas)
-        .storeMaybeRef(forwardPayload)
-        .endCell()
-
-      messages.push({
-        to: params.jettonWalletAddress1,
-        value: providingGas + jettonTransferGas,
-        payload: jettonTransferBody1,
-      })
+      groupMessages.push(
+        createTransferJettonTxParams({
+          jettonWalletAddress: params.jettonWalletAddress1,
+          receiverAddress: params.poolAddress,
+          amount: jettonAmount1,
+          senderAddress: params.senderAddress,
+          forwardPayload: forwardPayload,
+          forwardAmount: providingGas,
+          queryId,
+        }),
+      )
     }
-  })
 
-  return messages
+    return groupMessages
+  })
 }
 
-const calculateGas = (binsAmount: number): bigint => {
-  return toNano('0.8') + BigInt(binsAmount) * toNano('0.004')
+const calculateGas = (binsAmount: number, batchesCount: number): bigint => {
+  const nanoTonsPerBin = toNano('0.004') + toNano('0.001') * BigInt(batchesCount)
+  const gasForBins = BigInt(binsAmount) * nanoTonsPerBin
+
+  const constantGas = toNano('0.8')
+
+  return constantGas + gasForBins
 }

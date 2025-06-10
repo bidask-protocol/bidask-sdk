@@ -1,6 +1,6 @@
 {
   "name": "@bidask-protocol/sdk",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "description": "Bidask Protocol SDK",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -26,11 +26,14 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "@ton/ton": "^13.9.0 || ^14.0.0 || ^15.0.0",
     "@ton/crypto": "^3.3.0",
+    "@ton/ton": "^13.9.0 || ^14.0.0 || ^15.0.0",
     "buffer": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.11.18"
+  },
+  "dependencies": {
+    "bignumber.js": "9.3.0"
   }
 }

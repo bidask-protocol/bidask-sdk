@@ -1,14 +1,22 @@
+import Big from 'bignumber.js'
+
 import { getBinByPrice, getBinPriceBounds } from '../../bins'
 
-export const getCentralBinShares = (currentPrice: number, bps: bigint) => {
+export const getCentralBinShares = (currentPrice: number, bps: bigint): { x: Big; y: Big } => {
   const currentBin = getBinByPrice(currentPrice, bps)
   const [lowerBound, upperBound] = getBinPriceBounds(currentBin, bps)
 
-  const sqrtLowerBound = Math.sqrt(lowerBound)
-  const sqrtUpperBound = Math.sqrt(upperBound)
-  const sqrtCurrentPrice = Math.sqrt(currentPrice)
+  const sqrtLowerBound = Big(lowerBound).sqrt()
+  const sqrtUpperBound = Big(upperBound).sqrt()
+  const sqrtCurrentPrice = Big(currentPrice).sqrt()
 
-  const singleL = calculateLiquidity(1, 1, sqrtCurrentPrice, sqrtLowerBound, sqrtUpperBound)
+  const singleL = calculateLiquidity(
+    Big(1),
+    Big(1),
+    sqrtCurrentPrice,
+    sqrtLowerBound,
+    sqrtUpperBound,
+  )
 
   const xShare = calculateTokenX(singleL, sqrtCurrentPrice, sqrtUpperBound)
   const yShare = calculateTokenY(singleL, sqrtLowerBound, sqrtCurrentPrice)
@@ -20,8 +28,8 @@ export const getCentralBinShares = (currentPrice: number, bps: bigint) => {
 }
 
 export const calculateCentralBinLiquidity = (params: {
-  token0Amount: number
-  token1Amount: number
+  token0Amount: Big
+  token1Amount: Big
   currentPrice: number
   bps: bigint
   fallbackRatio: number
@@ -47,77 +55,107 @@ export const calculateCentralBinLiquidity = (params: {
   const share = getCentralBinShares(currentPrice, bps)
 
   const perUnit = {
-    x: token0Amount / (unitsOnSide.right + share.x),
-    y: token1Amount / (unitsOnSide.left + share.y),
+    x: token0Amount.div(share.x.plus(unitsOnSide.right)),
+    y: token1Amount.div(share.y.plus(unitsOnSide.left)),
   }
 
   const currentBinPotential = {
-    x: perUnit.x * share.x * centralBinUnits.right,
-    y: perUnit.y * share.y * centralBinUnits.left,
+    x: perUnit.x.multipliedBy(share.x).multipliedBy(centralBinUnits.right),
+    y: perUnit.y.multipliedBy(share.y).multipliedBy(centralBinUnits.left),
   }
 
   const activeBin = getBinByPrice(currentPrice, bps)
 
   const [lowerBound, upperBound] = getBinPriceBounds(activeBin, bps)
-  const sqrtLowerBound = Math.sqrt(lowerBound)
-  const sqrtUpperBound = Math.sqrt(upperBound)
-  const sqrtCurrentPrice = Math.sqrt(currentPrice)
+  const sqrtLowerBound = Big(lowerBound).sqrt()
+  const sqrtUpperBound = Big(upperBound).sqrt()
+  const sqrtCurrentPrice = Big(currentPrice).sqrt()
 
-  const defaultCurrentBinL =
-    calculateLiquidityForTokenY(currentBinPotential.y, sqrtLowerBound, sqrtUpperBound) >
-    calculateLiquidityForTokenX(currentBinPotential.x, sqrtLowerBound, sqrtUpperBound)
-      ? calculateLiquidity(
-          token0Amount,
-          currentBinPotential.y,
-          sqrtCurrentPrice,
-          sqrtLowerBound,
-          sqrtUpperBound,
-        )
-      : calculateLiquidity(
-          currentBinPotential.x,
-          token1Amount,
-          sqrtCurrentPrice,
-          sqrtLowerBound,
-          sqrtUpperBound,
-        )
-
-  const defaultTokenXLiquidity = Math.round(
-    calculateTokenX(defaultCurrentBinL, sqrtCurrentPrice, sqrtUpperBound),
+  const liquidityForTokenX = calculateLiquidityForTokenX(
+    currentBinPotential.x,
+    sqrtLowerBound,
+    sqrtUpperBound,
+  )
+  const liquidityForTokenY = calculateLiquidityForTokenY(
+    currentBinPotential.y,
+    sqrtLowerBound,
+    sqrtUpperBound,
   )
 
-  const defaultTokenYLiquidity = Math.round(
-    calculateTokenY(defaultCurrentBinL, sqrtLowerBound, sqrtCurrentPrice),
+  const defaultCurrentBinL = liquidityForTokenY.gt(liquidityForTokenX)
+    ? calculateLiquidity(
+        token0Amount,
+        currentBinPotential.y,
+        sqrtCurrentPrice,
+        sqrtLowerBound,
+        sqrtUpperBound,
+      )
+    : calculateLiquidity(
+        currentBinPotential.x,
+        token1Amount,
+        sqrtCurrentPrice,
+        sqrtLowerBound,
+        sqrtUpperBound,
+      )
+
+  const defaultTokenXLiquidity = calculateTokenX(
+    defaultCurrentBinL,
+    sqrtCurrentPrice,
+    sqrtUpperBound,
+  )
+
+  const defaultTokenYLiquidity = calculateTokenY(
+    defaultCurrentBinL,
+    sqrtLowerBound,
+    sqrtCurrentPrice,
   )
 
   if (
-    (unitsOnSide.left !== 0 && defaultTokenYLiquidity >= token1Amount) ||
-    (unitsOnSide.right !== 0 && defaultTokenXLiquidity >= token0Amount)
+    (unitsOnSide.left !== 0 && defaultTokenYLiquidity.gte(token1Amount)) ||
+    (unitsOnSide.right !== 0 && defaultTokenXLiquidity.gte(token0Amount))
   ) {
     if (fallbackRatio < 0 || fallbackRatio > 1) {
       throw new Error('Fallback ratio must be between 0 and 1')
     }
 
-    const fallbackCurrentBinL =
-      calculateLiquidityForTokenY(currentBinPotential.y, sqrtLowerBound, sqrtUpperBound) >
-      calculateLiquidityForTokenX(currentBinPotential.x, sqrtLowerBound, sqrtUpperBound)
-        ? calculateLiquidity(
-            token0Amount * fallbackRatio + currentBinPotential.x * (1 - fallbackRatio),
-            currentBinPotential.y * fallbackRatio + token1Amount * (1 - fallbackRatio),
-            sqrtCurrentPrice,
-            sqrtLowerBound,
-            sqrtUpperBound,
-          )
-        : calculateLiquidity(
-            token0Amount * (1 - fallbackRatio) + currentBinPotential.x * fallbackRatio,
-            currentBinPotential.y * (1 - fallbackRatio) + token1Amount * fallbackRatio,
-            sqrtCurrentPrice,
-            sqrtLowerBound,
-            sqrtUpperBound,
-          )
+    const liquidityForTokenY = calculateLiquidityForTokenY(
+      currentBinPotential.y,
+      sqrtLowerBound,
+      sqrtUpperBound,
+    )
+    const liquidityForTokenX = calculateLiquidityForTokenX(
+      currentBinPotential.x,
+      sqrtLowerBound,
+      sqrtUpperBound,
+    )
+
+    const fallbackCurrentBinL = liquidityForTokenY.gt(liquidityForTokenX)
+      ? calculateLiquidity(
+          token0Amount
+            .multipliedBy(fallbackRatio)
+            .plus(currentBinPotential.x.multipliedBy(1 - fallbackRatio)),
+          currentBinPotential.y
+            .multipliedBy(fallbackRatio)
+            .plus(token1Amount.multipliedBy(1 - fallbackRatio)),
+          sqrtCurrentPrice,
+          sqrtLowerBound,
+          sqrtUpperBound,
+        )
+      : calculateLiquidity(
+          token0Amount
+            .multipliedBy(1 - fallbackRatio)
+            .plus(currentBinPotential.x.multipliedBy(fallbackRatio)),
+          currentBinPotential.y
+            .multipliedBy(1 - fallbackRatio)
+            .plus(token1Amount.multipliedBy(fallbackRatio)),
+          sqrtCurrentPrice,
+          sqrtLowerBound,
+          sqrtUpperBound,
+        )
 
     return [
-      Math.round(calculateTokenX(fallbackCurrentBinL, sqrtCurrentPrice, sqrtUpperBound)),
-      Math.round(calculateTokenY(fallbackCurrentBinL, sqrtLowerBound, sqrtCurrentPrice)),
+      calculateTokenX(fallbackCurrentBinL, sqrtCurrentPrice, sqrtUpperBound),
+      calculateTokenY(fallbackCurrentBinL, sqrtLowerBound, sqrtCurrentPrice),
     ]
   }
 
@@ -131,12 +169,10 @@ export const calculateCentralBinLiquidity = (params: {
  * @param sqrtPriceUpper - The square root of the upper price bound.
  * @returns Amount of token X.
  */
-export function calculateTokenX(
-  liquidity: number,
-  sqrtPrice: number,
-  sqrtPriceUpper: number,
-): number {
-  return (liquidity * (sqrtPriceUpper - sqrtPrice)) / (sqrtPrice * sqrtPriceUpper)
+export function calculateTokenX(liquidity: Big, sqrtPrice: Big, sqrtPriceUpper: Big): Big {
+  return liquidity
+    .multipliedBy(sqrtPriceUpper.minus(sqrtPrice))
+    .div(sqrtPrice.multipliedBy(sqrtPriceUpper))
 }
 
 /**
@@ -146,12 +182,8 @@ export function calculateTokenX(
  * @param sqrtPrice - The square root of the current price.
  * @returns Amount of token Y.
  */
-export function calculateTokenY(
-  liquidity: number,
-  sqrtPriceLower: number,
-  sqrtPrice: number,
-): number {
-  return liquidity * (sqrtPrice - sqrtPriceLower)
+export function calculateTokenY(liquidity: Big, sqrtPriceLower: Big, sqrtPrice: Big): Big {
+  return liquidity.multipliedBy(sqrtPrice.minus(sqrtPriceLower))
 }
 
 /**
@@ -162,11 +194,14 @@ export function calculateTokenY(
  * @returns Liquidity required for token X.
  */
 export function calculateLiquidityForTokenX(
-  tokenX: number,
-  sqrtPriceLower: number,
-  sqrtPriceUpper: number,
-): number {
-  return (tokenX * sqrtPriceLower * sqrtPriceUpper) / (sqrtPriceUpper - sqrtPriceLower)
+  tokenX: Big,
+  sqrtPriceLower: Big,
+  sqrtPriceUpper: Big,
+): Big {
+  return tokenX
+    .multipliedBy(sqrtPriceLower)
+    .multipliedBy(sqrtPriceUpper)
+    .div(sqrtPriceUpper.minus(sqrtPriceLower))
 }
 
 /**
@@ -177,11 +212,11 @@ export function calculateLiquidityForTokenX(
  * @returns Liquidity required for token Y.
  */
 export function calculateLiquidityForTokenY(
-  tokenY: number,
-  sqrtPriceLower: number,
-  sqrtPriceUpper: number,
-): number {
-  return tokenY / (sqrtPriceUpper - sqrtPriceLower)
+  tokenY: Big,
+  sqrtPriceLower: Big,
+  sqrtPriceUpper: Big,
+): Big {
+  return tokenY.div(sqrtPriceUpper.minus(sqrtPriceLower))
 }
 
 /**
@@ -194,18 +229,18 @@ export function calculateLiquidityForTokenY(
  * @returns Liquidity value.
  */
 export function calculateLiquidity(
-  tokenX: number,
-  tokenY: number,
-  sqrtPrice: number,
-  sqrtPriceLower: number,
-  sqrtPriceUpper: number,
-): number {
-  if (sqrtPrice <= sqrtPriceLower) {
+  tokenX: Big,
+  tokenY: Big,
+  sqrtPrice: Big,
+  sqrtPriceLower: Big,
+  sqrtPriceUpper: Big,
+): Big {
+  if (sqrtPrice.lte(sqrtPriceLower)) {
     return calculateLiquidityForTokenX(tokenX, sqrtPriceLower, sqrtPriceUpper)
   }
 
-  if (sqrtPrice < sqrtPriceUpper) {
-    return Math.min(
+  if (sqrtPrice.lt(sqrtPriceUpper)) {
+    return Big.min(
       calculateLiquidityForTokenX(tokenX, sqrtPrice, sqrtPriceUpper),
       calculateLiquidityForTokenY(tokenY, sqrtPriceLower, sqrtPrice),
     )
@@ -220,8 +255,8 @@ export const calculateCentralAmountXByAmountY = (
   bps: bigint,
 ): number => {
   const centralBinLiquidity = calculateCentralBinLiquidity({
-    token0Amount: 1e18,
-    token1Amount: 1e18,
+    token0Amount: Big(1e50),
+    token1Amount: Big(1e50),
     currentPrice,
     centralBinUnits: {
       left: 1,
@@ -235,11 +270,11 @@ export const calculateCentralAmountXByAmountY = (
     bps,
   })
 
-  const tokenXPerTokenY = centralBinLiquidity[0] / centralBinLiquidity[1]
+  const tokenXPerTokenY = centralBinLiquidity[0].div(centralBinLiquidity[1])
 
-  const result = tokenXPerTokenY * tokenYAmount
+  const result = tokenXPerTokenY.multipliedBy(tokenYAmount)
 
-  return Number.isFinite(result) ? result : 0
+  return result.isFinite() ? result.toNumber() : 0
 }
 
 export const calculateCentralAmountYByAmountX = (
@@ -248,8 +283,8 @@ export const calculateCentralAmountYByAmountX = (
   bps: bigint,
 ): number => {
   const centralBinLiquidity = calculateCentralBinLiquidity({
-    token0Amount: 1e18,
-    token1Amount: 1e18,
+    token0Amount: Big(1e50),
+    token1Amount: Big(1e50),
     currentPrice,
     centralBinUnits: {
       left: 1,
@@ -263,9 +298,9 @@ export const calculateCentralAmountYByAmountX = (
     bps,
   })
 
-  const tokenYPerTokenX = centralBinLiquidity[1] / centralBinLiquidity[0]
+  const tokenYPerTokenX = centralBinLiquidity[1].div(centralBinLiquidity[0])
 
-  const result = tokenYPerTokenX * tokenXAmount
+  const result = tokenYPerTokenX.multipliedBy(tokenXAmount)
 
-  return Number.isFinite(result) ? result : 0
+  return result.isFinite() ? result.toNumber() : 0
 }

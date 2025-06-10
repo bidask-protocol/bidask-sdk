@@ -14,19 +14,15 @@ export const createBidaskShape = (params: CreateShapeParams): LiquidityProvideBi
 
   return shapeCreator({
     ...params,
-    xBinCreator: (perUnit, bin) => bidaskBinHeight(bin, activeBin) * perUnit,
-    yBinCreator: (perUnit, bin) => bidaskBinHeight(bin, activeBin) * perUnit,
+    xBinCreator: (perUnit, bin) => perUnit.multipliedBy(bidaskBinHeight(bin, activeBin)),
+    yBinCreator: (perUnit, bin) => perUnit.multipliedBy(bidaskBinHeight(bin, activeBin)),
     centralBinUnits: {
       left: 1,
       right: 1,
     },
     sideBinsUnits: {
-      left:
-        activeBin === params.fromBin
-          ? 0
-          : bidaskSum(params.fromBin, nearestBinUnits.left, activeBin),
-      right:
-        activeBin === params.toBin ? 0 : bidaskSum(nearestBinUnits.right, params.toBin, activeBin),
+      left: bidaskSum(params.fromBin, nearestBinUnits.left, activeBin),
+      right: bidaskSum(nearestBinUnits.right, params.toBin, activeBin),
     },
     fallbackRatio: 0.2,
   })
