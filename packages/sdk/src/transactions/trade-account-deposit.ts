@@ -1,8 +1,9 @@
 import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
-import { JettonWalletContract, TradeAccount } from '../contracts'
+import { TradeAccount } from '../contracts'
 import { TxParams } from '../types'
-import { createSeedCell, generateRandomQueryId, isZeroAddress } from '../utils'
+import { generateRandomQueryId, isZeroAddress } from '../utils'
+import { createTransferJettonTxParams } from './transfer-jetton'
 
 /**
  * Creates a transaction parameters for depositing tokens into a trade account
@@ -28,13 +29,11 @@ export const createTradeAccountDepositTxParams = (params: {
   userAddress: Address
   senderAddress: Address
   publicKey: Buffer
-  seed: number
+  seedCell?: Cell
   queryId?: bigint
 }): TxParams[] => {
-  const { queryId = generateRandomQueryId() } = params
-  const constantGas = toNano('0.5')
-
-  const seedCell = createSeedCell(params.seed)
+  const { queryId = generateRandomQueryId(), seedCell = Cell.EMPTY } = params
+  const constantGas = toNano('0.1')
 
   const forwardPayload = beginCell()
     .storeUint(TradeAccount.Opcodes.DepositOnAccount, 32)
@@ -62,22 +61,16 @@ export const createTradeAccountDepositTxParams = (params: {
         payload: tonPayload,
       })
     } else {
-      const jettonPayload = beginCell()
-        .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-        .storeUint(queryId, 64)
-        .storeCoins(params.token0Amount)
-        .storeAddress(params.poolAddress)
-        .storeAddress(params.senderAddress)
-        .storeMaybeRef(Cell.EMPTY)
-        .storeCoins(constantGas / 2n)
-        .storeMaybeRef(forwardPayload)
-        .endCell()
-
-      messages.push({
-        to: params.token0UserWalletAddress,
-        value: constantGas,
-        payload: jettonPayload,
-      })
+      messages.push(
+        createTransferJettonTxParams({
+          jettonWalletAddress: params.token0UserWalletAddress,
+          receiverAddress: params.poolAddress,
+          amount: params.token0Amount,
+          senderAddress: params.senderAddress,
+          forwardPayload,
+          queryId,
+        }),
+      )
     }
   }
 
@@ -98,22 +91,16 @@ export const createTradeAccountDepositTxParams = (params: {
         payload: tonPayload,
       })
     } else {
-      const jettonPayload = beginCell()
-        .storeUint(JettonWalletContract.Opcodes.JettonTransfer, 32)
-        .storeUint(queryId, 64)
-        .storeCoins(params.token1Amount)
-        .storeAddress(params.poolAddress)
-        .storeAddress(params.senderAddress)
-        .storeMaybeRef(Cell.EMPTY)
-        .storeCoins(constantGas / 2n)
-        .storeMaybeRef(forwardPayload)
-        .endCell()
-
-      messages.push({
-        to: params.token1UserWalletAddress,
-        value: constantGas,
-        payload: jettonPayload,
-      })
+      messages.push(
+        createTransferJettonTxParams({
+          jettonWalletAddress: params.token1UserWalletAddress,
+          receiverAddress: params.poolAddress,
+          amount: params.token1Amount,
+          senderAddress: params.senderAddress,
+          forwardPayload,
+          queryId,
+        }),
+      )
     }
   }
 
