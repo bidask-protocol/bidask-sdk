@@ -12,6 +12,7 @@ import {
 } from '@ton/ton'
 
 import { SwapPartialExecutionParams } from '../types'
+import { generateRandomQueryId } from '../utils'
 import { bufferToBigInt } from '../utils/bigint'
 
 export type TradeAccountConfig = { pool: Address; user: Address; publicKey: Buffer; seed: Cell }
@@ -72,14 +73,17 @@ export class TradeAccount implements Contract {
       newCode?: Cell
       amount1: bigint
       amount2: bigint
+      queryId?: bigint
     },
     value: bigint = toNano('0.1'),
   ) {
+    const { queryId = generateRandomQueryId() } = opts
+
     await provider.internal(via, {
       sendMode: SendMode.PAY_GAS_SEPARATELY,
       body: beginCell()
         .storeUint(TradeAccount.Opcodes.DepositOnAccount, 32)
-        .storeUint(0, 64)
+        .storeUint(queryId, 64)
         .storeMaybeRef(opts.newCode)
         .storeCoins(opts.amount1)
         .storeCoins(opts.amount2)
@@ -107,6 +111,7 @@ export class TradeAccount implements Contract {
    * @param params.partialExecution - Partial execution (default: true)
    * @param params.slippage - Slippage
    * @param params.exactOut - Exact out (default: 0)
+   * @param params.queryId - Query ID (default: random)
    */
   async sendExternalSwap(
     provider: ContractProvider,
@@ -123,9 +128,15 @@ export class TradeAccount implements Contract {
       tokenAmount: bigint
       isX: boolean
       exactOut?: bigint
+      queryId?: bigint
     } & SwapPartialExecutionParams,
   ) {
-    const { exactOut = 0n, amount = toNano('0.3'), mode = SendMode.PAY_GAS_SEPARATELY } = params
+    const {
+      exactOut = 0n,
+      amount = toNano('0.3'),
+      mode = SendMode.PAY_GAS_SEPARATELY,
+      queryId = generateRandomQueryId(),
+    } = params
 
     let swapBody = beginCell()
       .storeAddress(params.receiverAddress)
@@ -146,7 +157,7 @@ export class TradeAccount implements Contract {
 
     const msg = beginCell()
       .storeUint(TradeAccount.Opcodes.Swap, 32)
-      .storeUint(0, 64)
+      .storeUint(queryId, 64)
       .storeUint(validUntil, 32)
       .storeUint(seqno, 32)
       .storeAddress(poolAddress)
@@ -172,6 +183,7 @@ export class TradeAccount implements Contract {
    * @param params.receiverAddress - Receiver address
    * @param params.token0Amount - Token0 amount
    * @param params.token1Amount - Token1 amount
+   * @param params.queryId - Query ID (default: random)
    */
   async sendExternalWithdraw(
     provider: ContractProvider,
@@ -186,13 +198,18 @@ export class TradeAccount implements Contract {
       receiverAddress: Address
       token0Amount: bigint
       token1Amount: bigint
+      queryId?: bigint
     },
   ) {
-    const { amount = toNano('0.3'), mode = SendMode.CARRY_ALL_REMAINING_BALANCE } = params
+    const {
+      amount = toNano('0.3'),
+      mode = SendMode.CARRY_ALL_REMAINING_BALANCE,
+      queryId = generateRandomQueryId(),
+    } = params
 
     const msg = beginCell()
       .storeUint(TradeAccount.Opcodes.Withdraw, 32)
-      .storeUint(0, 64)
+      .storeUint(queryId, 64)
       .storeUint(validUntil, 32)
       .storeUint(seqno, 32)
       .storeAddress(poolAddress)
