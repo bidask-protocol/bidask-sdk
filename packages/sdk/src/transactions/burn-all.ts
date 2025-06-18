@@ -1,4 +1,4 @@
-import { Address, beginCell, toNano } from '@ton/ton'
+import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import { LpMultitokenContract } from '../contracts'
 import { TxParams } from '../types'
@@ -15,6 +15,7 @@ import { fromBigInt, generateRandomQueryId } from '../utils'
 export function createBurnAllTxParams(params: {
   queryId?: bigint
   amountOfBins: number
+  forwardPayload?: Cell
   lpMultitokenAddress: Address
 }): TxParams {
   const { queryId = generateRandomQueryId() } = params
@@ -22,7 +23,7 @@ export function createBurnAllTxParams(params: {
   const payload = beginCell()
     .storeUint(LpMultitokenContract.Opcodes.BurnAll, 32)
     .storeUint(queryId, 64)
-    .storeMaybeRef(null)
+    .storeMaybeRef(params.forwardPayload)
     .endCell()
 
   return {

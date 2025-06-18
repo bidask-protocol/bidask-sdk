@@ -1,4 +1,4 @@
-import { Address, beginCell, toNano } from '@ton/ton'
+import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import { PoolContract } from '../contracts'
 import { TxParams } from '../types'
@@ -16,6 +16,8 @@ import { generateRandomQueryId } from '../utils'
  * @param params.allowPartial - Allow partial swap execution if true, require exact amount if false
  * @param params.sqrtX128LastPrice - Last price in sqrt price X 2^128 format (required if `allowPartial` is true)
  * @param params.minAmountToReceive - Minimum amount of tokens to receive (required if `allowPartial` is false)
+ * @param params.forwardPayload - Optional forward payload for the transaction
+ * @param params.rejectPayload - Optional reject payload for the transaction
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @returns Transaction parameters
  */
@@ -27,6 +29,8 @@ export function createTonSwapTxParams(
     poolAddress: Address
     exactOut?: bigint
     queryId?: bigint
+    forwardPayload?: Cell
+    rejectPayload?: Cell
   } & SwapPartialExecutionParams,
 ): TxParams {
   const { exactOut = 0n, queryId = generateRandomQueryId() } = params
@@ -48,8 +52,8 @@ export function createTonSwapTxParams(
     .storeCoins(exactOut) // Exact output
     .storeAddress(null) // Referral address
     .storeMaybeRef(beginCell().storeAddress(params.senderAddress).endCell()) // Sender address
-    .storeMaybeRef(null) // Reject payload
-    .storeMaybeRef(null) // Forward payload
+    .storeMaybeRef(params.rejectPayload) // Reject payload
+    .storeMaybeRef(params.forwardPayload) // Forward payload
     .endCell()
 
   const constantSwapGas = toNano('0.2')

@@ -1,4 +1,4 @@
-import { Address, beginCell, toNano } from '@ton/ton'
+import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
 import { LpMultitokenContract } from '../contracts'
 import { TxParams } from '../types'
@@ -12,11 +12,13 @@ import { createLiquidityBurnDict, divideBurnBinsIntoBatches } from '../utils/liq
  * @param params.lpMultitokenAddress - Address of the liquidity pool contract
  * @param params.binsToBurn - Bins to burn
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
+ * @param params.forwardPayload - Optional forward payload for the transaction
  * @returns Array of transaction parameters
  */
 export function createBurnTxParams(params: {
   lpMultitokenAddress: Address
   binsToBurn: LiquidityRemoveBins
+  forwardPayload?: Cell
   queryId?: bigint
 }): TxParams[] {
   const { queryId = generateRandomQueryId() } = params
@@ -28,7 +30,7 @@ export function createBurnTxParams(params: {
       .storeUint(LpMultitokenContract.Opcodes.Burn, 32)
       .storeUint(queryId, 64)
       .storeDict(createLiquidityBurnDict(binsToBurn))
-      .storeMaybeRef(null)
+      .storeMaybeRef(params.forwardPayload)
       .endCell()
 
     const providingGas = calculateGas(Object.keys(binsToBurn).length)

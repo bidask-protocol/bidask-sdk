@@ -1,7 +1,6 @@
 import { Address, beginCell, Cell, toNano } from '@ton/ton'
 
-import { JETTON_TRANSFER_GAS } from '../constants'
-import { JettonWalletContract, PoolContract } from '../contracts'
+import { PoolContract } from '../contracts'
 import { TxParams } from '../types'
 import { SwapPartialExecutionParams } from '../types/swap'
 import { generateRandomQueryId } from '../utils'
@@ -20,6 +19,8 @@ import { createTransferJettonTxParams } from './transfer-jetton'
  * @param params.allowPartial - Allow partial swap execution if true, require exact amount if false
  * @param params.sqrtX128LastPrice - Last price in sqrt price X 2^128 format (required if `allowPartial` is true)
  * @param params.minAmountToReceive - Minimum amount of tokens to receive (required if `allowPartial` is false)
+ * @param params.forwardPayload - Optional forward payload for the transaction
+ * @param params.rejectPayload - Optional reject payload for the transaction
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @returns Transaction parameters
  */
@@ -33,6 +34,8 @@ export function createJettonSwapTxParams(
     jettonWalletAddress: Address
     poolAddress: Address
     queryId?: bigint
+    rejectPayload?: Cell
+    forwardPayload?: Cell
   } & SwapPartialExecutionParams,
 ): TxParams {
   const { exactOut = 0n, queryId = generateRandomQueryId() } = params
@@ -52,8 +55,8 @@ export function createJettonSwapTxParams(
     .storeCoins(exactOut)
     .storeAddress(null)
     .storeMaybeRef(beginCell().storeAddress(params.senderAddress).endCell())
-    .storeMaybeRef(null)
-    .storeMaybeRef(null)
+    .storeMaybeRef(params.rejectPayload)
+    .storeMaybeRef(params.forwardPayload)
     .endCell()
 
   const constantSwapGas = toNano('0.2')
