@@ -18,7 +18,7 @@ export const getSqrtPriceX128 = (price: number): bigint => {
  * @returns The price
  */
 export const getPriceFromSqrtPriceX128 = (sqrtPriceX128: bigint): number => {
-  const sqrt = Big(sqrtPriceX128).div(2).pow(128)
+  const sqrt = Big(sqrtPriceX128).div(Big(2).pow(128)).pow(2)
   return sqrt.toNumber()
 }
 
