@@ -9,7 +9,7 @@ import { toBigInt } from './bigint'
  */
 export const getSqrtPriceX128 = (price: number): bigint => {
   const sqrt = Big(price).sqrt()
-  return toBigInt(sqrt.multipliedBy(2).pow(128).toString())
+  return toBigInt(sqrt.multipliedBy(Big(2).pow(128)).toPrecision(100))
 }
 
 /**
