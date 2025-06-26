@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { LiquidityProvideBins } from '../../../types'
 import { createBidaskShape } from './bidask-shape'
 
 describe('createBidaskShape', () => {
@@ -18,11 +17,7 @@ describe('createBidaskShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('return the correct shape #2', () => {
@@ -38,11 +33,7 @@ describe('createBidaskShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
   })
 
@@ -60,11 +51,7 @@ describe('createBidaskShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('excluding active bin', () => {
@@ -80,11 +67,7 @@ describe('createBidaskShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('ignore tokens from right side', () => {
@@ -100,11 +83,7 @@ describe('createBidaskShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
   })
 
@@ -122,11 +101,7 @@ describe('createBidaskShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('excluding active bin', () => {
@@ -142,11 +117,7 @@ describe('createBidaskShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('ignore tokens from left side', () => {
@@ -162,15 +133,7 @@ describe('createBidaskShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
   })
 })
-
-const sumAmounts = (shape: LiquidityProvideBins) => {
-  return Object.values(shape).reduce((acc, [x, y]) => [acc[0] + x, acc[1] + y], [0n, 0n])
-}

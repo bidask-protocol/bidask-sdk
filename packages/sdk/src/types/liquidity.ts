@@ -21,6 +21,15 @@ export enum LiquidityType {
 export type LiquidityProvideBins = Record<number, [bigint, bigint]>
 
 /**
+ * Result of shape creator
+ */
+export type ShapeCreatorResult = {
+  bins: LiquidityProvideBins
+  token0Amount: bigint
+  token1Amount: bigint
+}
+
+/**
  * Record of liquidity remove bins where the key is the bin index and the value is the amount of lpToken to remove
  */
 export type LiquidityRemoveBins = Record<number, bigint>
@@ -30,9 +39,11 @@ export type LiquidityRemoveBins = Record<number, bigint>
  */
 export type CreateShapeParams = {
   /** Amount of token0 to provide */
-  token0Amount: bigint
+  token0Amount?: bigint
   /** Amount of token1 to provide */
-  token1Amount: bigint
+  token1Amount?: bigint
+  /** Autocomplete token side */
+  autocomplete?: 'x' | 'y' | null
   /** Current price of the pool */
   currentPrice: number
   /** Starting bin index */
@@ -44,7 +55,14 @@ export type CreateShapeParams = {
   /**
    * Ratio of liquidity to distribute from active bin to other bins (0-1) in case of central bin takes all of the liquidity
    *
-   * @default 0.8
+   * @default 1
+   */
+  baseRatio?: number
+  /**
+   * Ratio of liquidity to distribute from active bin to other bins (0-1) in case of central bin takes all of the liquidity
+   *
+   * @default 0.8 (for curve and spot shape)
+   * @default 0.2 (for bidask shape)
    */
   fallbackRatio?: number
 }

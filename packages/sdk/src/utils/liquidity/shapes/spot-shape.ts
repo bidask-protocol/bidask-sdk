@@ -1,36 +1,40 @@
-import { CreateShapeParams, LiquidityProvideBins } from '../../../types/liquidity'
+import BigNumber from 'bignumber.js'
+
+import { BIN_STEP_COEFFICIENT } from '../../../constants'
+import { CreateShapeParams, ShapeCreatorResult } from '../../../types/liquidity'
 import { getBinByPrice } from '../../bins'
-import { getNearestBinUnits, shapeCreator } from './shape-creator'
+import { shapeCreator } from './shape-creator'
 
 /**
  * Creates bin dictionary for spot shape
  *
  * @returns The spot shape
  */
-export const createSpotShape = (params: CreateShapeParams): LiquidityProvideBins => {
+export const createSpotShape = (params: CreateShapeParams): ShapeCreatorResult => {
   const activeBin = getBinByPrice(params.currentPrice, params.bps)
 
-  const nearestBinUnits = getNearestBinUnits(params.fromBin, activeBin, params.toBin)
+  const token0Amount = params.token0Amount ? BigNumber(params.token0Amount) : BigNumber(1)
+  const token1Amount = params.token1Amount ? BigNumber(params.token1Amount) : BigNumber(1)
 
-  return shapeCreator({
-    ...params,
-    xBinCreator: (perUnit) => perUnit,
-    yBinCreator: (perUnit) => perUnit,
-    centralBinUnits: {
-      left: 1,
-      right: 1,
-    },
-    sideBinsUnits: {
-      left:
-        activeBin === params.fromBin
-          ? 0
-          : countClosedInterval(params.fromBin, nearestBinUnits.left),
-      right:
-        activeBin === params.toBin ? 0 : countClosedInterval(nearestBinUnits.right, params.toBin),
-    },
-  })
-}
+  const autocomplete = params.autocomplete ?? null
 
-const countClosedInterval = (a: number, b: number) => {
-  return Math.abs(b - a) + 1
+  const sqrtPrice = BigNumber(params.currentPrice).sqrt()
+
+  const binStep = Number(params.bps) / BIN_STEP_COEFFICIENT
+
+  const { baseRatio = 1, fallbackRatio = 0.8 } = params
+
+  return shapeCreator(
+    token0Amount,
+    token1Amount,
+    autocomplete,
+    'spot',
+    params.fromBin,
+    params.toBin,
+    baseRatio,
+    fallbackRatio,
+    activeBin,
+    sqrtPrice,
+    binStep,
+  )
 }

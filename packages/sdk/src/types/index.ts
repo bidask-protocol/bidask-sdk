@@ -4,6 +4,7 @@ export {
   CreateShapeParams,
   LiquidityRemoveBins,
   DepositType,
+  ShapeCreatorResult,
 } from './liquidity'
 export { PoolInfo } from './pool'
 export { TxParams } from './transactions'

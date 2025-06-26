@@ -1,48 +1,40 @@
-import { CreateShapeParams, LiquidityProvideBins } from '../../../types/liquidity'
+import BigNumber from 'bignumber.js'
+
+import { BIN_STEP_COEFFICIENT } from '../../../constants'
+import { CreateShapeParams, ShapeCreatorResult } from '../../../types/liquidity'
 import { getBinByPrice } from '../../bins'
-import { getNearestBinUnits, shapeCreator } from './shape-creator'
+import { shapeCreator } from './shape-creator'
 
 /**
  * Creates bin dictionary for bidask shape
  *
  * @returns The bidask shape
  */
-export const createBidaskShape = (params: CreateShapeParams): LiquidityProvideBins => {
+export const createBidaskShape = (params: CreateShapeParams): ShapeCreatorResult => {
   const activeBin = getBinByPrice(params.currentPrice, params.bps)
 
-  const nearestBinUnits = getNearestBinUnits(params.fromBin, activeBin, params.toBin)
+  const token0Amount = params.token0Amount ? BigNumber(params.token0Amount) : BigNumber(1)
+  const token1Amount = params.token1Amount ? BigNumber(params.token1Amount) : BigNumber(1)
 
-  return shapeCreator({
-    ...params,
-    xBinCreator: (perUnit, bin) => perUnit.multipliedBy(bidaskBinHeight(bin, activeBin)),
-    yBinCreator: (perUnit, bin) => perUnit.multipliedBy(bidaskBinHeight(bin, activeBin)),
-    centralBinUnits: {
-      left: 1,
-      right: 1,
-    },
-    sideBinsUnits: {
-      left: bidaskSum(params.fromBin, nearestBinUnits.left, activeBin),
-      right: bidaskSum(nearestBinUnits.right, params.toBin, activeBin),
-    },
-    fallbackRatio: 0.2,
-  })
-}
+  const autocomplete = params.autocomplete ?? null
 
-const countClosedInterval = (a: number, b: number) => {
-  return Math.abs(b - a) + 1
-}
+  const sqrtPrice = BigNumber(params.currentPrice).sqrt()
 
-function bidaskBinHeight(bin: number, currentBin: number) {
-  return countClosedInterval(currentBin, bin)
-}
+  const binStep = Number(params.bps) / BIN_STEP_COEFFICIENT
 
-function arithmeticProgressionSum(a: number, b: number) {
-  return ((a + b) * countClosedInterval(a, b)) / 2
-}
+  const { baseRatio = 1, fallbackRatio = 0.2 } = params
 
-function bidaskSum(fromBin: number, toBin: number, currentBin: number) {
-  return arithmeticProgressionSum(
-    bidaskBinHeight(fromBin, currentBin),
-    bidaskBinHeight(currentBin, toBin),
+  return shapeCreator(
+    token0Amount,
+    token1Amount,
+    autocomplete,
+    'bidask',
+    params.fromBin,
+    params.toBin,
+    baseRatio,
+    fallbackRatio,
+    activeBin,
+    sqrtPrice,
+    binStep,
   )
 }

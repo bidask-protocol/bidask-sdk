@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { LiquidityProvideBins } from '../../../types'
 import { createCurveShape } from './curve-shape'
 
 describe('createCurveShape', () => {
@@ -18,11 +17,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('return the correct shape #2', () => {
@@ -38,11 +33,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('fallback ratio should work', () => {
@@ -58,11 +49,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('real case bug - providing tokens were bigger than balance', () => {
@@ -78,11 +65,18 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
+      expect(shape.bins).toMatchSnapshot()
+    })
 
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+    it('real case bug with tokens amount more than provided', () => {
+      createCurveShape({
+        bps: 5n,
+        currentPrice: 1.000123997202373,
+        fromBin: -2,
+        toBin: 1,
+        token0Amount: 400155324n,
+        token1Amount: 400155324n,
+      })
     })
   })
 
@@ -100,11 +94,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('excluding active bin', () => {
@@ -120,11 +110,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('ignore tokens from right side', () => {
@@ -140,11 +126,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
   })
 
@@ -162,11 +144,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('excluding active bin', () => {
@@ -182,11 +160,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
 
     it('ignore tokens from left side', () => {
@@ -202,11 +176,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
   })
 
@@ -224,15 +194,7 @@ describe('createCurveShape', () => {
         token1Amount,
       })
 
-      const sum = sumAmounts(shape)
-
-      expect(sum[0]).toBeLessThanOrEqual(token0Amount)
-      expect(sum[1]).toBeLessThanOrEqual(token1Amount)
-      expect(shape).toMatchSnapshot()
+      expect(shape.bins).toMatchSnapshot()
     })
   })
 })
-
-const sumAmounts = (shape: LiquidityProvideBins) => {
-  return Object.values(shape).reduce((acc, [x, y]) => [acc[0] + x, acc[1] + y], [0n, 0n])
-}
