@@ -1,6 +1,13 @@
 import { getBinByPrice } from '../../bins'
 import { createSpotShape } from './spot-shape'
 
+/**
+ * Calculates the amount of token X needed for a central bin position given an amount of token Y
+ * @param tokenYAmount - The amount of token Y to provide
+ * @param currentPrice - The current price of the token pair
+ * @param bps - The basis points for bin spacing
+ * @returns The calculated amount of token X required
+ */
 export const calculateCentralAmountXByAmountY = (
   tokenYAmount: bigint,
   currentPrice: number,
@@ -21,6 +28,13 @@ export const calculateCentralAmountXByAmountY = (
   return centralBinLiquidity.token0Amount
 }
 
+/**
+ * Calculates the amount of token Y needed for a central bin position given an amount of token X
+ * @param tokenXAmount - The amount of token X to provide
+ * @param currentPrice - The current price of the token pair
+ * @param bps - The basis points for bin spacing
+ * @returns The calculated amount of token Y required
+ */
 export const calculateCentralAmountYByAmountX = (
   tokenXAmount: bigint,
   currentPrice: number,

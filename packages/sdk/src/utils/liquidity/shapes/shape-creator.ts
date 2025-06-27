@@ -1,12 +1,10 @@
 import BigNumber from 'bignumber.js'
 
 import {
-  CreateShapeParams,
   LiquidityProvideBins,
-  ShapeCreatorResult,
+  ShapeCreatorResult
 } from '../../../types/liquidity'
 import { toBigInt } from '../../bigint'
-import { getBinByPrice } from '../../bins'
 
 BigNumber.config({
   POW_PRECISION: 80,
