@@ -328,32 +328,3 @@ export function shapeCreator(
 
   return { bins, token0Amount: totalX, token1Amount: totalY }
 }
-
-export function shapeCreatorParamsToPythonString(
-  params: CreateShapeParams,
-  shape: 'spot' | 'curve' | 'bidask',
-) {
-  const curBin = getBinByPrice(params.currentPrice, params.bps)
-
-  // Determine autocomplete based on which tokens are provided
-  let autocomplete: string
-  if (params.autocomplete === 'x') {
-    autocomplete = 'Token.X'
-  } else if (params.autocomplete === 'y') {
-    autocomplete = 'Token.Y'
-  } else {
-    autocomplete = 'None'
-  }
-
-  // Convert token amounts, defaulting to 0 if not provided
-  const x = params.token0Amount?.toString() || '0'
-  const y = params.token1Amount?.toString() || '0'
-
-  // Calculate bin_step from bps (basis points)
-  const binStep = Number(params.bps) / 10000
-
-  // Use fallbackRatio or default to 1
-  const ratio = params.baseRatio ?? 1
-
-  return `print_provision_array(Tokens(${y}, ${x}), LiquidityShape.${shape.toUpperCase()}, ${params.fromBin}, ${params.toBin}, ${ratio}, ${curBin}, sqrt(${params.currentPrice}), ${binStep}, ${autocomplete})`
-}
