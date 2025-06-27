@@ -318,11 +318,11 @@ export function shapeCreator(
     }
   }
 
-  if (amount[0].lt(totalY)) {
+  if (autocomplete !== 'y' && amount[0].lt(totalY)) {
     throw new Error(`Total Y (${totalY.toString()}) exceeds amount Y (${amount[0].toString()})`)
   }
 
-  if (amount[1].lt(totalX)) {
+  if (autocomplete !== 'x' && amount[1].lt(totalX)) {
     throw new Error(`Total X (${totalX.toString()}) exceeds amount X (${amount[1].toString()})`)
   }
 
