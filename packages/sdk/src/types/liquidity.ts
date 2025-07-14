@@ -1,3 +1,5 @@
+declare const _liquidityProvideBins: unique symbol
+
 /**
  * Types of deposit operations
  */
@@ -17,8 +19,12 @@ export enum LiquidityType {
 
 /**
  * Record of liquidity provide bins where the key is the bin index and the value is the amount of token0 and token1 to provide
+ *
+ * @warning Due to branded typing, use `as LiquidityProvideBins` instead of `: LiquidityProvideBins` when creating objects
  */
-export type LiquidityProvideBins = Record<number, [bigint, bigint]>
+export type LiquidityProvideBins = Record<number, [bigint, bigint]> & {
+  readonly [_liquidityProvideBins]: void
+}
 
 /**
  * Result of shape creator

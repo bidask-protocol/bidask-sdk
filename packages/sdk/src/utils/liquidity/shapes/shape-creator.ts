@@ -1,9 +1,6 @@
 import BigNumber from 'bignumber.js'
 
-import {
-  LiquidityProvideBins,
-  ShapeCreatorResult
-} from '../../../types/liquidity'
+import { LiquidityProvideBins, ShapeCreatorResult } from '../../../types/liquidity'
 import { toBigInt } from '../../bigint'
 
 BigNumber.config({
@@ -293,7 +290,7 @@ export function shapeCreator(
     units[1].eq(0) ? BigNumber(0) : rest[1].dividedBy(units[1]),
   ]
 
-  const bins: LiquidityProvideBins = {}
+  const bins = {} as LiquidityProvideBins
   let totalY = 0n
   let totalX = 0n
   for (let bin = fromBin; bin <= toBin; bin++) {

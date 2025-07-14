@@ -110,7 +110,7 @@ export const divideProvideBinsIntoBatches = (bins: LiquidityProvideBins) => {
   Object.entries(bins).forEach(([binId, amounts]) => {
     const binNum = Number(binId)
     const rangeNum = getRangeByBin(binNum)
-    binsByRange[rangeNum] ??= {}
+    binsByRange[rangeNum] ??= {} as LiquidityProvideBins
     binsByRange[rangeNum][binNum] = amounts
   })
 
@@ -124,7 +124,7 @@ export const divideProvideBinsIntoBatches = (bins: LiquidityProvideBins) => {
       finalBinGroups.push(rangeBins)
     } else {
       for (let i = 0; i < binIds.length; i += MAX_PROVIDED_BINS_IN_MESSAGE) {
-        const chunk: LiquidityProvideBins = {}
+        const chunk = {} as LiquidityProvideBins
         const chunkIds = binIds.slice(i, i + MAX_PROVIDED_BINS_IN_MESSAGE)
         chunkIds.forEach((id) => {
           chunk[id] = rangeBins[id]

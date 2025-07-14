@@ -2,7 +2,7 @@
  * Bidask SDK
  *
  * ```
- * import { BidaskSDK } from 'bidask-sdk'
+ * import { ... } from '@bidask-protocol/sdk'
  * ```
  *
  * @packageDocumentation
