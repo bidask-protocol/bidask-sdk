@@ -21,6 +21,7 @@ import { createTransferJettonTxParams } from './transfer-jetton'
  * @param params.minAmountToReceive - Minimum amount of tokens to receive (required if `allowPartial` is false)
  * @param params.forwardPayload - Optional forward payload for the transaction
  * @param params.rejectPayload - Optional reject payload for the transaction
+ * @param params.forwardAmount - Optional forward amount for the Jetton transfer (defaults to 0.5 TON)
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @returns Transaction parameters
  */
@@ -36,9 +37,10 @@ export function createJettonSwapTxParams(
     queryId?: bigint
     rejectPayload?: Cell
     forwardPayload?: Cell
+    forwardAmount?: bigint
   } & SwapPartialExecutionParams,
 ): TxParams {
-  const { exactOut = 0n, queryId = generateRandomQueryId() } = params
+  const { exactOut = 0n, queryId = generateRandomQueryId(), forwardAmount = toNano('0.5') } = params
 
   let forwardPayloadBuilder = beginCell()
     .storeUint(PoolContract.Opcodes.Swap, 32)
@@ -59,7 +61,6 @@ export function createJettonSwapTxParams(
     .storeMaybeRef(params.forwardPayload)
     .endCell()
 
-  const constantSwapGas = toNano('0.5')
 
   const jettonTransferTxParams = createTransferJettonTxParams({
     jettonWalletAddress: params.jettonWalletAddress,
@@ -67,7 +68,7 @@ export function createJettonSwapTxParams(
     amount: params.amountIn,
     senderAddress: params.senderAddress,
     forwardPayload: forwardPayloadCell,
-    forwardAmount: constantSwapGas,
+    forwardAmount,
     queryId,
   })
 
