@@ -59,7 +59,7 @@ export function createJettonSwapTxParams(
     .storeMaybeRef(params.forwardPayload)
     .endCell()
 
-  const constantSwapGas = toNano('0.2')
+  const constantSwapGas = toNano('0.5')
 
   const jettonTransferTxParams = createTransferJettonTxParams({
     jettonWalletAddress: params.jettonWalletAddress,

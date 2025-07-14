@@ -6,7 +6,7 @@ import { Address, Cell } from '@ton/ton'
 export type TxParams = {
   /** Destination address */
   to: Address
-  /** Amount of TON coins to send (in nanoTON) */
+  /** Recommended amount of TON coins to send (in nanoTON) */
   value: bigint
   /** Cell containing the message payload */
   payload: Cell

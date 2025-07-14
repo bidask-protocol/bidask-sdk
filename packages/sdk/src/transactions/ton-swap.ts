@@ -56,7 +56,7 @@ export function createTonSwapTxParams(
     .storeMaybeRef(params.forwardPayload) // Forward payload
     .endCell()
 
-  const constantSwapGas = toNano('0.2')
+  const constantSwapGas = toNano('0.5')
 
   return {
     to: params.poolAddress,
