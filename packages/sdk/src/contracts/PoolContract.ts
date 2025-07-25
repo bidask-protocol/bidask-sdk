@@ -81,6 +81,12 @@ export class PoolContract implements Contract {
     return Object.fromEntries(rangeStatuses)
   }
 
+  async getCurrentBin(provider: ContractProvider): Promise<number> {
+    const result = await provider.get('get_current_bin', [])
+
+    return result.stack.readNumber()
+  }
+
   async getRangeStatus(provider: ContractProvider, range: number): Promise<RangeStatus> {
     const rangeAddress = await this.getRangeAddress(provider, getFirstBinByRange(range))
 

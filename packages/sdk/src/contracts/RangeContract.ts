@@ -20,4 +20,10 @@ export class RangeContract implements Contract {
 
     return result.stack.readAddress()
   }
+
+  async getCurrentBin(provider: ContractProvider): Promise<number> {
+    const result = await provider.get('get_current_bin', [])
+
+    return result.stack.readNumber()
+  }
 }
