@@ -189,22 +189,32 @@ export function shapeCreator(
   const twoSided = fromBin <= curBin && curBin <= toBin
   let inCurBin: [BigNumber, BigNumber]
   if (twoSided) {
-    const singleL = getLiquidity(BigNumber(1), BigNumber(1), sqrtP, pa, pb)
     const share: [BigNumber, BigNumber] = [
-      calculateY(singleL, sqrtP, pa, pb),
-      calculateX(singleL, sqrtP, pa, pb),
+      sqrtP.minus(pa).dividedBy(pb.minus(pa)),
+      pb.minus(sqrtP).dividedBy(pb.minus(pa)),
     ]
-    const perUnit: [BigNumber, BigNumber] = [
-      units[0].plus(share[0]).eq(0) ? BigNumber(0) : amount[0].dividedBy(units[0].plus(share[0])),
-      units[1].plus(share[1]).eq(0) ? BigNumber(0) : amount[1].dividedBy(units[1].plus(share[1])),
-    ]
-    const curveMagnitude: [number, number] = [
+    const magnitude: [number, number] = [
       countBetween(fromBin, curBin),
       countBetween(curBin, toBin),
     ]
+
+
+    const curBinUnits: [BigNumber, BigNumber] = [
+      share[0].multipliedBy(shape === 'curve' ? magnitude[0] : 1),
+      share[1].multipliedBy(shape === 'curve' ? magnitude[1] : 1),
+    ]
+
+    const perUnit: [BigNumber, BigNumber] = [
+      units[0].plus(curBinUnits[0]).eq(0)
+        ? BigNumber(0)
+        : amount[0].dividedBy(units[0].plus(curBinUnits[0])),
+      units[1].plus(curBinUnits[1]).eq(0)
+        ? BigNumber(0)
+        : amount[1].dividedBy(units[1].plus(curBinUnits[1])),
+    ]
     const inCurBinPotential: [BigNumber, BigNumber] = [
-      perUnit[0].multipliedBy(share[0]).multipliedBy(shape === 'curve' ? curveMagnitude[0] : 1),
-      perUnit[1].multipliedBy(share[1]).multipliedBy(shape === 'curve' ? curveMagnitude[1] : 1),
+      perUnit[0].multipliedBy(curBinUnits[0]),
+      perUnit[1].multipliedBy(curBinUnits[1]),
     ]
 
     const potentialL: [BigNumber, BigNumber] = [
@@ -213,71 +223,70 @@ export function shapeCreator(
     ]
 
     let L: BigNumber
-    if (autocomplete === null) {
+
+    if (potentialL[0].gt(potentialL[1])) {
+      L = getLiquidity(
+        amount[1].multipliedBy(baseRatio).plus(inCurBinPotential[1].multipliedBy(1 - baseRatio)),
+        inCurBinPotential[0].multipliedBy(baseRatio).plus(amount[0].multipliedBy(1 - baseRatio)),
+        sqrtP,
+        pa,
+        pb,
+      )
+    } else {
+      L = getLiquidity(
+        amount[1].multipliedBy(1 - baseRatio).plus(inCurBinPotential[1].multipliedBy(baseRatio)),
+        inCurBinPotential[0].multipliedBy(1 - baseRatio).plus(amount[0].multipliedBy(baseRatio)),
+        sqrtP,
+        pa,
+        pb,
+      )
+    }
+
+    // Check if either token amount equals full provision
+    const tempInCurBin = [calculateY(L, sqrtP, pa, pb), calculateX(L, sqrtP, pa, pb)]
+
+    const fallbackByTokenX = toBin > curBin && tempInCurBin[1].gte(amount[1])
+    const fallbackByTokenY = fromBin < curBin && tempInCurBin[0].gte(amount[0])
+
+    if (baseRatio !== fallbackRatio && (fallbackByTokenX || fallbackByTokenY)) {
       if (potentialL[0].gt(potentialL[1])) {
         L = getLiquidity(
-          amount[1].multipliedBy(baseRatio).plus(inCurBinPotential[1].multipliedBy(1 - baseRatio)),
-          inCurBinPotential[0].multipliedBy(baseRatio).plus(amount[0].multipliedBy(1 - baseRatio)),
+          amount[1]
+            .multipliedBy(fallbackRatio)
+            .plus(inCurBinPotential[1].multipliedBy(1 - fallbackRatio)),
+          inCurBinPotential[0]
+            .multipliedBy(fallbackRatio)
+            .plus(amount[0].multipliedBy(1 - fallbackRatio)),
           sqrtP,
           pa,
           pb,
         )
       } else {
         L = getLiquidity(
-          amount[1].multipliedBy(1 - baseRatio).plus(inCurBinPotential[1].multipliedBy(baseRatio)),
-          inCurBinPotential[0].multipliedBy(1 - baseRatio).plus(amount[0].multipliedBy(baseRatio)),
+          amount[1]
+            .multipliedBy(1 - fallbackRatio)
+            .plus(inCurBinPotential[1].multipliedBy(fallbackRatio)),
+          inCurBinPotential[0]
+            .multipliedBy(1 - fallbackRatio)
+            .plus(amount[0].multipliedBy(fallbackRatio)),
           sqrtP,
           pa,
           pb,
         )
       }
-
-      // Check if either token amount equals full provision
-      const tempInCurBin = [calculateY(L, sqrtP, pa, pb), calculateX(L, sqrtP, pa, pb)]
-
-      const fallbackByTokenX = toBin > curBin && tempInCurBin[1].gte(amount[1])
-      const fallbackByTokenY = fromBin < curBin && tempInCurBin[0].gte(amount[0])
-
-      if (fallbackByTokenX || fallbackByTokenY) {
-        if (potentialL[0].gt(potentialL[1])) {
-          L = getLiquidity(
-            amount[1]
-              .multipliedBy(fallbackRatio)
-              .plus(inCurBinPotential[1].multipliedBy(1 - fallbackRatio)),
-            inCurBinPotential[0]
-              .multipliedBy(fallbackRatio)
-              .plus(amount[0].multipliedBy(1 - fallbackRatio)),
-            sqrtP,
-            pa,
-            pb,
-          )
-        } else {
-          L = getLiquidity(
-            amount[1]
-              .multipliedBy(1 - fallbackRatio)
-              .plus(inCurBinPotential[1].multipliedBy(fallbackRatio)),
-            inCurBinPotential[0]
-              .multipliedBy(1 - fallbackRatio)
-              .plus(amount[0].multipliedBy(fallbackRatio)),
-            sqrtP,
-            pa,
-            pb,
-          )
-        }
-      }
-    } else if (autocomplete === 'x') {
-      L = potentialL[0]
-    } else {
-      L = potentialL[1]
     }
-    inCurBin = [calculateY(L, sqrtP, pa, pb), calculateX(L, sqrtP, pa, pb)]
 
-    if (autocomplete === 'x') {
-      perUnit[1] = perUnit[0].dividedBy(sqrtP.pow(2))
-      amount[1] = perUnit[1].multipliedBy(units[1].plus(share[1]))
-    } else if (autocomplete === 'y') {
-      perUnit[0] = perUnit[1].multipliedBy(sqrtP.pow(2))
-      amount[0] = perUnit[0].multipliedBy(units[0].plus(share[0]))
+    if (autocomplete === null) {
+      inCurBin = [calculateY(L, sqrtP, pa, pb), calculateX(L, sqrtP, pa, pb)]
+    } else {
+      if (autocomplete === 'x') {
+        perUnit[1] = perUnit[0].dividedBy(sqrtP.pow(2)).multipliedBy(shape !== 'spot' ? magnitude[0] / magnitude[1] : 1)
+        amount[1] = perUnit[1].multipliedBy(units[1].plus(curBinUnits[1]))
+      } else if (autocomplete === 'y') {
+        perUnit[0] = perUnit[1].multipliedBy(sqrtP.pow(2)).multipliedBy(shape !== 'spot' ? magnitude[1] / magnitude[0] : 1)
+        amount[0] = perUnit[0].multipliedBy(units[0].plus(curBinUnits[0]))
+      }
+      inCurBin = [curBinUnits[0].multipliedBy(perUnit[0]), curBinUnits[1].multipliedBy(perUnit[1])]
     }
   } else {
     inCurBin = [BigNumber(0), BigNumber(0)]
