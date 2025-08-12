@@ -13,3 +13,6 @@ export { createDeployJettonLimitOrderTxParams } from './deploy-jetton-limit-orde
 export { createExecuteJettonLimitOrderTxParams } from './execute-jetton-limit-order'
 export { createCancelLimitOrderTxParams } from './cancel-limit-order'
 export { createTransferJettonTxParams, parseTransferJettonPayload } from './transfer-jetton'
+export { createJettonSwapV2TxParams } from './jetton-swap-v2'
+export { createTonSwapV2TxParams } from './ton-swap-v2'
+

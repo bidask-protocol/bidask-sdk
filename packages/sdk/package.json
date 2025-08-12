@@ -1,6 +1,6 @@
 {
   "name": "@bidask-protocol/sdk",
-  "version": "0.4.8",
+  "version": "0.5.0-rc.2",
   "description": "Bidask Protocol SDK",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -31,7 +31,8 @@
     "buffer": "^6.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.11.18"
+    "@types/node": "^22.11.18",
+    "dotenv": "16.5.0"
   },
   "dependencies": {
     "bignumber.js": "9.3.0"

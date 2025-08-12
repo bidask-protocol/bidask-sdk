@@ -1,12 +1,12 @@
 export {
   LiquidityType,
-  LiquidityProvideBins,
-  CreateShapeParams,
-  LiquidityRemoveBins,
+  type LiquidityProvideBins,
+  type CreateShapeParams,
+  type LiquidityRemoveBins,
+  type ShapeCreatorResult,
   DepositType,
-  ShapeCreatorResult,
 } from './liquidity'
-export { PoolInfo } from './pool'
-export { TxParams } from './transactions'
-export { SwapPartialExecutionParams } from './swap'
+export type { PoolInfo } from './pool'
+export type { TxParams } from './transactions'
+export type { SwapPartialExecutionParams } from './swap'
 export { RangeStatus } from './range'
