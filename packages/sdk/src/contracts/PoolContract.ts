@@ -7,6 +7,7 @@ import { RangeContract } from './RangeContract'
 export class PoolContract implements Contract {
   static Opcodes = {
     Swap: 0xf2ef6c1b,
+    SwapV2: 0xc09da84e,
     AddLiquidity: 0x96feef7b,
     AddBothLiquidity: 0x3ea0bafc,
   }
