@@ -1,14 +1,12 @@
-import { Address, beginCell, Contract, type ContractProvider } from '@ton/ton'
+import { Address, beginCell, Cell, Contract, type ContractProvider } from '@ton/ton'
 
 import { LiquidityProvideBins, PoolInfo, RangeStatus } from '../types'
-import { createSeedCell, getFirstBinByRange, getRangeByBin } from '../utils'
-import { bufferToBigInt } from '../utils/bigint'
+import { getFirstBinByRange, getRangeByBin } from '../utils'
 import { RangeContract } from './RangeContract'
 
 export class PoolContract implements Contract {
   static Opcodes = {
     Swap: 0xf2ef6c1b,
-    SwapV2: 0xc09da84e,
     AddLiquidity: 0x96feef7b,
     AddBothLiquidity: 0x3ea0bafc,
   }
@@ -38,12 +36,11 @@ export class PoolContract implements Contract {
 
   async getTradeAccountAddress(
     provider: ContractProvider,
-    params: { userAddress: Address; publicKey: Buffer; seed: number },
+    params: { userAddress: Address; seedCell: Cell },
   ): Promise<Address> {
     const result = await provider.get('get_trade_account_address', [
       { type: 'slice', cell: beginCell().storeAddress(params.userAddress).endCell() },
-      { type: 'int', value: bufferToBigInt(params.publicKey) },
-      { type: 'cell', cell: createSeedCell(params.seed) },
+      { type: 'cell', cell: params.seedCell },
     ])
 
     return result.stack.readAddress()
@@ -80,12 +77,6 @@ export class PoolContract implements Contract {
     )
 
     return Object.fromEntries(rangeStatuses)
-  }
-
-  async getCurrentBin(provider: ContractProvider): Promise<number> {
-    const result = await provider.get('get_current_bin', [])
-
-    return result.stack.readNumber()
   }
 
   async getRangeStatus(provider: ContractProvider, range: number): Promise<RangeStatus> {
