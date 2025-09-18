@@ -39,12 +39,12 @@ const { jetton0Master, jetton1Master } = await getJettonAddressesByPool(
 )
 
 // Get token info
-const jetton0Info = await getJettonInfo(jetton0Master)
-const jetton1Info = await getJettonInfo(jetton1Master)
+const jetton0Info = await rateLimiter(getJettonInfo(jetton0Master))
+const jetton1Info = await rateLimiter(getJettonInfo(jetton1Master))
 
 // Get pool contract and current price
 const poolContract = client.open(PoolContract.create(poolAddress))
-const { bps } = await poolContract.getPoolInfo()
+const { bps } = await rateLimiter(poolContract.getPoolInfo())
 
 const activeRangeAddress = await rateLimiter(poolContract.getActiveRange())
 const activeRangeContract = client.open(RangeContract.create(activeRangeAddress))

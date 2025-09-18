@@ -84,17 +84,17 @@ export function createProvideTonLiquidityTxParams(params: {
         value: providingGas + tonAmount,
         payload: forwardPayloadCell,
       }
-    } else {
-      return createTransferJettonTxParams({
-        jettonWalletAddress: params.jettonWalletAddress,
-        receiverAddress: params.poolAddress,
-        amount: jettonAmount,
-        senderAddress: params.senderAddress,
-        forwardPayload: forwardPayloadCell,
-        forwardAmount: tonAmount + providingGas,
-        queryId,
-      })
     }
+
+    return createTransferJettonTxParams({
+      jettonWalletAddress: params.jettonWalletAddress,
+      receiverAddress: params.poolAddress,
+      amount: jettonAmount,
+      senderAddress: params.senderAddress,
+      forwardPayload: forwardPayloadCell,
+      forwardAmount: tonAmount + providingGas,
+      queryId,
+    })
   })
 }
 

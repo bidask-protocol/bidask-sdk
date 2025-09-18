@@ -16,7 +16,7 @@ import { generateRandomQueryId, getBinByPrice, getSqrtPriceX128 } from '../utils
  * @param params.timeDecay - Time decay value (must be > timeFilter)
  * @param params.initialRawPrice - Initial raw price of the pool
  * @param params.seedCell - Seed cell for the pool
- * @param params.poolDeployerAddress - Optional address of the pool deployer (defaults to factory)
+ * @param params.poolDeployerAddress - Optional address of the pool deployer (defaults to POOL_FACTORY_ADDRESS)
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @returns Transaction parameters
  */
@@ -40,7 +40,9 @@ export const createDeployDlmmPoolTxParams = (params: {
   if (params.timeFilter >= params.timeDecay) {
     throw new Error('timeFilter must be < timeDecay')
   }
-  const { poolDeployerAddress = POOL_FACTORY_ADDRESS, queryId = generateRandomQueryId() } = params
+  
+  const { poolDeployerAddress = POOL_FACTORY_ADDRESS, queryId = generateRandomQueryId() } =
+    params
 
   const initSqrtPriceCell = beginCell()
     .storeUint(getSqrtPriceX128(params.initialRawPrice), 256)
