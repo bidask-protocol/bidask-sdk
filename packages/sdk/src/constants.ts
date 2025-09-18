@@ -33,7 +33,7 @@ export const TESTNET_MEMEPOOL_FACTORY_ADDRESS = Address.parse(
 
 /** Testnet meme factory address */
 export const TESTNET_MEME_FACTORY_ADDRESS = Address.parse(
-  'kQBy4rdTtrBoJc3SXq6Y9pMsy_JZAz9LW7sXnIwxjDKeUNfG',
+  'kQDVekMudCe__jbd8gh72Ne3tcvj7nZY9AkJJem632mlkpAf',
 )
 
 /**
