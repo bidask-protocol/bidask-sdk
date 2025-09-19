@@ -13,6 +13,7 @@ import { createDeployDlmmPoolTxParams } from './deploy-dlmm-pool'
  * @param params.initialRawPrice - Initial raw price of the pool
  * @param params.seedCell - Seed cell for the pool
  * @param params.poolDeployerAddress - Optional address of the pool deployer (defaults to POOL_FACTORY_ADDRESS)
+ * @param params.initSqrtPriceX128 - Optional initial sqrt price X 128 (defaults to the price calculated from initialRawPrice)
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @returns Transaction parameters
  */
@@ -24,6 +25,7 @@ export const createDeployClmmPoolTxParams = (params: {
   initialRawPrice: number
   seedCell: Cell
   poolDeployerAddress?: Address
+  initSqrtPriceX128?: bigint
   queryId?: bigint
 }): TxParams => {
   return createDeployDlmmPoolTxParams({
