@@ -25,7 +25,7 @@ export function createClaimMemePoolOwnerFeesTxParams(params: {
   const { queryId = generateRandomQueryId() } = params
 
   const payloadCell = beginCell()
-    .storeUint(0x17c8f2b, 28) // JettonClaimFees opcode
+    .storeUint(0x17c8f2b, 32) // JettonClaimFees opcode
     .storeUint(queryId, 64) // Query ID
     .storeAddress(params.lpMultitokenAddress)
     .storeInt(params.firstBinGroup, 32) // First bin group

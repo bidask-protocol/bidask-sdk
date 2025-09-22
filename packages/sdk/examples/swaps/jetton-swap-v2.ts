@@ -31,6 +31,7 @@ const poolAddress = await getPoolAddress()
 const { jetton0Master, userJetton0WalletAddress, jetton1Master, userJetton1WalletAddress } =
   await getJettonAddressesByPool(client, poolAddress, walletContractOpened.address)
 
+
 // Get token info
 const jetton0Info = await getJettonInfo(jetton0Master)
 const jetton1Info = await getJettonInfo(jetton1Master)
