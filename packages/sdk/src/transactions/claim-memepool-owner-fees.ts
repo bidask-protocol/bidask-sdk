@@ -5,7 +5,7 @@ import { generateRandomQueryId } from '../utils'
 
 /**
  * @ignore
- * 
+ *
  * Creates transaction parameters for claiming memepool fees from LP multitoken contract
  * @param params - Parameters for the transaction
  * @param params.lpMultitokenAddress - Address of the LP multitoken contract
@@ -17,7 +17,7 @@ import { generateRandomQueryId } from '../utils'
  * @returns Transaction parameters
  */
 export function createClaimMemePoolOwnerFeesTxParams(params: {
-  jettonMasterAddress: Address
+  memeAddress: Address
   lpMultitokenAddress: Address
   firstBinGroup: number
   lastBinGroup: number
@@ -38,7 +38,7 @@ export function createClaimMemePoolOwnerFeesTxParams(params: {
   const constantClaimGas = toNano('1')
 
   return {
-    to: params.jettonMasterAddress,
+    to: params.memeAddress,
     value: constantClaimGas,
     payload: payloadCell,
   }
