@@ -28,6 +28,9 @@ function vanityConfigToCell(config: MemeVanityConfig): Cell {
     .endCell()
 }
 
+/**
+ * @ignore
+ */
 export class MemeVanity implements Contract {
   static code = MEME_VANITY_CODE
   static codeCell = MEME_VANITY_CODE_CELL

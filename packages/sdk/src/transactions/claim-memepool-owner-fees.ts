@@ -4,6 +4,8 @@ import { TxParams } from '../types'
 import { generateRandomQueryId } from '../utils'
 
 /**
+ * @ignore
+ * 
  * Creates transaction parameters for claiming memepool fees from LP multitoken contract
  * @param params - Parameters for the transaction
  * @param params.lpMultitokenAddress - Address of the LP multitoken contract

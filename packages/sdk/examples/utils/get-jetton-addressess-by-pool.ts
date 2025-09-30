@@ -1,4 +1,4 @@
-import { Address, JettonMaster, OpenedContract, TonClient } from '@ton/ton'
+import { Address, JettonMaster, TonClient } from '@ton/ton'
 
 import { JettonWalletContract, PoolContract, TON_ADDRESS } from '../../src'
 import { rateLimiter } from './rate-limiter'

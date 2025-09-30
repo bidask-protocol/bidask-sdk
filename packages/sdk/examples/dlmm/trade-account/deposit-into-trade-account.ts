@@ -20,7 +20,7 @@ const rl = createInterface({
 // Get pool address
 const poolAddress = await getPoolAddress()
 
-// Get user's jetton wallet addresses for the pool
+// Get user's jetton wallet addresses for tokens in the pool
 const { userJetton0WalletAddress, userJetton1WalletAddress, jetton0Master, jetton1Master } =
   await getJettonAddressesByPool(client, poolAddress, walletContractOpened.address)
 

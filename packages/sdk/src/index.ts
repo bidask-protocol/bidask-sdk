@@ -7,6 +7,7 @@
  *
  * @packageDocumentation
  */
+import BigNumber from 'bignumber.js'
 
 export * from './contracts'
 export * from './types'
@@ -22,3 +23,9 @@ export {
   TESTNET_MEMEPOOL_FACTORY_ADDRESS,
 } from './constants'
 export * from './transactions'
+
+BigNumber.config({
+  POW_PRECISION: 80,
+  DECIMAL_PLACES: 80,
+  EXPONENTIAL_AT: 1e9,
+})

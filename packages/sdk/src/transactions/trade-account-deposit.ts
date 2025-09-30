@@ -6,6 +6,8 @@ import { generateRandomQueryId, isZeroAddress } from '../utils'
 import { createTransferJettonTxParams } from './transfer-jetton'
 
 /**
+ * @internal
+ * 
  * Creates a transaction parameters for depositing tokens into a trade account
  *
  * @param params - Parameters for the transaction

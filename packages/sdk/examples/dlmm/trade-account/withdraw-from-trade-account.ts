@@ -32,8 +32,8 @@ const jetton0Info = await getJettonInfo(jetton0Master)
 const jetton1Info = await getJettonInfo(jetton1Master)
 
 // Get pool contract and trade account address
-const poolContract = client.open(PoolContract.create(poolAddress))
-const tradeAccountAddress = await poolContract.getTradeAccountAddress({
+const poolContractOpened = client.open(PoolContract.create(poolAddress))
+const tradeAccountAddress = await poolContractOpened.getTradeAccountAddress({
   userAddress: walletContractOpened.address,
   seedCell: tradingAccountSeed,
 })

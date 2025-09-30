@@ -2,6 +2,8 @@ import Big from 'bignumber.js'
 
 import { toBigInt } from './bigint'
 
+const twoPow128 = Big('340282366920938463463374607431768211456') // 2^128
+
 /**
  * Gets the sqrt price X 128
  * @param price - The price
@@ -9,7 +11,7 @@ import { toBigInt } from './bigint'
  */
 export const getSqrtPriceX128 = (price: number): bigint => {
   const sqrt = Big(price).sqrt()
-  return toBigInt(sqrt.multipliedBy(Big(2).pow(128)).toPrecision(100))
+  return toBigInt(sqrt.multipliedBy(twoPow128).toPrecision(100))
 }
 
 /**
@@ -18,7 +20,7 @@ export const getSqrtPriceX128 = (price: number): bigint => {
  * @returns The price
  */
 export const getPriceFromSqrtPriceX128 = (sqrtPriceX128: bigint): number => {
-  const sqrt = Big(sqrtPriceX128).div(Big(2).pow(128)).pow(2)
+  const sqrt = Big(sqrtPriceX128).div(twoPow128).pow(2)
   return sqrt.toNumber()
 }
 

@@ -9,9 +9,9 @@ import {
   RangeContract,
   toBigInt,
 } from '../../src'
+import { getJettonAddressesByPool } from '../utils/get-jetton-addressess-by-pool'
 import { getJettonInfo } from '../utils/get-jetton-info'
 import { getPoolAddress } from '../utils/get-pool-address'
-import { getJettonAddressesByPool } from '../utils/get-user-wallet-addressess-by-pool'
 import { sendMultipleTransactions } from '../utils/send-multiple-transactions'
 import { setupEnv } from '../utils/setup-env'
 
@@ -30,7 +30,6 @@ const poolAddress = await getPoolAddress()
 // Get jetton master addresses for the pool
 const { jetton0Master, userJetton0WalletAddress, jetton1Master, userJetton1WalletAddress } =
   await getJettonAddressesByPool(client, poolAddress, walletContractOpened.address)
-
 
 // Get token info
 const jetton0Info = await getJettonInfo(jetton0Master)

@@ -5,23 +5,24 @@
  * @returns The bigint value
  */
 export const toBigInt = (amount: number | string, decimals: number | string = 0): bigint => {
-  const decimalsNumber = Number(decimals)
-  const multiplier = BigInt(10) ** BigInt(decimalsNumber)
-
   let amountString: string
   if (typeof amount === 'string') {
-    amountString = amount
+    amountString = numberExponentToLarge(amount)
   } else if (Number.isFinite(amount)) {
     amountString = numberExponentToLarge(amount)
   } else {
     amountString = '0'
   }
 
-  const [integerPart, fractionalPart = ''] = String(amountString).split('.')
+  const [integerPart, fractionalPart = ''] = amountString.split('.')
+
+  const decimalsNumber = Number(decimals)
   const fractionStr = (fractionalPart + '0'.repeat(decimalsNumber)).slice(0, decimalsNumber)
 
   const integerPartBigInt = BigInt(integerPart)
   const fractionalPartBigInt = BigInt(fractionStr)
+
+  const multiplier = BigInt(10) ** BigInt(decimalsNumber)
 
   return integerPartBigInt * multiplier + fractionalPartBigInt
 }

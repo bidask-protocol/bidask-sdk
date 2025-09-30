@@ -35,6 +35,9 @@ export class PoolContract implements Contract {
     return result.stack.readAddress()
   }
 
+  /**
+   * @internal
+   */
   async getTradeAccountAddress(
     provider: ContractProvider,
     params: { userAddress: Address; seedCell: Cell },

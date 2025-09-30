@@ -1,4 +1,6 @@
 export { PoolContract } from './PoolContract'
+export { PoolContract as PoolDlmmContract } from './PoolContract'
+export { PoolDammContract } from './PoolDammContract'
 export { RangeContract } from './RangeContract'
 export { JettonWalletContract } from './JettonWalletContract'
 export { LpMultitokenContract } from './LpMultitokenContract'

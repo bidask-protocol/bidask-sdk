@@ -36,6 +36,9 @@ function createBody(payload: Cell, keypair: KeyPair) {
     .endCell()
 }
 
+/**
+ * @internal
+ */
 export class TradeAccount implements Contract {
   static readonly Opcodes = {
     DepositOnAccount: 0xd8e04bf6,

@@ -2,21 +2,21 @@ import { toNano } from '@ton/ton'
 import { createInterface } from 'readline/promises'
 
 import {
+  createDeployDlmmPoolTxParams,
+  createDeployMemeTokenTxParams,
+  createSeedCell,
+  getBinByPrice,
   LiquidityProvideBins,
   MemeJettonWallet,
   MemeVanity,
   PoolFactory,
-  TESTNET_MEMEPOOL_FACTORY_ADDRESS,
   TESTNET_MEME_FACTORY_ADDRESS,
+  TESTNET_MEMEPOOL_FACTORY_ADDRESS,
   TON_ADDRESS,
-  createDeployDlmmPoolTxParams,
-  createDeployMemeTokenTxParams,
-  createSeedCell,
-  getBinByPrice
-} from '../../src'
-import { rateLimiter } from '../utils/rate-limiter'
-import { sendMultipleTransactions } from '../utils/send-multiple-transactions'
-import { setupEnv } from '../utils/setup-env'
+} from '../../../src'
+import { rateLimiter } from '../../utils/rate-limiter'
+import { sendMultipleTransactions } from '../../utils/send-multiple-transactions'
+import { setupEnv } from '../../utils/setup-env'
 
 const { client, walletKeypair, walletContract, walletContractOpened } = await setupEnv()
 

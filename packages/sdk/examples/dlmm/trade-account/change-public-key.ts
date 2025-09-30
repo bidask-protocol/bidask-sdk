@@ -1,10 +1,10 @@
 import { mnemonicNew, mnemonicToPrivateKey } from '@ton/crypto'
 import { createInterface } from 'readline/promises'
 
-import { getDeadline, PoolContract, TradeAccount } from '../../src'
-import { getPoolAddress } from '../utils/get-pool-address'
-import { rateLimiter } from '../utils/rate-limiter'
-import { setupTradeAccountEnv } from '../utils/setup-env'
+import { getDeadline, PoolContract, TradeAccount } from '../../../src'
+import { getPoolAddress } from '../../utils/get-pool-address'
+import { rateLimiter } from '../../utils/rate-limiter'
+import { setupTradeAccountEnv } from '../../utils/setup-env'
 
 // Example of changing public key for a trade account
 const { client, walletContractOpened, tradeAccountKeypair, tradingAccountSeed } =

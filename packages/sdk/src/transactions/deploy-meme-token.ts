@@ -7,6 +7,8 @@ import { fromBigInt, generateRandomQueryId, getBinByPrice } from '../utils'
 import { createLiquidityProvideDict } from '../utils/liquidity/dictionary'
 
 /**
+ * @ignore
+ * 
  * Creates transaction parameters for deploying a meme token with liquidity pool
  * @param params - Parameters for the transaction
  * @param params.maxSupply - Maximum supply of the meme token

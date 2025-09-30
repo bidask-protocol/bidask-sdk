@@ -43,18 +43,18 @@ const jetton0Info = await rateLimiter(getJettonInfo(jetton0Master))
 const jetton1Info = await rateLimiter(getJettonInfo(jetton1Master))
 
 // Get pool contract and current price
-const poolContract = client.open(PoolContract.create(poolAddress))
-const { bps } = await rateLimiter(poolContract.getPoolInfo())
+const poolContractOpened = client.open(PoolContract.create(poolAddress))
+const { bps } = await rateLimiter(poolContractOpened.getPoolInfo())
 
-const activeRangeAddress = await rateLimiter(poolContract.getActiveRange())
-const activeRangeContract = client.open(RangeContract.create(activeRangeAddress))
-const sqrtPriceX128 = await rateLimiter(activeRangeContract.getSqrtPrice())
+const activeRangeAddress = await rateLimiter(poolContractOpened.getActiveRange())
+const activeRangeContractOpened = client.open(RangeContract.create(activeRangeAddress))
+const sqrtPriceX128 = await rateLimiter(activeRangeContractOpened.getSqrtPrice())
 const currentPrice = getPriceFromSqrtPriceX128(sqrtPriceX128)
 const currentBin = getBinByPrice(currentPrice, bps)
 
 // Get trade account address
 const tradeAccountAddress = await rateLimiter(
-  poolContract.getTradeAccountAddress({
+  poolContractOpened.getTradeAccountAddress({
     userAddress: walletContractOpened.address,
     seedCell: tradingAccountSeed,
   }),
@@ -98,7 +98,7 @@ const binsToProvide = createCurveShape({
 
 // Get range statuses to determine if ranges are initialized
 const rangesStatuses = await rateLimiter(
-  poolContract.getRangesStatusesByLiquidityBins(binsToProvide.bins),
+  poolContractOpened.getRangesStatusesByLiquidityBins(binsToProvide.bins),
 )
 const hasInitializedRange = Object.values(rangesStatuses).includes(RangeStatus.Initialized)
 const rangeStatus = hasInitializedRange ? RangeStatus.Initialized : RangeStatus.Uninitialized

@@ -1,13 +1,12 @@
 import { Address } from '@ton/ton'
 import { createInterface } from 'readline/promises'
 
-import { setupTradeAccountEnv } from '../utils/setup-env'
-import { createClaimMemePoolOwnerFeesTxParams } from '../../src'
-import { sendMultipleTransactions } from '../utils/send-multiple-transactions'
+import { createClaimMemePoolOwnerFeesTxParams } from '../../../src'
+import { sendMultipleTransactions } from '../../utils/send-multiple-transactions'
+import { setupTradeAccountEnv } from '../../utils/setup-env'
 
 // Interactive liquidity removal function using TradeAccount
-const {  walletContractOpened, walletKeypair } =
-  await setupTradeAccountEnv()
+const { walletContractOpened, walletKeypair } = await setupTradeAccountEnv()
 
 // Setup readline interface for user prompts
 const rl = createInterface({
@@ -25,12 +24,11 @@ const jettonMasterAddress = Address.parse(jettonMasterAddressInput)
 
 rl.close()
 
-
 const txParams = createClaimMemePoolOwnerFeesTxParams({
   lpMultitokenAddress,
   jettonMasterAddress,
-  firstBinGroup: Math.floor(-298/4),
-  lastBinGroup: Math.floor(-298/4),
+  firstBinGroup: Math.floor(-298 / 4),
+  lastBinGroup: Math.floor(-298 / 4),
 })
 
 await sendMultipleTransactions(walletContractOpened, walletKeypair, [txParams])

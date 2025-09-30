@@ -26,14 +26,24 @@ export const POOL_FACTORY_ADDRESS = Address.parse(
   'EQAuBZGak9BdkxuCC9gWUsY4Em3jog94BI4eRzX-3_Bidask',
 )
 
-/** Testnet memepool factory address */
+/**
+ * @ignore
+ *
+ * Testnet memepool factory address
+ *
+ * */
 export const TESTNET_MEMEPOOL_FACTORY_ADDRESS = Address.parse(
   '0QCP-pjWgVb6clw0tlMouAOR4yHI6uJp9w0h-TgjcQbk3TeZ',
 )
 
-/** Testnet meme factory address */
+/**
+ * @ignore
+ *
+ * Testnet meme factory address
+ *
+ * */
 export const TESTNET_MEME_FACTORY_ADDRESS = Address.parse(
-  'kQDUkYuOlbTlwru82thrJ9AD5k5GItm7kbLgz8kqou--sZdw',
+  'kQBtsL6K6ambRRCmdUXSpmeT5ZWxjfTNUASpjluzAt7rIkDV',
 )
 
 /**

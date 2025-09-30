@@ -42,16 +42,16 @@ const jetton0Info = await getJettonInfo(jetton0Master)
 const jetton1Info = await getJettonInfo(jetton1Master)
 
 // Get pool contract and current price
-const poolContract = client.open(PoolContract.create(poolAddress))
-const { bps } = await poolContract.getPoolInfo()
-const activeRangeAddress = await poolContract.getActiveRange()
+const poolContractOpened = client.open(PoolContract.create(poolAddress))
+const { bps } = await poolContractOpened.getPoolInfo()
+const activeRangeAddress = await poolContractOpened.getActiveRange()
 const activeRangeContract = client.open(RangeContract.create(activeRangeAddress))
 const sqrtPriceX128 = await activeRangeContract.getSqrtPrice()
 const currentPrice = getPriceFromSqrtPriceX128(sqrtPriceX128)
 const currentBin = getBinByPrice(currentPrice, bps)
 
 // Get trade account address
-const tradeAccountAddress = await poolContract.getTradeAccountAddress({
+const tradeAccountAddress = await poolContractOpened.getTradeAccountAddress({
   userAddress: walletContractOpened.address,
   seedCell: tradingAccountSeed,
 })
@@ -66,8 +66,8 @@ const lpMultitokenAddressInput = await rl.question('Enter LP multitoken contract
 const lpMultitokenAddress = Address.parse(lpMultitokenAddressInput)
 
 // Get LP token positions
-const lpMultitokenContract = client.open(LpMultitokenContract.create(lpMultitokenAddress))
-const lpTokens = await lpMultitokenContract.getTokens()
+const lpMultitokenContractOpened = client.open(LpMultitokenContract.create(lpMultitokenAddress))
+const lpTokens = await lpMultitokenContractOpened.getTokens()
 
 // Filter out bins with zero LP tokens
 const nonZeroBins = Object.entries(lpTokens)

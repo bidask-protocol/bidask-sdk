@@ -41,11 +41,11 @@ const jetton0Info = await rateLimiter(getJettonInfo(jetton0Master))
 const jetton1Info = await rateLimiter(getJettonInfo(jetton1Master))
 
 // Get current price for partial execution parameters
-const poolContract = client.open(PoolContract.create(poolAddress))
+const poolContractOpened = client.open(PoolContract.create(poolAddress))
 
 // Get trade account address from pool contract
 const tradeAccountAddress = await rateLimiter(
-  poolContract.getTradeAccountAddress({
+  poolContractOpened.getTradeAccountAddress({
     userAddress: walletContractOpened.address,
     seedCell: tradingAccountSeed,
   }),
@@ -68,7 +68,7 @@ const tokenAmountInput = await rl.question(`Enter ${tokenToSwap} amount to swap:
 const tokenAmount = toBigInt(tokenAmountInput, decimals)
 
 // Get current price for partial execution parameters
-const activeRangeAddress = await rateLimiter(poolContract.getActiveRange())
+const activeRangeAddress = await rateLimiter(poolContractOpened.getActiveRange())
 const activeRangeContract = client.open(RangeContract.create(activeRangeAddress))
 const sqrtPriceX128 = await rateLimiter(activeRangeContract.getSqrtPrice())
 

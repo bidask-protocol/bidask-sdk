@@ -3,11 +3,6 @@ import BigNumber from 'bignumber.js'
 import { LiquidityProvideBins, ShapeCreatorResult } from '../../../types/liquidity'
 import { toBigInt } from '../../bigint'
 
-BigNumber.config({
-  POW_PRECISION: 80,
-  DECIMAL_PLACES: 80,
-})
-
 function bigNumberIntoBigint(x: BigNumber): bigint {
   return toBigInt(x.toFixed(0, BigNumber.ROUND_DOWN))
 }
@@ -193,11 +188,7 @@ export function shapeCreator(
       sqrtP.minus(pa).dividedBy(pb.minus(pa)),
       pb.minus(sqrtP).dividedBy(pb.minus(pa)),
     ]
-    const magnitude: [number, number] = [
-      countBetween(fromBin, curBin),
-      countBetween(curBin, toBin),
-    ]
-
+    const magnitude: [number, number] = [countBetween(fromBin, curBin), countBetween(curBin, toBin)]
 
     const curBinUnits: [BigNumber, BigNumber] = [
       share[0].multipliedBy(shape === 'curve' ? magnitude[0] : 1),
@@ -280,10 +271,14 @@ export function shapeCreator(
       inCurBin = [calculateY(L, sqrtP, pa, pb), calculateX(L, sqrtP, pa, pb)]
     } else {
       if (autocomplete === 'x') {
-        perUnit[1] = perUnit[0].dividedBy(sqrtP.pow(2)).multipliedBy(shape !== 'spot' ? magnitude[0] / magnitude[1] : 1)
+        perUnit[1] = perUnit[0]
+          .dividedBy(sqrtP.pow(2))
+          .multipliedBy(shape !== 'spot' ? magnitude[0] / magnitude[1] : 1)
         amount[1] = perUnit[1].multipliedBy(units[1].plus(curBinUnits[1]))
       } else if (autocomplete === 'y') {
-        perUnit[0] = perUnit[1].multipliedBy(sqrtP.pow(2)).multipliedBy(shape !== 'spot' ? magnitude[1] / magnitude[0] : 1)
+        perUnit[0] = perUnit[1]
+          .multipliedBy(sqrtP.pow(2))
+          .multipliedBy(shape !== 'spot' ? magnitude[1] / magnitude[0] : 1)
         amount[0] = perUnit[0].multipliedBy(units[0].plus(curBinUnits[0]))
       }
       inCurBin = [curBinUnits[0].multipliedBy(perUnit[0]), curBinUnits[1].multipliedBy(perUnit[1])]

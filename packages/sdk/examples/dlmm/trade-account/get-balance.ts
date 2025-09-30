@@ -11,11 +11,12 @@ const { client, walletContractOpened, tradingAccountSeed } = await setupTradeAcc
 // Get pool address from env or user input
 const poolAddress = await getPoolAddress()
 
-// Get pool contract and trade account address
-const poolContract = client.open(PoolContract.create(poolAddress))
+// Get pool contract
+const poolContractOpened = client.open(PoolContract.create(poolAddress))
 
+// Get trade account address
 const tradeAccountAddress = await rateLimiter(
-  poolContract.getTradeAccountAddress({
+  poolContractOpened.getTradeAccountAddress({
     userAddress: walletContractOpened.address,
     seedCell: tradingAccountSeed,
   }),
@@ -25,7 +26,7 @@ const tradeAccountAddress = await rateLimiter(
 const tradeAccount = TradeAccount.createFromAddress(tradeAccountAddress)
 const tradeAccountOpened = client.open(tradeAccount)
 
-// Get deposit balance
+// Get balances
 const { token0Amount, token1Amount } = await rateLimiter(tradeAccountOpened.getDepositBalance())
 
 // Get token info for display
