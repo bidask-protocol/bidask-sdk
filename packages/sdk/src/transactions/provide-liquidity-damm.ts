@@ -44,7 +44,6 @@ export function createProvideLiquidityDammTxParams(params: {
 
   const forwardPayload = beginCell()
     .storeUint(0x63ec24ae, 32)
-    .storeBit(isReceiverAccount)
     .storeAddress(receiverAddress)
     .storeBit(lockLiquidity)
     .storeMaybeRef(params.rejectPayload)
