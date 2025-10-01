@@ -1,16 +1,16 @@
 import { Address, beginCell, Cell, toNano } from '@ton/ton'
-import BigNumber from 'bignumber.js'
 
 import { POOL_FACTORY_ADDRESS } from '../constants'
 import type { TxParams } from '../types'
-import { generateRandomQueryId, toBigInt } from '../utils'
+import { generateRandomQueryId } from '../utils'
 
 export const createDeployDammPoolTxParams = (params: {
   token0PoolWalletAddress: Address
   token1PoolWalletAddress: Address
   tokenXAmount: bigint
   tokenYAmount: bigint
-  initialRawPrice: number
+  virtualXAmount: bigint
+  virtualYAmount: bigint
   baseFee: bigint
   dynamicFeeFactor: bigint
   timeFilter: bigint
@@ -34,34 +34,6 @@ export const createDeployDammPoolTxParams = (params: {
     throw new Error('timeFilter must be < timeDecay')
   }
 
-  let virtualXAmount: bigint
-  let virtualYAmount: bigint
-
-  const tokensRelation = Number(params.tokenYAmount) / Number(params.tokenXAmount)
-
-  const relation = tokensRelation / params.initialRawPrice
-
-  if (relation === 1) {
-    virtualXAmount = 0n
-    virtualYAmount = 0n
-  } else if (relation < 1) {
-    virtualXAmount = 0n
-    virtualYAmount = toBigInt(
-      BigNumber(params.tokenXAmount)
-        .multipliedBy(params.initialRawPrice)
-        .minus(params.tokenYAmount)
-        .toString(),
-    )
-  } else {
-    virtualXAmount = toBigInt(
-      BigNumber(params.tokenYAmount)
-        .dividedBy(params.initialRawPrice)
-        .minus(params.tokenXAmount)
-        .toString(),
-    )
-    virtualYAmount = 0n
-  }
-
   const deployDammPoolPayload = beginCell()
     .storeUint(0x0273228f, 32)
     .storeUint(queryId, 64)
@@ -77,8 +49,8 @@ export const createDeployDammPoolTxParams = (params: {
     .storeRef(
       beginCell()
         .storeCoins(params.tokenYAmount)
-        .storeCoins(virtualXAmount)
-        .storeCoins(virtualYAmount),
+        .storeCoins(params.virtualXAmount)
+        .storeCoins(params.virtualYAmount),
     )
     .endCell()
 

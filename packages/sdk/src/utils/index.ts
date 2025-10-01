@@ -11,6 +11,11 @@ export { createSeedCell } from './seed'
 export { getRangeByBin, getFirstBinByRange } from './ranges'
 export { generateRandomQueryId } from './transactions'
 export {
+  calculateVirtualTokens,
+  calculateVirtualTokensWithBoundsFromX,
+  calculateVirtualTokensWithBoundsFromY,
+} from './virtual-tokens'
+export {
   calculateCentralAmountXByAmountY,
   calculateCentralAmountYByAmountX,
 } from './liquidity/shapes/central-bin'

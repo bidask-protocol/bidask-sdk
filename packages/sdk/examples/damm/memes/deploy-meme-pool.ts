@@ -1,11 +1,12 @@
 import { toNano } from '@ton/ton'
-import { BigNumber } from 'bignumber.js'
 import { createInterface } from 'readline/promises'
 
 import {
+  calculateVirtualTokens,
   createDeployDammMemeTokenTxParams,
   createDeployDammPoolTxParams,
   createSeedCell,
+  fromBigInt,
   MemeJettonWallet,
   MemeVanity,
   PoolFactory,
@@ -61,15 +62,22 @@ const memeTokenAmount = toNano(100)
 const memeToBuyback = toNano(2)
 const initialRawPrice = 3.5356
 const memeToSupply = memeTokenAmount - memeToBuyback
+const tonToSpend = toBigInt(Number(fromBigInt(memeToSupply, 9)) * initialRawPrice, 9)
 
-const tonToSpend = toBigInt(BigNumber(memeToBuyback).multipliedBy(initialRawPrice).toString())
+// Calculate virtual tokens and auto-complete TON amount
+const { virtualXAmount, virtualYAmount } = calculateVirtualTokens(
+  initialRawPrice,
+  memeToSupply,
+  tonToSpend,
+)
 
 const txParams = createDeployDammPoolTxParams({
   token0PoolWalletAddress: jettonWalletContract.address,
   token1PoolWalletAddress: TON_ADDRESS,
   tokenXAmount: memeToSupply,
   tokenYAmount: tonToSpend,
-  initialRawPrice,
+  virtualXAmount,
+  virtualYAmount,
   baseFee: 10n,
   dynamicFeeFactor: 0n,
   timeFilter: 0n,
