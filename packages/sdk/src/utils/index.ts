@@ -14,8 +14,13 @@ export {
   calculateVirtualTokens,
   calculateVirtualTokensWithBoundsFromX,
   calculateVirtualTokensWithBoundsFromY,
+  calculateMaxPrice,
+  calculateMinPrice,
+  calculateTokenXToAddByTokenY,
+  calculateTokenYToAddByTokenX,
 } from './virtual-tokens'
 export {
   calculateCentralAmountXByAmountY,
   calculateCentralAmountYByAmountX,
+
 } from './liquidity/shapes/central-bin'
