@@ -64,7 +64,7 @@ export function createDeployDammMemeTokenTxParams(params: {
     .storeUint(0xaa41517c, 32) // deploy_meme opcode
     .storeUint(queryId, 64)
     .storeCoins(params.maxSupply)
-    .storeRef(metadata)
+    .storeMaybeRef(metadata)
     .storeBit(bidaskExclusive)
     .storeCoins(params.memeToSupply)
     .storeAddress(params.poolAddress)
