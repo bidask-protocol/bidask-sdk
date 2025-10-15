@@ -55,16 +55,57 @@ export function calculateVirtualTokensWithBoundsFromX(
   currentPrice: number,
   tokenXAmount: bigint,
 ): { virtualXAmount: bigint; virtualYAmount: bigint; tokenYAmount: bigint } {
-  if (priceLower < 0 || priceUpper <= 0) {
-    throw new Error('Price bounds must be positive')
+  // Validation: allow priceLower >= 0 and priceUpper > 0 or Infinity
+  if (priceLower < 0) {
+    throw new Error('priceLower must be >= 0')
   }
 
-  if (priceLower > currentPrice) {
+  if (priceUpper <= 0 && priceUpper !== Infinity) {
+    throw new Error('priceUpper must be > 0 or Infinity')
+  }
+
+  if (priceLower > 0 && priceLower > currentPrice) {
     throw new Error('priceLower must be <= currentPrice')
   }
 
-  if (currentPrice >= priceUpper) {
+  if (priceUpper !== Infinity && currentPrice >= priceUpper) {
     throw new Error('currentPrice must be < priceUpper')
+  }
+
+  // Edge case: fully unbounded pool (no bounds at all)
+  if (priceLower === 0 && priceUpper === Infinity) {
+    return {
+      virtualXAmount: 0n,
+      virtualYAmount: 0n,
+      tokenYAmount: toBigInt(BigNumber(currentPrice).multipliedBy(tokenXAmount).toString()),
+    }
+  }
+
+  // Edge case: only lower bound exists (no upper bound)
+  // y_v = X * sqrt(p * p_a), y = pX - y_v
+  if (priceUpper === Infinity) {
+    const virtualYAmount = toBigInt(
+      BigNumber(currentPrice).multipliedBy(priceLower).sqrt().multipliedBy(tokenXAmount).toString(),
+    )
+    const tokenYAmount = toBigInt(
+      BigNumber(currentPrice).multipliedBy(tokenXAmount).minus(virtualYAmount).toString(),
+    )
+    return { virtualXAmount: 0n, virtualYAmount, tokenYAmount }
+  }
+
+  // Edge case: only upper bound exists (no lower bound)
+  // x_v = Y / sqrt(p * p_b), but we need to derive from X
+  if (priceLower === 0) {
+    const virtualXAmount = toBigInt(
+      BigNumber(currentPrice)
+        .multipliedBy(tokenXAmount)
+        .dividedBy(priceUpper - currentPrice)
+        .toString(),
+    )
+    const tokenYAmount = toBigInt(
+      BigNumber(currentPrice).multipliedBy(BigNumber(tokenXAmount).plus(virtualXAmount)).toString(),
+    )
+    return { virtualXAmount, virtualYAmount: 0n, tokenYAmount }
   }
 
   // Cache common subexpressions for clarity and performance
@@ -106,16 +147,59 @@ export function calculateVirtualTokensWithBoundsFromY(
   currentPrice: number,
   tokenYAmount: bigint,
 ): { virtualXAmount: bigint; virtualYAmount: bigint; tokenXAmount: bigint } {
-  if (priceLower < 0 || priceUpper <= 0) {
-    throw new Error('Price bounds must be positive')
+  // Validation: allow priceLower >= 0 and priceUpper > 0 or Infinity
+  if (priceLower < 0) {
+    throw new Error('priceLower must be >= 0')
   }
 
-  if (priceLower >= currentPrice) {
+  if (priceUpper <= 0 && priceUpper !== Infinity) {
+    throw new Error('priceUpper must be > 0 or Infinity')
+  }
+
+  if (priceLower > 0 && priceLower >= currentPrice) {
     throw new Error('priceLower must be < currentPrice')
   }
 
-  if (currentPrice > priceUpper) {
+  if (priceUpper !== Infinity && currentPrice > priceUpper) {
     throw new Error('currentPrice must be <= priceUpper')
+  }
+
+  // Edge case: fully unbounded pool (no bounds at all)
+  if (priceLower === 0 && priceUpper === Infinity) {
+    return {
+      virtualXAmount: 0n,
+      virtualYAmount: 0n,
+      tokenXAmount: toBigInt(BigNumber(tokenYAmount).dividedBy(currentPrice).toString()),
+    }
+  }
+
+  // Edge case: only lower bound exists (no upper bound)
+  // y_v = X * sqrt(p * p_a), y = pX - y_v
+  // Solving for X: X = Y / (p - sqrt(p * p_a))
+  if (priceUpper === Infinity) {
+    const sqrtPriceLowerCurrent = BigNumber(priceLower).multipliedBy(currentPrice).sqrt()
+    const tokenXAmount = toBigInt(
+      BigNumber(tokenYAmount)
+        .dividedBy(BigNumber(currentPrice).minus(sqrtPriceLowerCurrent))
+        .toString(),
+    )
+    const virtualYAmount = toBigInt(sqrtPriceLowerCurrent.multipliedBy(tokenXAmount).toString())
+
+    return { virtualXAmount: 0n, virtualYAmount, tokenXAmount }
+  }
+
+  // Edge case: only upper bound exists (no lower bound)
+  // x_v = Y / sqrt(p * p_b), x = Y/p - x_v
+  if (priceLower === 0) {
+    const virtualXAmount = toBigInt(
+      BigNumber(tokenYAmount)
+        .dividedBy(BigNumber(currentPrice).multipliedBy(priceUpper).sqrt())
+        .toString(),
+    )
+    const tokenXAmount = toBigInt(
+      BigNumber(tokenYAmount).dividedBy(currentPrice).minus(virtualXAmount).toString(),
+    )
+    return { virtualXAmount, virtualYAmount: 0n, tokenXAmount }
   }
 
   // Cache common subexpressions to avoid redundant calculations
