@@ -241,7 +241,7 @@ export function calculateTokenXToAddByTokenY(
   tokenYToAdd: bigint,
 ): bigint {
   if (tokenYAmount === 0n) {
-    throw new Error('Cannot calculate: Y = 0')
+    return 0n
   }
 
   // deltaX = deltaY * X / Y
@@ -269,7 +269,7 @@ export function calculateTokenYToAddByTokenX(
   tokenXToAdd: bigint,
 ): bigint {
   if (tokenXAmount === 0n) {
-    throw new Error('Cannot calculate: X = 0')
+    return 0n
   }
 
   // deltaY = deltaX * Y / X
@@ -281,57 +281,93 @@ export function calculateTokenYToAddByTokenX(
 }
 
 /**
- * Calculates the minimum price (lower bound p_a) from token amounts and virtual tokens.
- * Formula: p_a = y_v / (X + x_v)
- * At minimum price, all Y is depleted (Y = 0).
+ * Extracts price bounds (p_a and p_b) from token amounts and virtual token data.
+ * This is the inverse operation of calculateVirtualTokensWithBoundsFromX/Y.
+ * The current price is calculated from the relationship: Y = p(X + x_v) - y_v
  *
- * @param tokenXAmount - Amount of token X
- * @param virtualXAmount - Virtual amount of token X
- * @param virtualYAmount - Virtual amount of token Y
- * @returns Minimum price, or null if no price bounds exist (both virtual amounts are 0)
+ * @param tokenXAmount - Amount of token X (X)
+ * @param tokenYAmount - Amount of token Y (Y)
+ * @param virtualXAmount - Virtual amount of token X (x_v)
+ * @param virtualYAmount - Virtual amount of token Y (y_v)
+ * @returns Object with priceLower (p_a) and priceUpper (p_b)
  */
-export function calculateMinPrice(
+export function calculatePriceBounds(
   tokenXAmount: bigint,
-  virtualXAmount: bigint,
-  virtualYAmount: bigint,
-): number | null {
-  if (virtualXAmount === 0n && virtualYAmount === 0n) {
-    return null
-  }
-
-  const denominator = BigNumber(tokenXAmount).plus(virtualXAmount)
-
-  if (denominator.isZero()) {
-    throw new Error('Cannot calculate min price: X + x_v = 0')
-  }
-
-  const minPrice = BigNumber(virtualYAmount).dividedBy(denominator).toNumber()
-  return minPrice
-}
-
-/**
- * Calculates the maximum price (upper bound p_b) from token amounts and virtual tokens.
- * Formula: p_b = (Y + y_v) / x_v
- * At maximum price, all X is depleted (X = 0).
- *
- * @param tokenYAmount - Amount of token Y
- * @param virtualXAmount - Virtual amount of token X
- * @param virtualYAmount - Virtual amount of token Y
- * @returns Maximum price, or null if no price bounds exist (both virtual amounts are 0)
- */
-export function calculateMaxPrice(
   tokenYAmount: bigint,
   virtualXAmount: bigint,
   virtualYAmount: bigint,
-): number | null {
+): { priceLower: number; priceUpper: number } {
+  // Validation
+  if (tokenXAmount < 0n || tokenYAmount < 0n || virtualXAmount < 0n || virtualYAmount < 0n) {
+    throw new Error('Token amounts must be >= 0')
+  }
+
+  // Calculate current price: p = (Y + y_v) / (X + x_v)
+  const totalX = BigNumber(tokenXAmount).plus(virtualXAmount)
+  const totalY = BigNumber(tokenYAmount).plus(virtualYAmount)
+
+  if (totalX.isZero()) {
+    throw new Error('tokenXAmount + virtualXAmount must be > 0')
+  }
+
+  const currentPrice = totalY.dividedBy(totalX).toNumber()
+
+  if (currentPrice <= 0) {
+    throw new Error('Calculated current price must be > 0')
+  }
+
+  // Case 1: No virtual tokens - fully unbounded pool
   if (virtualXAmount === 0n && virtualYAmount === 0n) {
-    return null
+    return { priceLower: 0, priceUpper: Infinity }
   }
 
-  if (virtualXAmount === 0n) {
-    throw new Error('Cannot calculate max price: x_v = 0')
+  // Case 2: Only virtual Y - only lower bound exists (no upper bound)
+  // Formula: p_a = y_v² / (p × X²)
+  if (virtualXAmount === 0n && virtualYAmount > 0n) {
+    if (tokenXAmount === 0n) {
+      throw new Error('tokenXAmount must be > 0 when virtualYAmount > 0')
+    }
+
+    const yVirtSq = BigNumber(virtualYAmount).multipliedBy(virtualYAmount)
+    const denominator = BigNumber(currentPrice)
+      .multipliedBy(tokenXAmount)
+      .multipliedBy(tokenXAmount)
+
+    const priceLower = yVirtSq.dividedBy(denominator).toNumber()
+
+    // Validate that priceLower < currentPrice
+    if (priceLower >= currentPrice) {
+      throw new Error('Calculated priceLower must be < currentPrice')
+    }
+
+    return { priceLower, priceUpper: Infinity }
   }
 
-  const maxPrice = BigNumber(tokenYAmount).plus(virtualYAmount).dividedBy(virtualXAmount).toNumber()
-  return maxPrice
+  // Case 3: Only virtual X - only upper bound exists (no lower bound)
+  // Formula: p_b = p(X + x_v) / x_v
+  if (virtualXAmount > 0n && virtualYAmount === 0n) {
+    const priceUpper = BigNumber(currentPrice)
+      .multipliedBy(BigNumber(tokenXAmount).plus(virtualXAmount))
+      .dividedBy(virtualXAmount)
+      .toNumber()
+
+    // Validate that priceUpper > currentPrice
+    if (priceUpper <= currentPrice) {
+      throw new Error('Calculated priceUpper must be > currentPrice')
+    }
+
+    return { priceLower: 0, priceUpper }
+  }
+
+  // Case 4: Both virtual tokens exist - both bounds exist
+  // Formula for p_b: p_b = p × ((X + x_v) / x_v)²
+  // Formula for p_a: p_a = y_v² / (p × (X + x_v)²)
+  const ratio = totalX.dividedBy(virtualXAmount)
+  const priceUpper = BigNumber(currentPrice).multipliedBy(ratio.multipliedBy(ratio)).toNumber()
+
+  const yOverSum = BigNumber(virtualYAmount).dividedBy(totalX)
+  const priceLower = yOverSum.multipliedBy(yOverSum).dividedBy(currentPrice).toNumber()
+
+  return { priceLower, priceUpper }
 }
+

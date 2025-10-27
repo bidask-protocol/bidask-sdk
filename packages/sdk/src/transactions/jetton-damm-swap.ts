@@ -17,7 +17,7 @@ import { createTransferJettonTxParams } from './transfer-jetton'
  * @param params.additionalData - Optional additional data cell
  * @param params.rejectPayload - Optional reject payload for the transaction
  * @param params.forwardPayload - Optional forward payload for the transaction
- * @param params.forwardAmount - Optional forward amount for the Jetton transfer (defaults to 0.5 TON)
+ * @param params.swapGasAmount - Optional swap gas amount for the Jetton transfer (defaults to 0.5 TON)
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @param params.refAddress - Optional referral address
  * @returns Transaction parameters
@@ -33,10 +33,10 @@ export function createJettonDammSwapTxParams(params: {
   queryId?: bigint
   rejectPayload?: Cell
   forwardPayload?: Cell
-  forwardAmount?: bigint
+  swapGasAmount?: bigint
   refAddress?: Address
 }): TxParams {
-  const { exactOut = 0n, queryId = generateRandomQueryId(), forwardAmount = toNano('0.5') } = params
+  const { exactOut = 0n, queryId = generateRandomQueryId(), swapGasAmount = toNano('0.5') } = params
 
   const forwardPayload = beginCell()
     .storeUint(0xdd79732c, 32)
@@ -55,7 +55,7 @@ export function createJettonDammSwapTxParams(params: {
     amount: params.amountIn,
     senderAddress: params.senderAddress,
     forwardPayload,
-    forwardAmount,
+    forwardAmount: swapGasAmount,
     queryId,
   })
 

@@ -17,6 +17,7 @@ import { generateRandomQueryId } from '../utils'
  * @param params.forwardPayload - Optional forward payload for the transaction
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @param params.refAddress - Optional referral address
+ * @param params.swapGasAmount - Optional swap gas amount (defaults to 0.5 TON)
  * @returns Transaction parameters
  */
 export function createTonDammSwapTxParams(params: {
@@ -31,8 +32,9 @@ export function createTonDammSwapTxParams(params: {
   forwardPayload?: Cell
   queryId?: bigint
   refAddress?: Address
+  swapGasAmount?: bigint
 }): TxParams {
-  const { exactOut = 0n, queryId = generateRandomQueryId() } = params
+  const { exactOut = 0n, queryId = generateRandomQueryId(), swapGasAmount = toNano('0.5') } = params
 
   const body = beginCell()
     .storeUint(0xdd79732c, 32)
@@ -47,11 +49,9 @@ export function createTonDammSwapTxParams(params: {
     .storeMaybeRef(params.forwardPayload)
     .endCell()
 
-  const constantSwapGas = toNano('0.5')
-
   return {
     to: params.poolAddress,
-    value: params.nativeAmount + constantSwapGas,
+    value: params.nativeAmount + swapGasAmount,
     payload: body,
   }
 }

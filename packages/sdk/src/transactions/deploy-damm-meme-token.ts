@@ -2,7 +2,7 @@ import { sha256_sync } from '@ton/crypto'
 import { Address, beginCell, Cell, Dictionary, toNano } from '@ton/ton'
 import BigNumber from 'bignumber.js'
 
-import { TESTNET_MEME_FACTORY_ADDRESS } from '../constants'
+import { MEME_FACTORY_ADDRESS } from '../constants'
 import type { TxParams } from '../types'
 import { fromBigInt, generateRandomQueryId, toBigInt } from '../utils'
 
@@ -43,7 +43,7 @@ export function createDeployDammMemeTokenTxParams(params: {
   deployerAddress?: Address
   queryId?: bigint
 }): TxParams {
-  const { deployerAddress = TESTNET_MEME_FACTORY_ADDRESS, queryId = generateRandomQueryId() } =
+  const { deployerAddress = MEME_FACTORY_ADDRESS, queryId = generateRandomQueryId() } =
     params
 
   const { bidaskExclusive = false } = params.memeTokenParams

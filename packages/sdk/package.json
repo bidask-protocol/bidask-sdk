@@ -1,6 +1,6 @@
 {
   "name": "@bidask-protocol/sdk",
-  "version": "0.6.0-rc.12",
+  "version": "0.6.0-rc.21",
   "description": "Bidask Protocol SDK",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -16,9 +16,7 @@
     "lint": "eslint src",
     "check-types": "tsc --noEmit",
     "prepublishOnly": "npm run build",
-    "docs": "typedoc --excludeInternal --disableSources --plugin typedoc-plugin-markdown --out docs src",
-    "docs:integration": "typedoc --disableSources --plugin typedoc-plugin-markdown --out docs src"
-
+    "docs": "typedoc --disableSources --plugin typedoc-plugin-markdown --out docs src"
   },
   "keywords": [
     "ton",

@@ -36,7 +36,7 @@ export function createClaimDammFeesTxParams(params: {
     .storeMaybeRef(params.forwardPayload)
     .endCell()
 
-  const constantClaimGas = toNano('0.5')
+  const constantClaimGas = toNano('0.25')
 
   return {
     to: params.lpWalletAddress,

@@ -20,6 +20,7 @@ import { generateRandomQueryId } from '../utils'
  * @param params.forwardPayload - Optional forward payload for the transaction
  * @param params.rejectPayload - Optional reject payload for the transaction
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
+ * @param params.swapGasAmount - Optional swap gas amount (defaults to 0.5 TON)
  * @returns Transaction parameters
  */
 export function createTonSwapTxParams(
@@ -32,9 +33,10 @@ export function createTonSwapTxParams(
     queryId?: bigint
     forwardPayload?: Cell
     rejectPayload?: Cell
+    swapGasAmount?: bigint
   } & SwapPartialExecutionParams,
 ): TxParams {
-  const { exactOut = 0n, queryId = generateRandomQueryId() } = params
+  const { exactOut = 0n, queryId = generateRandomQueryId(), swapGasAmount = toNano('0.5'), } = params
 
   let payloadBuilder = beginCell()
     .storeUint(PoolContract.Opcodes.Swap, 32) // Opcode
@@ -57,11 +59,9 @@ export function createTonSwapTxParams(
     .storeMaybeRef(params.forwardPayload) // Forward payload
     .endCell()
 
-  const constantSwapGas = toNano('0.5')
-
   return {
     to: params.poolAddress,
-    value: params.amountIn + constantSwapGas,
+    value: params.amountIn + swapGasAmount,
     payload: payloadCell,
   }
 }

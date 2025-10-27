@@ -21,7 +21,7 @@ import { createTransferJettonTxParams } from './transfer-jetton'
  * @param params.minAmountToReceive - Minimum amount of tokens to receive (required if `allowPartial` is false)
  * @param params.forwardPayload - Optional forward payload for the transaction
  * @param params.rejectPayload - Optional reject payload for the transaction
- * @param params.forwardAmount - Optional forward amount for the Jetton transfer (defaults to 0.5 TON)
+ * @param params.swapGasAmount - Optional swap gas amount for the Jetton transfer (defaults to 0.5 TON)
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @param params.refAddress - Optional referral address
  * @returns Transaction parameters
@@ -37,7 +37,7 @@ export function createJettonSwapV2TxParams(
     queryId?: bigint
     rejectPayload?: Cell
     forwardPayload?: Cell
-    forwardAmount?: bigint
+    swapGasAmount?: bigint
     refundAddress?: Address
     refAddress?: Address
   } & SwapPartialExecutionParams,
@@ -45,7 +45,7 @@ export function createJettonSwapV2TxParams(
   const {
     exactOut = 0n,
     queryId = generateRandomQueryId(),
-    forwardAmount = toNano('0.5'),
+    swapGasAmount = toNano('0.5'),
     refundAddress = params.senderAddress,
     receiverAddress = params.senderAddress,
   } = params
@@ -84,7 +84,7 @@ export function createJettonSwapV2TxParams(
     amount: params.amountIn,
     senderAddress: params.senderAddress,
     forwardPayload: forwardPayloadCell,
-    forwardAmount,
+    forwardAmount: swapGasAmount,
     queryId,
   })
 

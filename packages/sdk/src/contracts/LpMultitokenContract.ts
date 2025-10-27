@@ -51,4 +51,14 @@ export class LpMultitokenContract implements Contract {
 
     return result.stack.readNumber()
   }
+
+  async getRangeAddress(provider: ContractProvider): Promise<Address> {
+    const result = await provider.get('get_nft_data', [])
+
+    result.stack.readBigNumber() // init?
+    result.stack.readBigNumber() // index
+    const collectionAddress = result.stack.readAddress()
+
+    return collectionAddress
+  }
 }

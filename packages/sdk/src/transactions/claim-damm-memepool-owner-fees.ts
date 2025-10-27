@@ -35,7 +35,7 @@ export function createClaimDammMemePoolOwnerFeesTxParams(params: {
     .storeMaybeRef(params.forwardPayload) // Optional forward payload
     .endCell()
 
-  const constantClaimGas = toNano('0.5')
+  const constantClaimGas = toNano('0.25')
 
   return {
     to: params.memeAddress,

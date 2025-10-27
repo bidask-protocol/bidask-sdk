@@ -21,6 +21,7 @@ export {
   TESTNET_POOL_FACTORY_ADDRESS,
   TESTNET_MEME_FACTORY_ADDRESS,
   TESTNET_MEMEPOOL_FACTORY_ADDRESS,
+  MEME_FACTORY_ADDRESS,
 } from './constants'
 export * from './transactions'
 

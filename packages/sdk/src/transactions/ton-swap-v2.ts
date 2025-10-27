@@ -21,6 +21,7 @@ import { generateRandomQueryId } from '../utils'
  * @param params.rejectPayload - Optional reject payload for the transaction
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @param params.refAddress - Optional referral address
+ * @param params.swapGasAmount - Optional swap gas amount (defaults to 0.5 TON)
  * @returns Transaction parameters
  */
 export function createTonSwapV2TxParams(
@@ -35,6 +36,7 @@ export function createTonSwapV2TxParams(
     forwardPayload?: Cell
     rejectPayload?: Cell
     refAddress?: Address
+    swapGasAmount?: bigint
   } & SwapPartialExecutionParams,
 ): TxParams {
   const {
@@ -42,6 +44,7 @@ export function createTonSwapV2TxParams(
     queryId = generateRandomQueryId(),
     refundAddress = params.senderAddress,
     receiverAddress = params.senderAddress,
+    swapGasAmount = toNano('0.5'),
   } = params
 
   let payloadBuilder = beginCell()
@@ -74,11 +77,9 @@ export function createTonSwapV2TxParams(
     .storeMaybeRef(params.forwardPayload)
     .endCell()
 
-  const constantSwapGas = toNano('0.5')
-
   return {
     to: params.poolAddress,
-    value: params.amountIn + constantSwapGas,
+    value: params.amountIn + swapGasAmount,
     payload: payloadCell,
   }
 }
