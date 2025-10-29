@@ -7,6 +7,56 @@ export class RangeContract implements Contract {
 
   private constructor(public address: Address) {}
 
+  async getStorage(provider: ContractProvider) {
+    const result = await provider.get('get_storage', [])
+
+    const cellParser = result.stack.readCell().beginParse()
+
+    cellParser.skip(16)
+    const precalculated = cellParser.loadBoolean()
+
+    const liquidityDictCell = cellParser.loadMaybeRef()
+    const lpSupplyDictCell = cellParser.loadMaybeRef()
+
+    const currentBin = cellParser.loadInt(32)
+    const sqrtPrice = cellParser.loadUintBig(256)
+    const isMain = cellParser.loadBoolean()
+
+    const dataStorageParser = cellParser.loadRef().asSlice()
+    const poolAddress = dataStorageParser.loadMaybeAddress()
+    const leftRangeAddress = dataStorageParser.loadMaybeAddress()
+    const rightRangeAddress = dataStorageParser.loadMaybeAddress()
+
+    const firstBin = dataStorageParser.loadInt(32)
+    const baseFee = dataStorageParser.loadUintBig(16)
+    const binStep = dataStorageParser.loadUintBig(32)
+    const dynamicFeeFactor = dataStorageParser.loadUintBig(32)
+    const timeFilter = dataStorageParser.loadUintBig(32)
+    const timeDecay = dataStorageParser.loadUintBig(32)
+
+    return {
+      poolAddress,
+      leftRangeAddress,
+      rightRangeAddress,
+
+      precalculated,
+
+      totalLiquidityDict: this.parseDict(liquidityDictCell),
+      lpSupplyDict: this.parseDict(lpSupplyDictCell),
+
+      currentBin,
+      sqrtPrice,
+      isMain,
+
+      firstBin,
+      baseFee,
+      binStep,
+      dynamicFeeFactor,
+      timeFilter,
+      timeDecay,
+    }
+  }
+
   async getSqrtPrice(provider: ContractProvider): Promise<bigint> {
     const result = await provider.get('get_sqrt_price', [])
 

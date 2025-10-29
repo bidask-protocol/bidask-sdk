@@ -12,11 +12,50 @@ export class LpMultitokenContract implements Contract {
 
   private constructor(public address: Address) {}
 
+  async getStorage(provider: ContractProvider) {
+    const result = await provider.get('get_storage', [])
+
+    const cellParser = result.stack.readCell().beginParse()
+
+    const rangeAddress = cellParser.loadAddress()
+    const userAddress = cellParser.loadAddress()
+    const binsNumber = cellParser.loadUint(32)
+    const tokens = LpMultitokenContract.parseTokens(cellParser.loadRef())
+
+    return {
+      rangeAddress,
+      userAddress,
+      binsNumber,
+      tokens,
+    }
+  }
+
   async getTokens(provider: ContractProvider): Promise<Record<number, bigint>> {
     const result = await provider.get('get_tokens', [])
 
-    const lpDict = result.stack
-      .readCellOpt()
+    const tokensCell = result.stack.readCellOpt()
+
+    return LpMultitokenContract.parseTokens(tokensCell)
+  }
+
+  async getBinsNumber(provider: ContractProvider): Promise<number> {
+    const result = await provider.get('get_bins_number', [])
+
+    return result.stack.readNumber()
+  }
+
+  async getRangeAddress(provider: ContractProvider): Promise<Address> {
+    const result = await provider.get('get_nft_data', [])
+
+    result.stack.readBigNumber() // init?
+    result.stack.readBigNumber() // index
+    const collectionAddress = result.stack.readAddress()
+
+    return collectionAddress
+  }
+
+  static parseTokens(cell: Cell | null): Record<number, bigint> {
+    const lpDict = cell
       ?.asSlice()
       .loadDictDirect(Dictionary.Keys.Int(32), Dictionary.Values.BitString(244 * 4))
 
@@ -44,21 +83,5 @@ export class LpMultitokenContract implements Contract {
     }
 
     return tokensDict
-  }
-
-  async getBinsNumber(provider: ContractProvider): Promise<number> {
-    const result = await provider.get('get_bins_number', [])
-
-    return result.stack.readNumber()
-  }
-
-  async getRangeAddress(provider: ContractProvider): Promise<Address> {
-    const result = await provider.get('get_nft_data', [])
-
-    result.stack.readBigNumber() // init?
-    result.stack.readBigNumber() // index
-    const collectionAddress = result.stack.readAddress()
-
-    return collectionAddress
   }
 }
