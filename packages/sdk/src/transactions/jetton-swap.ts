@@ -11,8 +11,7 @@ import { createTransferJettonTxParams } from './transfer-jetton'
  * @deprecated Use createJettonSwapV2TxParams instead
  * @param params - Parameters for the transaction
  * @param params.amountIn - Amount of jettons to swap
- * @param params.tokenIn - Address of the input token
- * @param params.receiverAddress - Address of the swap result receiver
+ * @param params.receiverAddress - Address of the swap result receiver (optional, defaults to the sender address)
  * @param params.senderAddress - Address of the swap sender
  * @param params.exactOut - Exact amount of tokens to receive (optional, defaults to 0)
  * @param params.jettonWalletAddress - Address of the sender's jetton wallet
@@ -23,14 +22,14 @@ import { createTransferJettonTxParams } from './transfer-jetton'
  * @param params.forwardPayload - Optional forward payload for the transaction
  * @param params.rejectPayload - Optional reject payload for the transaction
  * @param params.swapGasAmount - Optional swap gas amount for the Jetton transfer (defaults to 0.5 TON)
+ * @param params.refAddress - Optional referral address for the swap
  * @param params.queryId - Optional query ID for the transaction (defaults to random)
  * @returns Transaction parameters
  */
 export function createJettonSwapTxParams(
   params: {
     amountIn: bigint
-    tokenIn: Address
-    receiverAddress: Address
+    receiverAddress?: Address
     senderAddress: Address
     exactOut?: bigint
     jettonWalletAddress: Address
@@ -39,13 +38,14 @@ export function createJettonSwapTxParams(
     rejectPayload?: Cell
     forwardPayload?: Cell
     swapGasAmount?: bigint
+    refAddress?: Address
   } & SwapPartialExecutionParams,
 ): TxParams {
-  const { exactOut = 0n, queryId = generateRandomQueryId(), swapGasAmount = toNano('0.5') } = params
+  const { exactOut = 0n, receiverAddress = params.senderAddress, queryId = generateRandomQueryId(), swapGasAmount = toNano('0.5') } = params
 
   let forwardPayloadBuilder = beginCell()
     .storeUint(PoolContract.Opcodes.Swap, 32)
-    .storeAddress(params.receiverAddress)
+    .storeAddress(receiverAddress)
     .storeBit(params.allowPartial)
 
   if (params.allowPartial) {
@@ -56,12 +56,11 @@ export function createJettonSwapTxParams(
 
   const forwardPayloadCell = forwardPayloadBuilder
     .storeCoins(exactOut)
-    .storeAddress(null)
+    .storeAddress(params.refAddress)
     .storeMaybeRef(beginCell().storeAddress(params.senderAddress).endCell())
     .storeMaybeRef(params.rejectPayload)
     .storeMaybeRef(params.forwardPayload)
     .endCell()
-
 
   const jettonTransferTxParams = createTransferJettonTxParams({
     jettonWalletAddress: params.jettonWalletAddress,

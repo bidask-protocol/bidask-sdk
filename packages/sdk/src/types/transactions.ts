@@ -10,4 +10,9 @@ export type TxParams = {
   value: bigint
   /** Cell containing the message payload */
   payload: Cell
+  /** Optional state init for contract deployment */
+  init?: {
+    code: Cell
+    data: Cell
+  }
 }
