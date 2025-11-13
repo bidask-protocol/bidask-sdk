@@ -52,7 +52,7 @@ export const MEME_FACTORY_ADDRESS = Address.parse(
 
 /** Testnet bet events master address */
 export const TESTNET_BET_EVENTS_MASTER_ADDRESS = Address.parse(
-  'kQB-L4PwYkMOltqsS5K2LXObdTN_3B4QoGLIMGIXOEtdnuNN',
+  'kQCDk4gobs1-w6gn1nZUkGS0ViHGTQtyuQdd89vSbPw3KADd',
 )
 
 /**

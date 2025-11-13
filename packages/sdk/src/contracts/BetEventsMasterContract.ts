@@ -1,4 +1,4 @@
-import { Address, Cell, Contract, ContractProvider, TupleBuilder } from '@ton/ton'
+import { Address, Cell, Contract, ContractProvider } from '@ton/ton'
 
 export class BetEventsMasterContract implements Contract {
   static createFromAddress(address: Address) {
@@ -10,18 +10,9 @@ export class BetEventsMasterContract implements Contract {
     readonly init?: { code: Cell; data: Cell },
   ) {}
 
-  async getESCAddressById(provider: ContractProvider, eventId: bigint): Promise<Address> {
-    const builder = new TupleBuilder()
-    builder.writeNumber(eventId)
-
-    const { stack } = await provider.get('getESCAddress', builder.build())
+  async getESCAddressBySeed(provider: ContractProvider, seed: Cell): Promise<Address> {
+    const { stack } = await provider.get('getESCAddress', [{ type: 'cell', cell: seed }])
 
     return stack.readAddress()
-  }
-
-  async getNextEventId(provider: ContractProvider): Promise<bigint> {
-    const { stack } = await provider.get('getNextEventId', [])
-
-    return stack.readBigNumber()
   }
 }
