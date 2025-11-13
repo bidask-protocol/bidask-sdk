@@ -31,6 +31,8 @@ export { createProvideTonSinglesideLiquidityDammTxParams } from './provide-ton-s
 export { createClaimDammFeesTxParams } from './claim-damm-fees'
 export { createClaimDammMemePoolOwnerFeesTxParams } from './claim-damm-memepool-owner-fees'
 export { createDeployCpmmPoolTxParams } from './deploy-cpmm-pool'
-export { createStakeTxParams } from './stake';
-export { createUnstakeTxParams } from './unstake';
-export { createDeployFarmingTxParams } from './deploy-farming';
+export { createStakeTxParams } from './stake'
+export { createUnstakeTxParams } from './unstake'
+export { createDeployFarmingTxParams } from './deploy-farming'
+export { createPlaceBetTxParams } from './place-bet'
+export { createClaimBetRewardTxParams } from './claim-bet-reward'
