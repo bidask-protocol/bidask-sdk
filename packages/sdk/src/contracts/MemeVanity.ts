@@ -54,7 +54,7 @@ export class MemeVanity implements Contract {
     await provider.internal(via, {
       value,
       sendMode: SendMode.PAY_GAS_SEPARATELY,
-      body: body,
+      body,
     })
   }
 

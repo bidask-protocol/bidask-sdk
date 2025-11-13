@@ -18,4 +18,10 @@ export class BetEventsMasterContract implements Contract {
 
     return stack.readAddress()
   }
+
+  async getNextEventId(provider: ContractProvider): Promise<bigint> {
+    const { stack } = await provider.get('getNextEventId', [])
+
+    return stack.readBigNumber()
+  }
 }
