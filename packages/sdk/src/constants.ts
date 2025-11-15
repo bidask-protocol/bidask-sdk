@@ -55,6 +55,10 @@ export const TESTNET_BET_EVENTS_MASTER_ADDRESS = Address.parse(
   'kQCDk4gobs1-w6gn1nZUkGS0ViHGTQtyuQdd89vSbPw3KADd',
 )
 
+export const BET_EVENTS_MASTER_ADDRESS = Address.parse(
+  'EQB-3oa673YByKK2Wmrtnf2k66rkdcY-gaCAjwUl_f9FrJ97',
+)
+
 /**
  * Bin step coefficient
  *
