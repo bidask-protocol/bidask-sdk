@@ -16,7 +16,7 @@
     "lint": "eslint src",
     "check-types": "tsc --noEmit",
     "prepublishOnly": "npm run build",
-    "docs": "typedoc --disableSources --plugin typedoc-plugin-markdown --out docs src"
+    "docs": "typedoc --plugin typedoc-plugin-markdown --out docs src"
   },
   "keywords": [
     "ton",

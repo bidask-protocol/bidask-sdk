@@ -9,20 +9,6 @@ import { createTransferJettonTxParams } from './transfer-jetton'
  * Creates transaction parameters for deploying a farming (staking) contract
  * via the memefactory **using a jetton transfer**.
  *
- * The memefactory expects a forward payload of type `Factory_FarmingDeployData`:
- *   struct Factory_FarmingDeployData {
- *     seed: cell
- *     farmingToken: address
- *     lpToken: address
- *     farmingInfo: Cell<increaseFarming>
- *   }
- *
- * Where `increaseFarming` is:
- *   struct (0x50916472) increaseFarming {
- *     endOfFarming: uint64
- *     refundAddress: address
- *   }
- *
  * @param params.factoryAddress          – Address of the memefactory contract (optional, defaults to MEME_FACTORY_ADDRESS)
  * @param params.userAddress            – Address of the user deploying the farm
  * @param params.senderAddress          – Address of the sender (default is userAddress)
