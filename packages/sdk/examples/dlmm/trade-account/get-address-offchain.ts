@@ -1,7 +1,7 @@
-import { PoolContract, TradeAccount } from '../../src'
-import { getPoolAddress } from '../utils/get-pool-address'
-import { rateLimiter } from '../utils/rate-limiter'
-import { setupTradeAccountEnv } from '../utils/setup-env'
+import { PoolContract, TradeAccount } from '../../../src'
+import { getPoolAddress } from '../../utils/get-pool-address'
+import { rateLimiter } from '../../utils/rate-limiter'
+import { setupTradeAccountEnv } from '../../utils/setup-env'
 
 // Get trade account balance for a specific pool
 const { client, walletContractOpened, tradingAccountSeed } = await setupTradeAccountEnv()

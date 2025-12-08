@@ -1,11 +1,11 @@
 import { SendMode } from '@ton/ton'
 import { createInterface } from 'readline/promises'
 
-import { getDeadline, PoolContract, toBigInt, TradeAccount } from '../../src'
-import { getJettonInfo } from '../utils/get-jetton-info'
-import { getPoolAddress } from '../utils/get-pool-address'
-import { getJettonAddressesByPool } from '../utils/get-user-wallet-addressess-by-pool'
-import { setupTradeAccountEnv } from '../utils/setup-env'
+import { getDeadline, PoolContract, toBigInt, TradeAccount } from '../../../src'
+import { getJettonInfo } from '../../utils/get-jetton-info'
+import { getPoolAddress } from '../../utils/get-pool-address'
+import { getJettonAddressesByPool } from '../../utils/get-jetton-addressess-by-pool'
+import { setupTradeAccountEnv } from '../../utils/setup-env'
 
 // Interactive withdraw function using TradeAccount
 const { client, walletContractOpened, tradeAccountKeypair, tradingAccountSeed } =

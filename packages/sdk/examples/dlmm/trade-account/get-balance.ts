@@ -1,9 +1,9 @@
-import { fromBigInt, PoolContract, TradeAccount } from '../../src'
-import { getJettonInfo } from '../utils/get-jetton-info'
-import { getPoolAddress } from '../utils/get-pool-address'
-import { getJettonAddressesByPool } from '../utils/get-user-wallet-addressess-by-pool'
-import { rateLimiter } from '../utils/rate-limiter'
-import { setupTradeAccountEnv } from '../utils/setup-env'
+import { fromBigInt, PoolContract, TradeAccount } from '../../../src'
+import { getJettonInfo } from '../../utils/get-jetton-info'
+import { getPoolAddress } from '../../utils/get-pool-address'
+import { getJettonAddressesByPool } from '../../utils/get-jetton-addressess-by-pool'
+import { rateLimiter } from '../../utils/rate-limiter'
+import { setupTradeAccountEnv } from '../../utils/setup-env'
 
 // Get trade account balance for a specific pool
 const { client, walletContractOpened, tradingAccountSeed } = await setupTradeAccountEnv()

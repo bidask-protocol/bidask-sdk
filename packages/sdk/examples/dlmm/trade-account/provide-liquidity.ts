@@ -11,12 +11,12 @@ import {
   RangeStatus,
   toBigInt,
   TradeAccount,
-} from '../../src'
-import { getJettonInfo } from '../utils/get-jetton-info'
-import { getPoolAddress } from '../utils/get-pool-address'
-import { getJettonAddressesByPool } from '../utils/get-user-wallet-addressess-by-pool'
-import { rateLimiter } from '../utils/rate-limiter'
-import { setupTradeAccountEnv } from '../utils/setup-env'
+} from '../../../src'
+import { getJettonInfo } from '../../utils/get-jetton-info'
+import { getPoolAddress } from '../../utils/get-pool-address'
+import { getJettonAddressesByPool } from '../../utils/get-jetton-addressess-by-pool'
+import { rateLimiter } from '../../utils/rate-limiter'
+import { setupTradeAccountEnv } from '../../utils/setup-env'
 
 // Interactive liquidity providing function using TradeAccount
 const { client, walletContractOpened, tradeAccountKeypair, tradingAccountSeed } =

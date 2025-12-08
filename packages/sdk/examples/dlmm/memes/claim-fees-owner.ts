@@ -26,7 +26,7 @@ rl.close()
 
 const txParams = createClaimMemePoolOwnerFeesTxParams({
   lpMultitokenAddress,
-  jettonMasterAddress,
+  memeAddress: jettonMasterAddress,
   firstBinGroup: Math.floor(-298 / 4),
   lastBinGroup: Math.floor(-298 / 4),
 })

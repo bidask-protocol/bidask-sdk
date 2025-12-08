@@ -1,11 +1,11 @@
 import { createInterface } from 'readline/promises'
 
-import { createTradeAccountDepositTxParams, toBigInt } from '../../src'
-import { getJettonInfo } from '../utils/get-jetton-info'
-import { getPoolAddress } from '../utils/get-pool-address'
-import { getJettonAddressesByPool } from '../utils/get-user-wallet-addressess-by-pool'
-import { sendMultipleTransactions } from '../utils/send-multiple-transactions'
-import { setupTradeAccountEnv } from '../utils/setup-env'
+import { createTradeAccountDepositTxParams, toBigInt } from '../../../src'
+import { getJettonInfo } from '../../utils/get-jetton-info'
+import { getPoolAddress } from '../../utils/get-pool-address'
+import { sendMultipleTransactions } from '../../utils/send-multiple-transactions'
+import { setupTradeAccountEnv } from '../../utils/setup-env'
+import { getJettonAddressesByPool } from '../../utils/get-jetton-addressess-by-pool'
 
 // Example of depositing tokens into a trade account
 const { client, walletContractOpened, tradeAccountKeypair, walletKeypair, tradingAccountSeed } =

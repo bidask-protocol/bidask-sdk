@@ -69,6 +69,7 @@ const createMemeTonPoolTxParams = createDeployDlmmPoolTxParams({
 
 await sendMultipleTransactions(walletContractOpened, walletKeypair, [createMemeTonPoolTxParams])
 
+// eslint-disable-next-line no-console
 console.log('Pool address: ', poolAddress)
 await rl.question('⏳ Waiting for pool deployment to complete... Press Enter to continue: ')
 rl.close()
@@ -102,4 +103,6 @@ const createMemeTxParams = createDeployMemeTokenTxParams({
 })
 
 await sendMultipleTransactions(walletContractOpened, walletKeypair, [createMemeTxParams])
+
+// eslint-disable-next-line no-console
 console.log('Meme Jetton Master address: ', jettonMasterContract.address.toString())

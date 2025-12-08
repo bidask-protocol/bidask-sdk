@@ -10,12 +10,12 @@ import {
   RangeContract,
   toBigInt,
   TradeAccount,
-} from '../../src'
-import { LiquidityRemoveBins } from '../../src/types/liquidity'
-import { getJettonInfo } from '../utils/get-jetton-info'
-import { getPoolAddress } from '../utils/get-pool-address'
-import { getJettonAddressesByPool } from '../utils/get-user-wallet-addressess-by-pool'
-import { setupTradeAccountEnv } from '../utils/setup-env'
+} from '../../../src'
+import { LiquidityRemoveBins } from '../../../src/types/liquidity'
+import { getJettonInfo } from '../../utils/get-jetton-info'
+import { getPoolAddress } from '../../utils/get-pool-address'
+import { getJettonAddressesByPool } from '../../utils/get-jetton-addressess-by-pool'
+import { setupTradeAccountEnv } from '../../utils/setup-env'
 
 // Interactive liquidity removal function using TradeAccount
 const { client, walletContractOpened, tradeAccountKeypair, tradingAccountSeed } =
